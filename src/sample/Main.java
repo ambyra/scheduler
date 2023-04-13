@@ -5,6 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sample.dao.JDBC;
+
+import java.util.Locale;
 
 public class Main extends Application {
 
