@@ -1,8 +1,11 @@
 package sample.controller;
 
 import java.net.URL;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -16,7 +19,6 @@ public class loginController implements Initializable {
     @FXML private TextField TextFieldPassword;
     @FXML private TextField TextFieldUserName;
 
-
     @FXML private Text TextLogin;
     @FXML private Text TextUserName;
     @FXML private Text TextPassword;
@@ -25,8 +27,25 @@ public class loginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        resourceBundle = ResourceBundle.getBundle("languages_FR");
-        //resourceBundle = ResourceBundle.getBundle("languages_en_US");
+        setLanguage();
+
+        ZoneId timezone = ZoneId.systemDefault();
+        TextCurrentZone.setText(timezone.toString());
+    }
+
+    @FXML
+    void ClickLogin(ActionEvent event) {
+        System.out.println("ok");
+    }
+    @FXML
+    void ClickCancel(ActionEvent event) {
+        Platform.exit();
+    }
+
+    private void setLanguage(){
+        //Locale.setDefault(new Locale("Fr"));
+
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("languages", Locale.getDefault());
 
         TextLogin.setText((resourceBundle.getString("login")));
         TextUserName.setText((resourceBundle.getString("username")));
@@ -35,6 +54,5 @@ public class loginController implements Initializable {
 
         ButtonLogin.setText((resourceBundle.getString("login")));
         ButtonCancel.setText((resourceBundle.getString("cancel")));
-
     }
 }
