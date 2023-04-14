@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.scene.control.PasswordField;
 
 public class loginController implements Initializable {
-    @FXML private Button ButtonCancel;
     @FXML private Button ButtonLogin;
 
     @FXML private PasswordField PasswordFieldPassword;
@@ -38,7 +36,6 @@ public class loginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setLanguage();
-
         ZoneId timezone = ZoneId.systemDefault();
         TextCurrentZone.setText(timezone.toString());
     }
@@ -49,9 +46,7 @@ public class loginController implements Initializable {
         String pass = PasswordFieldPassword.getText();
 
         String sqlquery = "select * from users where User_Name = '" + user +
-                "' and Password = '" + pass + "'" ;
-        //System.out.println(sqlquery);
-
+                "' and Password = '" + pass + "'" ; //System.out.println(sqlquery);
 
         Connection connection = JDBC.getConnection();
         int userid = -1;
@@ -62,19 +57,14 @@ public class loginController implements Initializable {
             rs.next();
             userid= rs.getInt("User_ID");
             System.out.println("User ID: " + userid);
-        }catch (SQLException throwables) {
-            //throwables.printStackTrace();
+        }catch (SQLException throwables) { //throwables.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, passwordError);
             alert.showAndWait();
         }
     }
-    @FXML
-    void ClickCancel(ActionEvent event) {
-        Platform.exit();
-    }
 
     private void setLanguage(){
-        Locale.setDefault(new Locale("Fr"));
+        //Locale.setDefault(new Locale("Fr"));
 
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages", Locale.getDefault());
 
@@ -84,7 +74,6 @@ public class loginController implements Initializable {
         TextZoneID.setText((resourceBundle.getString("zoneid")));
 
         ButtonLogin.setText((resourceBundle.getString("login")));
-        ButtonCancel.setText((resourceBundle.getString("cancel")));
 
         passwordError = resourceBundle.getString("passworderror");
     }
