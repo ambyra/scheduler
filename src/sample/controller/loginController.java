@@ -1,6 +1,12 @@
 package sample.controller;
 
+import sample.dao.JDBC;
+import java.sql.Connection;
+
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -8,15 +14,17 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.scene.control.PasswordField;
 
 public class loginController implements Initializable {
     @FXML private Button ButtonCancel;
     @FXML private Button ButtonLogin;
 
-    @FXML private TextField TextFieldPassword;
+    @FXML private PasswordField PasswordFieldPassword;
     @FXML private TextField TextFieldUserName;
 
     @FXML private Text TextLogin;
@@ -24,6 +32,8 @@ public class loginController implements Initializable {
     @FXML private Text TextPassword;
     @FXML private Text TextZoneID;
     @FXML private Text TextCurrentZone;
+
+    private String passwordError;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -34,8 +44,29 @@ public class loginController implements Initializable {
     }
 
     @FXML
-    void ClickLogin(ActionEvent event) {
-        System.out.println("ok");
+    void ClickLogin(ActionEvent event){
+        String user = TextFieldUserName.getText();
+        String pass = PasswordFieldPassword.getText();
+
+        String sqlquery = "select * from users where User_Name = '" + user +
+                "' and Password = '" + pass + "'" ;
+        //System.out.println(sqlquery);
+
+
+        Connection connection = JDBC.getConnection();
+        int userid = -1;
+        try{
+            JDBC.makePreparedStatement(sqlquery, connection);
+            PreparedStatement ps = JDBC.getPreparedStatement();
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            userid= rs.getInt("User_ID");
+            System.out.println("User ID: " + userid);
+        }catch (SQLException throwables) {
+            //throwables.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, passwordError);
+            alert.showAndWait();
+        }
     }
     @FXML
     void ClickCancel(ActionEvent event) {
@@ -43,7 +74,7 @@ public class loginController implements Initializable {
     }
 
     private void setLanguage(){
-        //Locale.setDefault(new Locale("Fr"));
+        Locale.setDefault(new Locale("Fr"));
 
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages", Locale.getDefault());
 
@@ -54,5 +85,7 @@ public class loginController implements Initializable {
 
         ButtonLogin.setText((resourceBundle.getString("login")));
         ButtonCancel.setText((resourceBundle.getString("cancel")));
+
+        passwordError = resourceBundle.getString("passworderror");
     }
 }
