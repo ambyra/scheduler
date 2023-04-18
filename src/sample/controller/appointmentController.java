@@ -1,28 +1,21 @@
 package sample.controller;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.util.Callback;
+import javafx.scene.input.MouseButton;
 import sample.dao.AutoTableView;
-import sample.dao.JDBC;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class appointmentController implements Initializable {
     @FXML private Button ButtonAdd;
     @FXML private Button ButtonDelete;
     @FXML private Button ButtonUpdate;
+    @FXML private Button ButtonLoad;
     @FXML private ChoiceBox<?> ChoiceBoxContact;
     @FXML private ChoiceBox<?> ChoiceBoxCustomerID;
     @FXML private ChoiceBox<?> ChoiceBoxUserID;
@@ -50,6 +43,12 @@ public class appointmentController implements Initializable {
 
     @FXML
     void ClickUpdate (ActionEvent event){
+    }
+
+    @FXML
+    void ClickLoad(ActionEvent event) {
+        ObservableList<Object> selectedItem= TableViewAppointments.getSelectionModel().getSelectedItem();
+        System.out.println(selectedItem);
     }
 
     @Override
