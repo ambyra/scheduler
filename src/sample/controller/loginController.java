@@ -1,6 +1,13 @@
 package sample.controller;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import sample.Main;
 import sample.dao.JDBC;
+
+import java.io.IOException;
 import java.sql.Connection;
 
 import java.net.URL;
@@ -57,7 +64,8 @@ public class loginController implements Initializable {
             rs.next();
             userid= rs.getInt("User_ID");
             System.out.println("User ID: " + userid);
-        }catch (SQLException throwables) { //throwables.printStackTrace();
+            login(userid);
+        }catch (SQLException | IOException throwables) { //throwables.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, passwordError);
             alert.showAndWait();
         }
@@ -76,5 +84,16 @@ public class loginController implements Initializable {
         ButtonLogin.setText((resourceBundle.getString("login")));
 
         passwordError = resourceBundle.getString("passworderror");
+    }
+
+    private void login(int userid) throws IOException {
+        //TODO
+        System.out.println("User " + userid + " logged in at TIME");
+
+        Stage stage = Main.getStage();
+        URL resource = getClass().getResource("/sample/view/appointment.fxml");
+        Parent root = FXMLLoader.load(resource);
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
