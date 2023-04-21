@@ -5,17 +5,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
 import sample.dao.AutoTableView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class appointmentController implements Initializable {
-    @FXML private Button ButtonAdd;
-    @FXML private Button ButtonDelete;
-    @FXML private Button ButtonUpdate;
-    @FXML private Button ButtonLoad;
     @FXML private ChoiceBox<?> ChoiceBoxContact;
     @FXML private ChoiceBox<?> ChoiceBoxCustomerID;
     @FXML private ChoiceBox<?> ChoiceBoxUserID;
@@ -49,6 +44,13 @@ public class appointmentController implements Initializable {
     void ClickLoad(ActionEvent event) {
         ObservableList<Object> selectedItem= TableViewAppointments.getSelectionModel().getSelectedItem();
         System.out.println(selectedItem);
+
+        TextFieldAppointmentID.setText((String) selectedItem.get(0));
+        TextFieldTitle.setText((String) selectedItem.get(1));
+        TextFieldDescription.setText((String) selectedItem.get(2));
+        TextFieldLocation.setText((String) selectedItem.get(3));
+
+        TextFieldType.setText((String) selectedItem.get(5));
     }
 
     @Override
