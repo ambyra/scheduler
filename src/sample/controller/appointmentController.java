@@ -104,7 +104,6 @@ public class appointmentController implements Initializable {
         TextFieldTitle.setText((String) selectedItem.get(1));
         TextFieldDescription.setText((String) selectedItem.get(2));
         TextFieldLocation.setText((String) selectedItem.get(3));
-
         TextFieldType.setText((String) selectedItem.get(5));
     }
 

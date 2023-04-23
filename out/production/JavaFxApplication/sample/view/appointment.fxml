@@ -106,14 +106,14 @@
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <Button fx:id="ButtonAdd" mnemonicParsing="false" onAction="#ClickAdd" text="Add " GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS">
+                        <Button fx:id="ButtonAdd" mnemonicParsing="false" onAction="#ClickAdd" text="Add" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS">
                            <GridPane.margin>
-                              <Insets right="5.0" />
+                              <Insets />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="ButtonUpdate" mnemonicParsing="false" onAction="#ClickUpdate" text="Update" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
+                        <Button fx:id="ButtonSave" mnemonicParsing="false" onAction="#ClickSave" text="Save" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
                            <GridPane.margin>
-                              <Insets left="60.0" />
+                              <Insets left="65.0" />
                            </GridPane.margin>
                         </Button>
                         <Button fx:id="ButtonDelete" mnemonicParsing="false" onAction="#ClickDelete" text="Delete" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
@@ -121,7 +121,16 @@
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="ButtonLoad" mnemonicParsing="false" onAction="#ClickLoad" text="Load" GridPane.columnIndex="4" />
+                        <Button fx:id="ButtonEdit" mnemonicParsing="false" onAction="#ClickEdit" text="Edit" GridPane.columnIndex="4">
+                           <GridPane.margin>
+                              <Insets left="15.0" />
+                           </GridPane.margin>
+                        </Button>
+                        <Button fx:id="ButtonCancel" mnemonicParsing="false" onAction="#ClickCancel" text="Cancel" GridPane.columnIndex="4" GridPane.halignment="RIGHT">
+                           <GridPane.margin>
+                              <Insets right="5.0" />
+                           </GridPane.margin>
+                        </Button>
                      </children>
                   </GridPane>
                </children>

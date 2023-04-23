@@ -4,10 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.model.Appointment;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 
 public class AppointmentDAO {
@@ -42,4 +39,56 @@ public class AppointmentDAO {
         } catch (SQLException sqlException) {}
         return appointments;
     }
+
+    public static void updateAppointment(Appointment appointment) throws SQLException{
+        Connection connection = JDBC.getConnection();
+        String query = " update client_schedule.appointments " +
+            "set Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, " +
+            "Created_By = ?, Last_Update = ?, Last_Updated_By =?, Customer_ID = ?, User_ID = ?, Contact_ID = ? "+
+            "where Appointment_ID = ?";
+
+        try{
+            JDBC.makePreparedStatement(query, connection);
+            PreparedStatement ps = JDBC.getPreparedStatement();
+            ps.setString(1, appointment.getTitle());
+            ps.setString(2, appointment.getDescription());
+            ps.setString(3,appointment.getLocation());
+            ps.setString(4,appointment.getType());
+            ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart()));
+            ps.setTimestamp(6,Timestamp.valueOf(appointment.getEnd()));
+            ps.setTimestamp(7,Timestamp.valueOf(appointment.getCreateDate()));
+            ps.setString(8,appointment.getCreatedBy());
+            ps.setTimestamp(9,Timestamp.valueOf(appointment.getLastUpdate()));
+            ps.setString(10, appointment.getLastUpdatedBy());
+            ps.setInt(11, appointment.getCustomerID());
+            ps.setInt(12, appointment.getUserID());
+            ps.setInt(13, appointment.getContactID());
+
+            ps.executeUpdate(); //not executeupdate
+
+        }catch(SQLException sqlException){}
+    }
 }
+
+/*
+
+String query = " update client_schedule.appointments " +
+"set Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, " +
+"Created_By = ?, Last_Update = ?, Last_Updated_By =?, Customer_ID = ?, User_ID = ?, Contact_ID = ? "+
+"where Appointment_ID = ?";
+ */
+
+//Appointment_ID INT(10) (PK)
+//Title VARCHAR(50)
+//Description VARCHAR(50)
+// Location VARCHAR(50)
+//Type VARCHAR(50)
+//Start DATETIME
+//End DATETIME
+//Create_Date DATETIME
+//Created_By VARCHAR(50)
+//Last_Update TIMESTAMP
+//Last_Updated_By VARCHAR(50)
+//Customer_ID INT(10) (FK)
+//User_ID INT(10) (FK)
+//Contact_ID INT(10) (FK)
