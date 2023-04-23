@@ -59,6 +59,7 @@ public class appointmentController implements Initializable {
     @FXML
     void ClickSave (ActionEvent event){
         selectState();
+        //TODO: NEXT: dao not tested
     }
 
     @FXML
@@ -151,6 +152,7 @@ public class appointmentController implements Initializable {
         TextFieldLocation.setText(appointment.getLocation());
         ChoiceBoxContactID.setValue(appointment.getContactID());
         TextFieldType.setText(appointment.getType());
+        //TODO: convert UTC to local time
         TextFieldStartTime.setText(appointment.getStart().toLocalTime().toString());
         DatePickerStartDate.setValue(appointment.getStart().toLocalDate());
         TextFieldEndTime.setText(appointment.getEnd().toLocalTime().toString());
