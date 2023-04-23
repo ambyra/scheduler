@@ -1,6 +1,7 @@
 package sample.model;
 
 import java.time.LocalDateTime;
+import sample.dao.AppointmentDAO;
 
 public class Appointment {
     private int appointmentID;
@@ -74,8 +75,6 @@ public class Appointment {
         return contactID;
     }
 
-
-
     public Appointment(int appointmentID, String title, String description, String location,
                        String type, LocalDateTime start, LocalDateTime end, LocalDateTime createDate,
                        String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID){
@@ -94,8 +93,6 @@ public class Appointment {
         this.userID = userID;
         this.contactID = contactID;
     }
-
-
 }
 
 //Appointment_ID INT(10) (PK)

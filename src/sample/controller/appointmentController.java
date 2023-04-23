@@ -1,13 +1,17 @@
 package sample.controller;
 
+import sample.dao.AppointmentDAO;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import sample.dao.AutoTableView;
+import sample.model.Appointment;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class appointmentController implements Initializable {
@@ -60,5 +64,6 @@ public class appointmentController implements Initializable {
             "select appointment_id, title, description, location, contact_id, type, start, end, customer_id, user_id" +
             " from client_schedule.appointments";
         autoTableAppointments.loadTableFromDB(query);
+
     }
 }
