@@ -10,6 +10,45 @@ public class Division {
     private LocalDateTime lastUpdate;
     private String lastUpdatedBy;
     private int countryID;
+
+    public int getDivisionID() {
+        return divisionID;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public String getLastUpdatedBy() {
+        return lastUpdatedBy;
+    }
+
+    public int getCountryID() {
+        return countryID;
+    }
+
+    public Division(int divisionID, String division, LocalDateTime createDate, String createdBy,
+                    LocalDateTime lastUpdate, String lastUpdatedBy, int countryID){
+        this.divisionID = divisionID;
+        this.division = division;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.countryID = countryID;
+    }
 }
 
 //SELECT `first_level_divisions`.`Division_ID`,
