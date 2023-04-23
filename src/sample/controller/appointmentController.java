@@ -5,15 +5,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import sample.dao.AppointmentDAO;
 import sample.dao.AutoTableView;
+import sample.model.Appointment;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class appointmentController implements Initializable {
-    @FXML private ChoiceBox<?> ChoiceBoxContact;
-    @FXML private ChoiceBox<?> ChoiceBoxCustomerID;
-    @FXML private ChoiceBox<?> ChoiceBoxUserID;
+    @FXML private ChoiceBox<Integer> ChoiceBoxContactID;
+    @FXML private ChoiceBox<Integer> ChoiceBoxCustomerID;
+    @FXML private ChoiceBox<Integer> ChoiceBoxUserID;
     @FXML private DatePicker DatePickerEndDate;
     @FXML private DatePicker DatePickerStartDate;
     @FXML private ToggleGroup RadioGroupAppointments;
@@ -32,13 +37,46 @@ public class appointmentController implements Initializable {
     @FXML private Button ButtonCancel;
     @FXML private Button ButtonDelete;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        selectState();
+        populateTableView();
+        try {populateChoiceBoxes(); }
+        catch (SQLException sqlException) { sqlException.printStackTrace();}
+    }
 
-    private ObservableList<ObservableList> data;
+    @FXML
+    void ClickAdd (ActionEvent event){
+        addState();
+    }
+
+    @FXML
+    void ClickEdit(ActionEvent event) throws SQLException {
+        editState();
+        setBoxes(getAppointmentFromSelection());
+    }
+
+    @FXML
+    void ClickSave (ActionEvent event){
+        selectState();
+    }
+
+    @FXML
+    void ClickCancel (ActionEvent event){
+        selectState();
+    }
+
+    @FXML
+    void ClickDelete (ActionEvent event){
+        selectState();
+    }
 
     void selectState(){
         TableViewAppointments.setDisable(false);
+        TextFieldAppointmentID.setDisable(true);
         clearBoxes();
         disableButtons();
+        disableBoxes();
         ButtonAdd.setDisable(false);
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);
@@ -51,6 +89,7 @@ public class appointmentController implements Initializable {
     }
     void editState(){
         TableViewAppointments.setDisable(true);
+        enableBoxes();
         disableButtons();
         ButtonSave.setDisable(false);
         ButtonCancel.setDisable(false);
@@ -63,6 +102,8 @@ public class appointmentController implements Initializable {
         TextFieldStartTime.clear();
         TextFieldTitle.clear();
         TextFieldType.clear();
+        DatePickerStartDate.setValue(null);
+        DatePickerEndDate.setValue(null);
     }
 
     void disableButtons(){
@@ -73,51 +114,90 @@ public class appointmentController implements Initializable {
         ButtonDelete.setDisable(true);
     }
 
-    @FXML
-    void ClickAdd (ActionEvent event){
-        addState();
+    void disableBoxes(){
+        TextFieldAppointmentID.setDisable(true);
+        TextFieldDescription.setDisable(true);
+        TextFieldEndTime.setDisable(true);
+        TextFieldLocation.setDisable(true);
+        TextFieldStartTime.setDisable(true);
+        TextFieldTitle.setDisable(true);
+        TextFieldType.setDisable(true);
+        ChoiceBoxUserID.setDisable(true);
+        ChoiceBoxCustomerID.setDisable(true);
+        ChoiceBoxContactID.setDisable(true);
+        DatePickerStartDate.setDisable(true);
+        DatePickerEndDate.setDisable(true);
     }
 
-    @FXML
-    void ClickDelete (ActionEvent event){
-        selectState();
+    void enableBoxes(){
+        TextFieldAppointmentID.setDisable(false);
+        TextFieldDescription.setDisable(false);
+        TextFieldEndTime.setDisable(false);
+        TextFieldLocation.setDisable(false);
+        TextFieldStartTime.setDisable(false);
+        TextFieldTitle.setDisable(false);
+        TextFieldType.setDisable(false);
+        ChoiceBoxUserID.setDisable(false);
+        ChoiceBoxCustomerID.setDisable(false);
+        ChoiceBoxContactID.setDisable(false);
+        DatePickerStartDate.setDisable(false);
+        DatePickerEndDate.setDisable(false);
     }
 
-    @FXML
-    void ClickCancel (ActionEvent event){
-        selectState();
+    private void setBoxes(Appointment appointment){
+        TextFieldAppointmentID.setText(String.valueOf(appointment.getAppointmentID()));
+        TextFieldTitle.setText(appointment.getTitle());
+        TextFieldDescription.setText(appointment.getDescription());
+        TextFieldLocation.setText(appointment.getLocation());
+        ChoiceBoxContactID.setValue(appointment.getContactID());
+        TextFieldType.setText(appointment.getType());
+        TextFieldStartTime.setText(appointment.getStart().toLocalTime().toString());
+        DatePickerStartDate.setValue(appointment.getStart().toLocalDate());
+        TextFieldEndTime.setText(appointment.getEnd().toLocalTime().toString());
+        DatePickerEndDate.setValue(appointment.getEnd().toLocalDate());
+        ChoiceBoxCustomerID.setValue(appointment.getCustomerID());
+        ChoiceBoxUserID.setValue(appointment.getUserID());
     }
 
-    @FXML
-    void ClickSave (ActionEvent event){
-        selectState();
+    private Appointment getAppointmentFromSelection() throws SQLException {
+        Appointment selectedAppointment = null;
+
+        ObservableList selectedItem = TableViewAppointments.getSelectionModel().getSelectedItem();
+        if (selectedItem == null){return null;}
+        String selectedID = selectedItem.get(0).toString();
+        int selectedAppointmentID = Integer.parseInt(selectedID);
+
+        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+
+        for (Appointment appointment: allAppointments) {
+            if (selectedAppointmentID == appointment.getAppointmentID()) {
+                selectedAppointment = appointment;
+            }
+        }
+        if (selectedAppointment == null){
+            System.out.println("no appointment found");
+            return null;
+        }
+        return selectedAppointment;
     }
 
-    @FXML
-    void ClickEdit(ActionEvent event) {
-        editState();
-        ObservableList<Object> selectedItem= TableViewAppointments.getSelectionModel().getSelectedItem();
-        System.out.println(selectedItem);
-        if (selectedItem == null){return;}
-
-        TextFieldAppointmentID.setText((String) selectedItem.get(0));
-        TextFieldTitle.setText((String) selectedItem.get(1));
-        TextFieldDescription.setText((String) selectedItem.get(2));
-        TextFieldLocation.setText((String) selectedItem.get(3));
-        TextFieldType.setText((String) selectedItem.get(5));
+    private void populateChoiceBoxes() throws SQLException {
+        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+        for (Appointment appointment: allAppointments) {
+            ChoiceBoxContactID.getItems().add(appointment.getContactID());
+            ChoiceBoxUserID.getItems().add(appointment.getUserID());
+            ChoiceBoxCustomerID.getItems().add(appointment.getCustomerID());
+        }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        selectState();
-
+    private void populateTableView(){
         AutoTableView autoTableAppointments = new AutoTableView(TableViewAppointments);
         String query =
-            "select appointment_id, title, description, location, contact_id, type, start, end, customer_id, user_id" +
-            " from client_schedule.appointments";
+                "select appointment_id, title, description, location, contact_id, type, start, end, customer_id, user_id" +
+                        " from client_schedule.appointments";
         autoTableAppointments.loadTableFromDB(query);
-
         TableViewAppointments.getSelectionModel().selectFirst();
-
     }
+
 }
+
