@@ -76,7 +76,7 @@
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </Text>
-                        <TextField fx:id="TextFieldAppointmentID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="TextFieldAppointmentID" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField fx:id="TextFieldTitle" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="TextFieldDescription" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <TextField fx:id="TextFieldLocation" GridPane.columnIndex="1" GridPane.rowIndex="4" />

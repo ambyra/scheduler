@@ -14,10 +14,10 @@ import sample.model.Appointment;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.text.ParseException;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
@@ -58,17 +58,20 @@ public class appointmentController implements Initializable {
         populateTableView();
         try {populateChoiceBoxes(); }
         catch (SQLException sqlException) { sqlException.printStackTrace();}
+        setTimers();
+    }
 
+    void setTimers(){
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                String format = "yyyy-MM-dd HH:mm:ss";
 
-                TextFieldLocalDateTime.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                TextFieldLocalDateTime.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern(format)));
                 TextFieldLocalTimeZone.setText(ZoneId.systemDefault().toString());
 
-                TextFieldUTCDateTime.setText(ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                TextFieldUTCDateTime.setText(ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
+                TextFieldUTCDateTime.setText(ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern(format)));
+                TextFieldESTDateTime.setText(ZonedDateTime.now(ZoneId.of("US/Eastern")).format(DateTimeFormatter.ofPattern(format)));
             }
         };
         timer.start();
@@ -87,8 +90,50 @@ public class appointmentController implements Initializable {
 
     @FXML
     void ClickSave (ActionEvent event){
-        selectState();
         //TODO: NEXT: dao not tested
+
+        int appointmentid = Integer.parseInt(TextFieldAppointmentID.getText());
+        int contactid = ChoiceBoxContactID.getValue();
+        int customerid = ChoiceBoxCustomerID.getValue();
+        int userid = ChoiceBoxUserID.getValue();
+
+        String title = TextFieldTitle.getText();
+        String description = TextFieldDescription.getText();
+        String location = TextFieldLocation.getText();
+        String type = TextFieldType.getText();
+
+        //TODO: convert local time to UTC;
+        LocalDate startDate = DatePickerStartDate.getValue();
+        LocalTime startTime = parseTime(TextFieldStartTime.getText());
+        if (startTime==null){
+            sendAlert("Enter a valid start time in the format of HH:mm");
+            return;
+        }
+        LocalDateTime startDateTime = LocalDateTime.of(startDate,startTime);
+
+        LocalDate endDate = DatePickerEndDate.getValue();
+        LocalTime endTime = parseTime(TextFieldEndTime.getText());
+        if (endTime==null){
+            sendAlert("Enter a valid end time in the format of HH:mm");
+            return;
+        }
+        LocalDateTime endDateTime = LocalDateTime.of(endDate,endTime);
+
+        //exitstate
+        selectState();
+    }
+
+    LocalTime parseTime(String time){
+        LocalTime parsedTime;
+
+        try{
+            parsedTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+
+        }catch (DateTimeParseException e){
+            return null;
+
+        }
+        return parsedTime;
     }
 
     @FXML
@@ -228,6 +273,14 @@ public class appointmentController implements Initializable {
                         " from client_schedule.appointments";
         autoTableAppointments.loadTableFromDB(query);
         TableViewAppointments.getSelectionModel().selectFirst();
+    }
+
+    private void sendAlert(String alertMessage)
+    {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Error");
+        alert.setContentText(alertMessage);
+        alert.showAndWait();
     }
 
 }
