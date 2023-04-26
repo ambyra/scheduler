@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.appointmentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="865.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.appointmentController">
    <children>
-      <SplitPane dividerPositions="0.5" minHeight="-Infinity" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.6939799331103679" minHeight="-Infinity" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
@@ -28,11 +28,14 @@
                <children>
                   <GridPane prefHeight="169.0" prefWidth="564.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="68.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="241.0" minWidth="10.0" prefWidth="130.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="264.0" minWidth="10.0" prefWidth="99.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="126.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="10.0" prefWidth="180.0" />
+                      <ColumnConstraints hgrow="NEVER" maxWidth="137.0" minWidth="70.0" prefWidth="70.0" />
+                      <ColumnConstraints hgrow="NEVER" maxWidth="241.0" minWidth="120.0" prefWidth="120.0" />
+                        <ColumnConstraints hgrow="NEVER" maxWidth="264.0" minWidth="100.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="296.0" minWidth="120.0" prefWidth="120.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="391.0" minWidth="120.0" prefWidth="120.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="120.0" prefWidth="120.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="140.0" prefWidth="140.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="5.0" prefWidth="360.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -83,7 +86,7 @@
                         <ChoiceBox fx:id="ChoiceBoxCustomerID" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                         <ChoiceBox fx:id="ChoiceBoxUserID" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View:" />
-                        <RadioButton mnemonicParsing="false" selected="true" text="All Appointments" GridPane.columnIndex="1">
+                        <RadioButton mnemonicParsing="false" prefWidth="169.0" selected="true" text="All Appointments" GridPane.columnIndex="1">
                            <toggleGroup>
                               <ToggleGroup fx:id="RadioGroupAppointments" />
                            </toggleGroup>
@@ -115,9 +118,9 @@
                               <Insets left="65.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="ButtonDelete" mnemonicParsing="false" onAction="#ClickDelete" text="Delete" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
+                        <Button fx:id="ButtonDelete" mnemonicParsing="false" onAction="#ClickDelete" text="Delete" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS">
                            <GridPane.margin>
-                              <Insets right="5.0" />
+                              <Insets />
                            </GridPane.margin>
                         </Button>
                         <Button fx:id="ButtonEdit" mnemonicParsing="false" onAction="#ClickEdit" text="Edit" GridPane.columnIndex="4">
@@ -125,11 +128,51 @@
                               <Insets left="15.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="ButtonCancel" mnemonicParsing="false" onAction="#ClickCancel" text="Cancel" GridPane.columnIndex="4" GridPane.halignment="RIGHT">
+                        <Button fx:id="ButtonCancel" mnemonicParsing="false" onAction="#ClickCancel" text="Cancel" GridPane.columnIndex="5" GridPane.halignment="LEFT">
                            <GridPane.margin>
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </Button>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="LocalTime/Date" GridPane.columnIndex="5" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="UTC Time/Date" GridPane.columnIndex="5" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="EST Time/Date" GridPane.columnIndex="5" GridPane.rowIndex="5">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Local Time Zone" GridPane.columnIndex="5" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <TextField fx:id="TextFieldESTDateTime" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="5">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </TextField>
+                        <TextField fx:id="TextFieldLocalDateTime" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </TextField>
+                        <TextField fx:id="TextFieldLocalTimeZone" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </TextField>
+                        <TextField fx:id="TextFieldUTCDateTime" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </TextField>
                      </children>
                   </GridPane>
                </children>

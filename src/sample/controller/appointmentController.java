@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.animation.AnimationTimer;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,16 +14,25 @@ import sample.model.Appointment;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 public class appointmentController implements Initializable {
     @FXML private ChoiceBox<Integer> ChoiceBoxContactID;
     @FXML private ChoiceBox<Integer> ChoiceBoxCustomerID;
     @FXML private ChoiceBox<Integer> ChoiceBoxUserID;
+
     @FXML private DatePicker DatePickerEndDate;
     @FXML private DatePicker DatePickerStartDate;
+
     @FXML private ToggleGroup RadioGroupAppointments;
+
     @FXML private TableView<ObservableList> TableViewAppointments;
+
     @FXML private TextField TextFieldAppointmentID;
     @FXML private TextField TextFieldDescription;
     @FXML private TextField TextFieldEndTime;
@@ -30,6 +40,11 @@ public class appointmentController implements Initializable {
     @FXML private TextField TextFieldStartTime;
     @FXML private TextField TextFieldTitle;
     @FXML private TextField TextFieldType;
+    @FXML private TextField TextFieldLocalDateTime;
+    @FXML private TextField TextFieldLocalTimeZone;
+    @FXML private TextField TextFieldUTCDateTime;
+    @FXML private TextField TextFieldESTDateTime;
+
 
     @FXML private Button ButtonAdd;
     @FXML private Button ButtonEdit;
@@ -43,6 +58,20 @@ public class appointmentController implements Initializable {
         populateTableView();
         try {populateChoiceBoxes(); }
         catch (SQLException sqlException) { sqlException.printStackTrace();}
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+
+                TextFieldLocalDateTime.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                TextFieldLocalTimeZone.setText(ZoneId.systemDefault().toString());
+
+                TextFieldUTCDateTime.setText(ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                TextFieldUTCDateTime.setText(ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+            }
+        };
+        timer.start();
     }
 
     @FXML
