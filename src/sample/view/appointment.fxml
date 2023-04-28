@@ -6,6 +6,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -21,7 +22,19 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <TableView fx:id="TableViewAppointments" layoutX="135.0" layoutY="50.0" prefHeight="121.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TableView fx:id="TableViewAppointments" layoutX="135.0" layoutY="50.0" prefHeight="121.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <columns>
+                        <TableColumn fx:id="TableColumnAppointmentID" prefWidth="100.0" text="Appointment ID" />
+                        <TableColumn fx:id="TableColumnTitle" prefWidth="50.0" text="Title" />
+                        <TableColumn fx:id="TableColumnDescription" prefWidth="75.0" text="Description" />
+                        <TableColumn fx:id="TableColumnLocation" prefWidth="75.0" text="Location" />
+                        <TableColumn fx:id="TableColumnContact" prefWidth="75.0" text="Contact" />
+                        <TableColumn fx:id="TableColumnType" prefWidth="75.0" text="Type" />
+                        <TableColumn fx:id="TableColumnStart" prefWidth="75.0" text="Start" />
+                        <TableColumn fx:id="TableColumnEnd" prefWidth="75.0" text="End" />
+                        <TableColumn fx:id="TableColumnCustomerID" prefWidth="75.0" text="Customer ID" />
+                        <TableColumn fx:id="TableColumnUserID" prefWidth="75.0" text="User ID" />
+                     </columns></TableView>
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">

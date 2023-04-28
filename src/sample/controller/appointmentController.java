@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import sample.dao.AppointmentDAO;
 import sample.dao.AutoTableView;
 import sample.helper.TimeZoneConversions;
@@ -32,7 +33,18 @@ public class appointmentController implements Initializable {
 
     @FXML private ToggleGroup RadioGroupAppointments;
 
-    @FXML private TableView<ObservableList> TableViewAppointments;
+    @FXML private TableView<Appointment> TableViewAppointments;
+
+    @FXML private TableColumn<?, ?> TableColumnAppointmentID;
+    @FXML private TableColumn<?, ?> TableColumnContact;
+    @FXML private TableColumn<?, ?> TableColumnCustomerID;
+    @FXML private TableColumn<?, ?> TableColumnDescription;
+    @FXML private TableColumn<?, ?> TableColumnEnd;
+    @FXML private TableColumn<?, ?> TableColumnStart;
+    @FXML private TableColumn<?, ?> TableColumnTitle;
+    @FXML private TableColumn<?, ?> TableColumnType;
+    @FXML private TableColumn<?, ?> TableColumnUserID;
+    @FXML private TableColumn<?, ?> TableColumnLocation;
 
     @FXML private TextField TextFieldAppointmentID;
     @FXML private TextField TextFieldDescription;
@@ -240,25 +252,26 @@ public class appointmentController implements Initializable {
     }
 
     private Appointment getAppointmentFromSelection() throws SQLException {
-        Appointment selectedAppointment = null;
-
-        ObservableList selectedItem = TableViewAppointments.getSelectionModel().getSelectedItem();
-        if (selectedItem == null){return null;}
-        String selectedID = selectedItem.get(0).toString();
-        int selectedAppointmentID = Integer.parseInt(selectedID);
-
-        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
-
-        for (Appointment appointment: allAppointments) {
-            if (selectedAppointmentID == appointment.getAppointmentID()) {
-                selectedAppointment = appointment;
-            }
-        }
-        if (selectedAppointment == null){
-            System.out.println("no appointment found");
-            return null;
-        }
-        return selectedAppointment;
+//        Appointment selectedAppointment = null;
+//
+//        ObservableList selectedItem = TableViewAppointments.getSelectionModel().getSelectedItem();
+//        if (selectedItem == null){return null;}
+//        String selectedID = selectedItem.get(0).toString();
+//        int selectedAppointmentID = Integer.parseInt(selectedID);
+//
+//        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+//
+//        for (Appointment appointment: allAppointments) {
+//            if (selectedAppointmentID == appointment.getAppointmentID()) {
+//                selectedAppointment = appointment;
+//            }
+//        }
+//        if (selectedAppointment == null){
+//            System.out.println("no appointment found");
+//            return null;
+//        }
+//        return selectedAppointment;
+        return null;
     }
 
     private void populateChoiceBoxes() throws SQLException {
@@ -271,12 +284,33 @@ public class appointmentController implements Initializable {
     }
 
     private void populateTableView(){
-        AutoTableView autoTableAppointments = new AutoTableView(TableViewAppointments);
-        String query =
-                "select appointment_id, title, description, location, contact_id, type, start, end, customer_id, user_id" +
-                        " from client_schedule.appointments";
-        autoTableAppointments.loadTableFromDB(query);
-        TableViewAppointments.getSelectionModel().selectFirst();
+        TableColumnAppointmentID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        TableColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        TableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        TableColumnLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        TableColumnContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+        TableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        TableColumnStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+        TableColumnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+
+        TableColumnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        TableColumnUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+        try {
+            ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+            TableViewAppointments.setItems(allAppointments);
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+
+
+//        AutoTableView autoTableAppointments = new AutoTableView(TableViewAppointments);
+//        String query =
+//                "select appointment_id, title, description, location, contact_id, type, start, end, customer_id, user_id" +
+//                        " from client_schedule.appointments";
+//        autoTableAppointments.loadTableFromDB(query);
+//        TableViewAppointments.getSelectionModel().selectFirst();
     }
 
     private void sendAlert(String alertMessage)
