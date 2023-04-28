@@ -1,7 +1,6 @@
 package sample.model;
 
 import java.time.LocalDateTime;
-import sample.dao.AppointmentDAO;
 
 public class Appointment {
     private int appointmentID;

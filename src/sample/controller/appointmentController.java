@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import sample.dao.AppointmentDAO;
 import sample.dao.AutoTableView;
+import sample.helper.TimeZoneConversions;
 import sample.model.Appointment;
 
 import java.net.URL;
@@ -44,7 +45,6 @@ public class appointmentController implements Initializable {
     @FXML private TextField TextFieldLocalTimeZone;
     @FXML private TextField TextFieldUTCDateTime;
     @FXML private TextField TextFieldESTDateTime;
-
 
     @FXML private Button ButtonAdd;
     @FXML private Button ButtonEdit;
@@ -227,10 +227,14 @@ public class appointmentController implements Initializable {
         ChoiceBoxContactID.setValue(appointment.getContactID());
         TextFieldType.setText(appointment.getType());
         //TODO: convert UTC to local time
-        TextFieldStartTime.setText(appointment.getStart().toLocalTime().toString());
-        DatePickerStartDate.setValue(appointment.getStart().toLocalDate());
-        TextFieldEndTime.setText(appointment.getEnd().toLocalTime().toString());
-        DatePickerEndDate.setValue(appointment.getEnd().toLocalDate());
+
+        LocalDateTime localStartDateTime = TimeZoneConversions.UTCToSystem(appointment.getStart());
+        LocalDateTime localEndDateTime = TimeZoneConversions.UTCToSystem(appointment.getEnd());
+
+        TextFieldStartTime.setText(localStartDateTime.toLocalTime().toString());
+        DatePickerStartDate.setValue(localStartDateTime.toLocalDate());
+        TextFieldEndTime.setText(localEndDateTime.toLocalTime().toString());
+        DatePickerEndDate.setValue(localEndDateTime.toLocalDate());
         ChoiceBoxCustomerID.setValue(appointment.getCustomerID());
         ChoiceBoxUserID.setValue(appointment.getUserID());
     }
