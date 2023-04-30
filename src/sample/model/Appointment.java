@@ -46,6 +46,14 @@ public class Appointment {
         return end;
     }
 
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
+    }
+
     public LocalDateTime getCreateDate() {
         return createDate;
     }

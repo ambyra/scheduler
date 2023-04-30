@@ -238,40 +238,32 @@ public class appointmentController implements Initializable {
         TextFieldLocation.setText(appointment.getLocation());
         ChoiceBoxContactID.setValue(appointment.getContactID());
         TextFieldType.setText(appointment.getType());
-        //TODO: convert UTC to local time
 
-        LocalDateTime localStartDateTime = TimeZoneConversions.UTCToSystem(appointment.getStart());
-        LocalDateTime localEndDateTime = TimeZoneConversions.UTCToSystem(appointment.getEnd());
+        TextFieldStartTime.setText(appointment.getStart().toLocalTime().toString());
+        DatePickerStartDate.setValue(appointment.getStart().toLocalDate());
+        TextFieldEndTime.setText(appointment.getEnd().toLocalTime().toString());
+        DatePickerEndDate.setValue(appointment.getEnd().toLocalDate());
 
-        TextFieldStartTime.setText(localStartDateTime.toLocalTime().toString());
-        DatePickerStartDate.setValue(localStartDateTime.toLocalDate());
-        TextFieldEndTime.setText(localEndDateTime.toLocalTime().toString());
-        DatePickerEndDate.setValue(localEndDateTime.toLocalDate());
         ChoiceBoxCustomerID.setValue(appointment.getCustomerID());
         ChoiceBoxUserID.setValue(appointment.getUserID());
     }
 
     private Appointment getAppointmentFromSelection() throws SQLException {
-//        Appointment selectedAppointment = null;
-//
-//        ObservableList selectedItem = TableViewAppointments.getSelectionModel().getSelectedItem();
-//        if (selectedItem == null){return null;}
-//        String selectedID = selectedItem.get(0).toString();
-//        int selectedAppointmentID = Integer.parseInt(selectedID);
-//
+
+        Appointment selectedAppointment = TableViewAppointments.getSelectionModel().getSelectedItem();
+        return selectedAppointment;
 //        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
-//
+//        int selectedAppointmentID = selectedAppointment.getAppointmentID();
 //        for (Appointment appointment: allAppointments) {
 //            if (selectedAppointmentID == appointment.getAppointmentID()) {
-//                selectedAppointment = appointment;
+//                return appointment;
 //            }
 //        }
 //        if (selectedAppointment == null){
 //            System.out.println("no appointment found");
 //            return null;
 //        }
-//        return selectedAppointment;
-        return null;
+//        return null;
     }
 
     private void populateChoiceBoxes() throws SQLException {
@@ -292,7 +284,6 @@ public class appointmentController implements Initializable {
         TableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
         TableColumnStart.setCellValueFactory(new PropertyValueFactory<>("start"));
         TableColumnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
-
         TableColumnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         TableColumnUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
@@ -304,13 +295,11 @@ public class appointmentController implements Initializable {
             sqlException.printStackTrace();
         }
 
-
-//        AutoTableView autoTableAppointments = new AutoTableView(TableViewAppointments);
-//        String query =
-//                "select appointment_id, title, description, location, contact_id, type, start, end, customer_id, user_id" +
-//                        " from client_schedule.appointments";
-//        autoTableAppointments.loadTableFromDB(query);
-//        TableViewAppointments.getSelectionModel().selectFirst();
+        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
+        for(Appointment appointment : tableViewAppointments){
+            appointment.setStart(TimeZoneConversions.UTCToSystem(appointment.getStart()));
+            appointment.setEnd(TimeZoneConversions.UTCToSystem(appointment.getEnd()));
+        }
     }
 
     private void sendAlert(String alertMessage)
@@ -320,6 +309,5 @@ public class appointmentController implements Initializable {
         alert.setContentText(alertMessage);
         alert.showAndWait();
     }
-
 }
 
