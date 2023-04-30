@@ -102,7 +102,7 @@ public class appointmentController implements Initializable {
 
     @FXML
     void ClickSave (ActionEvent event){
-        //TODO: NEXT: dao not tested
+        //TODO: NEXT: dao not test
 
         int appointmentid = Integer.parseInt(TextFieldAppointmentID.getText());
         int contactid = ChoiceBoxContactID.getValue();
