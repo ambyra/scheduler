@@ -63,11 +63,14 @@ public class TimeZoneConversions {
 
     public static LocalDateTime UTCToSystem(LocalDateTime UTCLocalDateTime){
         ZonedDateTime zdtUTC = UTCLocalDateTime.atZone(ZoneId.of("UTC"));
-        System.out.println("UTC : " + zdtUTC);
         ZonedDateTime zdtSystem = zdtUTC.withZoneSameInstant(ZoneId.systemDefault());
-        System.out.println("System : " + zdtSystem);
-        System.out.println("Local : " + zdtSystem.toLocalDateTime());
         return zdtSystem.toLocalDateTime();
+    }
+
+    public static LocalDateTime SystemToUTC(LocalDateTime systemLocalDateTime){
+        ZonedDateTime zdtSystem = systemLocalDateTime.atZone(ZoneId.systemDefault());
+        ZonedDateTime zdtUTC = zdtSystem.withZoneSameInstant(ZoneId.of("UTC"));
+        return zdtUTC.toLocalDateTime();
     }
 
 

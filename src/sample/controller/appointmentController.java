@@ -10,13 +10,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.dao.AppointmentDAO;
-import sample.dao.AutoTableView;
 import sample.helper.TimeZoneConversions;
 import sample.model.Appointment;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -90,8 +88,10 @@ public class appointmentController implements Initializable {
     }
 
     @FXML
-    void ClickAdd (ActionEvent event){
+    void ClickAdd (ActionEvent event) throws SQLException {
         addState();
+        int newAppointmentID = AppointmentDAO.newAppointmentID();
+        TextFieldAppointmentID.setText(String.valueOf(newAppointmentID));
     }
 
     @FXML
@@ -101,9 +101,11 @@ public class appointmentController implements Initializable {
     }
 
     @FXML
-    void ClickSave (ActionEvent event){
-        //TODO: NEXT: dao not test
+    void ClickSave (ActionEvent event) throws SQLException {
+        //TODO: make appointment from all this junk
+        //TODO: call database update
 
+        //TODO: check for null here
         int appointmentid = Integer.parseInt(TextFieldAppointmentID.getText());
         int contactid = ChoiceBoxContactID.getValue();
         int customerid = ChoiceBoxCustomerID.getValue();
@@ -114,14 +116,14 @@ public class appointmentController implements Initializable {
         String location = TextFieldLocation.getText();
         String type = TextFieldType.getText();
 
-        //TODO: convert local time to UTC;
         LocalDate startDate = DatePickerStartDate.getValue();
         LocalTime startTime = parseTime(TextFieldStartTime.getText());
         if (startTime==null){
             sendAlert("Enter a valid start time in the format of HH:mm");
             return;
         }
-        LocalDateTime startDateTime = LocalDateTime.of(startDate,startTime);
+        LocalDateTime startDateTimeSystem = LocalDateTime.of(startDate,startTime);
+        LocalDateTime startDateTimeUTC = TimeZoneConversions.SystemToUTC(startDateTimeSystem);
 
         LocalDate endDate = DatePickerEndDate.getValue();
         LocalTime endTime = parseTime(TextFieldEndTime.getText());
@@ -129,7 +131,8 @@ public class appointmentController implements Initializable {
             sendAlert("Enter a valid end time in the format of HH:mm");
             return;
         }
-        LocalDateTime endDateTime = LocalDateTime.of(endDate,endTime);
+        LocalDateTime endDateTimeSystem = LocalDateTime.of(endDate,endTime);
+        LocalDateTime endDateTimeUTC = TimeZoneConversions.SystemToUTC(endDateTimeSystem);
 
         //exitstate
         selectState();
@@ -137,7 +140,6 @@ public class appointmentController implements Initializable {
 
     LocalTime parseTime(String time){
         LocalTime parsedTime;
-
         try{
             parsedTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
 
@@ -249,21 +251,7 @@ public class appointmentController implements Initializable {
     }
 
     private Appointment getAppointmentFromSelection() throws SQLException {
-
-        Appointment selectedAppointment = TableViewAppointments.getSelectionModel().getSelectedItem();
-        return selectedAppointment;
-//        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
-//        int selectedAppointmentID = selectedAppointment.getAppointmentID();
-//        for (Appointment appointment: allAppointments) {
-//            if (selectedAppointmentID == appointment.getAppointmentID()) {
-//                return appointment;
-//            }
-//        }
-//        if (selectedAppointment == null){
-//            System.out.println("no appointment found");
-//            return null;
-//        }
-//        return null;
+        return TableViewAppointments.getSelectionModel().getSelectedItem();
     }
 
     private void populateChoiceBoxes() throws SQLException {

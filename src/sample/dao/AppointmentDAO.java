@@ -6,6 +6,9 @@ import sample.model.Appointment;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class AppointmentDAO {
     public static ObservableList<Appointment> getAppointments() throws SQLException {
@@ -40,9 +43,29 @@ public class AppointmentDAO {
         return appointments;
     }
 
+    public static Appointment getAppointment(int appointmentID) throws SQLException {
+        ObservableList<Appointment> appointments = getAppointments();
+        for (Appointment appointment: appointments) {
+            if (appointment.getAppointmentID() == appointmentID) {
+                return appointment;
+            }
+        }
+        return null;
+    }
+
+    public static int newAppointmentID() throws SQLException {
+        ObservableList<Appointment> appointments = getAppointments();
+        List<Integer> appointmentIDs = new ArrayList<Integer>();
+        for (Appointment appointment: appointments) {
+            appointmentIDs.add(appointment.getAppointmentID());
+        }
+        int largest = Collections.max(appointmentIDs);
+        return largest + 1;
+    }
+
     public static void updateAppointment(Appointment appointment) throws SQLException{
         Connection connection = JDBC.getConnection();
-        String query = " update client_schedule.appointments " +
+        String query = "insert or update client_schedule.appointments " +
             "set Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, " +
             "Created_By = ?, Last_Update = ?, Last_Updated_By =?, Customer_ID = ?, User_ID = ?, Contact_ID = ? "+
             "where Appointment_ID = ?";
