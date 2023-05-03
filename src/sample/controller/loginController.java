@@ -40,6 +40,16 @@ public class loginController implements Initializable {
 
     private String passwordError;
 
+    private static int CurrentUserID = 0;
+
+    public static int getCurrentUserID() {
+        return CurrentUserID;
+    }
+
+    public static void debugSetCurrentUserID(){
+        CurrentUserID = 1;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setLanguage();
@@ -69,6 +79,8 @@ public class loginController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR, passwordError);
             alert.showAndWait();
         }
+
+        CurrentUserID = userid;
     }
 
     private void setLanguage(){

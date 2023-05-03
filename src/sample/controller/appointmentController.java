@@ -10,8 +10,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.dao.AppointmentDAO;
+import sample.dao.UserDAO;
 import sample.helper.TimeZoneConversions;
 import sample.model.Appointment;
+import sample.model.User;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -65,10 +67,7 @@ public class appointmentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         selectState();
-        populateTableView();
-        try {populateChoiceBoxes(); }
-        catch (SQLException sqlException) { sqlException.printStackTrace();}
-        setTimers();
+
     }
 
     void setTimers(){
@@ -102,36 +101,52 @@ public class appointmentController implements Initializable {
 
     @FXML
     void ClickSave (ActionEvent event) throws SQLException {
+
+        Appointment appointment = parseInput();
+        //AppointmentDAO.updateAppointment(appointment);
+
+        //exitstate
+        if(appointment != null){
+            selectState();
+        }
+
+    }
+
+    private Appointment parseInput() throws SQLException {
         //TODO: make appointment from all this junk
         //TODO: call database update
 
+        int appointmentid = 0;
+        int contactid = 0;
+        int customerid = 0;
+        int userid = 0;
+
         try{
-            int appointmentid = Integer.parseInt(TextFieldAppointmentID.getText());
-            int contactid = ChoiceBoxContactID.getValue();
-            int customerid = ChoiceBoxCustomerID.getValue();
-            int userid = ChoiceBoxUserID.getValue();
+            appointmentid = Integer.parseInt(TextFieldAppointmentID.getText());
+            contactid = ChoiceBoxContactID.getValue();
+            customerid = ChoiceBoxCustomerID.getValue();
+            userid = ChoiceBoxUserID.getValue();
         }catch(NullPointerException e){
             sendAlert("ID Field cannot be empty");
         }
 
-
         String title = TextFieldTitle.getText();
-        if(title.isEmpty()){sendAlert("Title cannot be empty"); return;}
+        if(title.isEmpty()){sendAlert("Title cannot be empty"); return null;}
 
         String description = TextFieldDescription.getText();
-        if(description.isEmpty()){sendAlert("Description cannot be empty"); return;}
+        if(description.isEmpty()){sendAlert("Description cannot be empty"); return null;}
 
         String location = TextFieldLocation.getText();
-        if(location.isEmpty()){sendAlert("Location cannot be empty"); return;}
+        if(location.isEmpty()){sendAlert("Location cannot be empty"); return null;}
 
         String type = TextFieldType.getText();
-        if(type.length()==0){sendAlert("Type cannot be empty"); return;}
+        if(type.length()==0){sendAlert("Type cannot be empty"); return null;}
 
         LocalDate startDate = DatePickerStartDate.getValue();
         LocalTime startTime = parseTime(TextFieldStartTime.getText());
         if (startTime==null){
             sendAlert("Enter a valid start time in the format of HH:mm");
-            return;
+            return null;
         }
         LocalDateTime startDateTimeSystem = LocalDateTime.of(startDate,startTime);
         LocalDateTime startDateTimeUTC = TimeZoneConversions.SystemToUTC(startDateTimeSystem);
@@ -140,13 +155,31 @@ public class appointmentController implements Initializable {
         LocalTime endTime = parseTime(TextFieldEndTime.getText());
         if (endTime==null){
             sendAlert("Enter a valid end time in the format of HH:mm");
-            return;
+            return null;
         }
         LocalDateTime endDateTimeSystem = LocalDateTime.of(endDate,endTime);
         LocalDateTime endDateTimeUTC = TimeZoneConversions.SystemToUTC(endDateTimeSystem);
 
-        //exitstate
-        selectState();
+        User currentUser = UserDAO.getCurrentUser();
+
+        LocalDateTime createDate = ZonedDateTime.now(ZoneId.of("UTC")).toLocalDateTime();
+        String createdBy = currentUser.getUserName();
+
+        //check if appointment already exists
+        Appointment oldAppointment = AppointmentDAO.getAppointment(appointmentid);
+        if(oldAppointment != null){
+            createDate  = oldAppointment.getCreateDate();
+            createdBy = oldAppointment.getCreatedBy();
+        }
+
+        LocalDateTime lastUpdate = ZonedDateTime.now(ZoneId.of("UTC")).toLocalDateTime();
+        String lastUpdatedBy = currentUser.getUserName();
+
+        Appointment appointment = new Appointment(appointmentid, title, description, location, type,
+                startDateTimeUTC, endDateTimeUTC, createDate, createdBy, lastUpdate, lastUpdatedBy,
+                customerid, userid, contactid);
+
+        return appointment;
     }
 
 
@@ -181,6 +214,11 @@ public class appointmentController implements Initializable {
         ButtonAdd.setDisable(false);
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);
+
+        populateTableView();
+        try {populateChoiceBoxes(); }
+        catch (SQLException sqlException) { sqlException.printStackTrace();}
+        setTimers();
     }
     void addState(){
         TableViewAppointments.setDisable(true);
