@@ -105,16 +105,27 @@ public class appointmentController implements Initializable {
         //TODO: make appointment from all this junk
         //TODO: call database update
 
-        //TODO: check for null here
-        int appointmentid = Integer.parseInt(TextFieldAppointmentID.getText());
-        int contactid = ChoiceBoxContactID.getValue();
-        int customerid = ChoiceBoxCustomerID.getValue();
-        int userid = ChoiceBoxUserID.getValue();
+        try{
+            int appointmentid = Integer.parseInt(TextFieldAppointmentID.getText());
+            int contactid = ChoiceBoxContactID.getValue();
+            int customerid = ChoiceBoxCustomerID.getValue();
+            int userid = ChoiceBoxUserID.getValue();
+        }catch(NullPointerException e){
+            sendAlert("ID Field cannot be empty");
+        }
+
 
         String title = TextFieldTitle.getText();
+        if(title.isEmpty()){sendAlert("Title cannot be empty"); return;}
+
         String description = TextFieldDescription.getText();
+        if(description.isEmpty()){sendAlert("Description cannot be empty"); return;}
+
         String location = TextFieldLocation.getText();
+        if(location.isEmpty()){sendAlert("Location cannot be empty"); return;}
+
         String type = TextFieldType.getText();
+        if(type.length()==0){sendAlert("Type cannot be empty"); return;}
 
         LocalDate startDate = DatePickerStartDate.getValue();
         LocalTime startTime = parseTime(TextFieldStartTime.getText());
@@ -137,6 +148,7 @@ public class appointmentController implements Initializable {
         //exitstate
         selectState();
     }
+
 
     LocalTime parseTime(String time){
         LocalTime parsedTime;
@@ -173,6 +185,7 @@ public class appointmentController implements Initializable {
     void addState(){
         TableViewAppointments.setDisable(true);
         disableButtons();
+        enableBoxes();
         ButtonSave.setDisable(false);
         ButtonCancel.setDisable(false);
     }
