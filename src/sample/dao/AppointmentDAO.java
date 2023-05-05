@@ -65,31 +65,46 @@ public class AppointmentDAO {
 
     public static void updateAppointment(Appointment appointment) throws SQLException{
         Connection connection = JDBC.getConnection();
-        String query = "insert or update client_schedule.appointments " +
-            "set Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, " +
-            "Created_By = ?, Last_Update = ?, Last_Updated_By =?, Customer_ID = ?, User_ID = ?, Contact_ID = ? "+
-            "where Appointment_ID = ?";
+
+        String query = "replace into client_schedule.appointments " +
+                "(Appointment_ID, Title, Description, Location, " +
+                "Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, " +
+                "User_ID, Contact_ID) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
         try{
             JDBC.makePreparedStatement(query, connection);
             PreparedStatement ps = JDBC.getPreparedStatement();
-            ps.setString(1, appointment.getTitle());
-            ps.setString(2, appointment.getDescription());
-            ps.setString(3,appointment.getLocation());
-            ps.setString(4,appointment.getType());
-            ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart()));
-            ps.setTimestamp(6,Timestamp.valueOf(appointment.getEnd()));
-            ps.setTimestamp(7,Timestamp.valueOf(appointment.getCreateDate()));
-            ps.setString(8,appointment.getCreatedBy());
-            ps.setTimestamp(9,Timestamp.valueOf(appointment.getLastUpdate()));
-            ps.setString(10, appointment.getLastUpdatedBy());
-            ps.setInt(11, appointment.getCustomerID());
-            ps.setInt(12, appointment.getUserID());
-            ps.setInt(13, appointment.getContactID());
+            ps.setInt(1, appointment.getAppointmentID());
+            ps.setString(2, appointment.getTitle());
+            ps.setString(3, appointment.getDescription());
+            ps.setString(4,appointment.getLocation());
+            ps.setString(5,appointment.getType());
+            ps.setTimestamp(6, Timestamp.valueOf(appointment.getStart()));
+            ps.setTimestamp(7,Timestamp.valueOf(appointment.getEnd()));
+            ps.setTimestamp(8,Timestamp.valueOf(appointment.getCreateDate()));
+            ps.setString(9,appointment.getCreatedBy());
+            ps.setTimestamp(10,Timestamp.valueOf(appointment.getLastUpdate()));
+            ps.setString(11, appointment.getLastUpdatedBy());
+            ps.setInt(12, appointment.getCustomerID());
+            ps.setInt(13, appointment.getUserID());
+            ps.setInt(14, appointment.getContactID());
 
+            System.out.println(ps.toString());
             ps.executeUpdate(); //not executeupdate
 
-        }catch(SQLException sqlException){}
+
+        }catch(SQLException sqlException){sqlException.printStackTrace();}
+    }
+
+    public static void deleteAppointment(Appointment appointment){
+        Connection connection = JDBC.getConnection();
+        String query = "delete from client_schedule.appointments where Appointment_ID = ?";
+
+        try{
+            JDBC.makePreparedStatement(query, connection);
+            PreparedStatement ps = JDBC.getPreparedStatement();
+            ps.setInt(1, appointment.getAppointmentID());}
+        catch(SQLException sqlException){sqlException.printStackTrace();}
     }
 }
 

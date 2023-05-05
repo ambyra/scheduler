@@ -103,7 +103,8 @@ public class appointmentController implements Initializable {
     void ClickSave (ActionEvent event) throws SQLException {
 
         Appointment appointment = parseInput();
-        //AppointmentDAO.updateAppointment(appointment);
+
+        AppointmentDAO.updateAppointment(appointment);
 
         //exitstate
         if(appointment != null){
@@ -113,9 +114,6 @@ public class appointmentController implements Initializable {
     }
 
     private Appointment parseInput() throws SQLException {
-        //TODO: make appointment from all this junk
-        //TODO: call database update
-
         int appointmentid = 0;
         int contactid = 0;
         int customerid = 0;
@@ -201,7 +199,11 @@ public class appointmentController implements Initializable {
     }
 
     @FXML
-    void ClickDelete (ActionEvent event){
+    void ClickDelete (ActionEvent event) throws SQLException {
+        Appointment appointment = getAppointmentFromSelection();
+
+        //TODO: not working?
+        AppointmentDAO.deleteAppointment(appointment);
         selectState();
     }
 
