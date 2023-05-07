@@ -66,8 +66,24 @@ public class appointmentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //entry state
         selectState();
 
+        checkAppointments();
+        //TODO: view appointment schedules by month and week using a TableView
+    }
+
+    private void checkAppointments(){
+        //TODO: check for scheduling an appointment outside of business hours,
+        // defined as 8:00 a.m. to 10:00 p.m. EST, including weekends
+
+        //TODO: check for scheduling overlapping appointments for customers
+
+        //TODO: provide an alert when there is an appointment within 15 minutes
+        // of the user’s log-in. A custom message should be displayed in the user interface
+        // and include the appointment ID, date, and time.
+        // If the user does not have any appointments within 15 minutes of logging in,
+        // display a custom message in the user interface indicating there are no upcoming appointments.
     }
 
     void setTimers(){
@@ -101,11 +117,8 @@ public class appointmentController implements Initializable {
 
     @FXML
     void ClickSave (ActionEvent event) throws SQLException {
-
         Appointment appointment = parseInput();
-
         AppointmentDAO.updateAppointment(appointment);
-
         //exitstate
         if(appointment != null){
             selectState();
@@ -286,12 +299,11 @@ public class appointmentController implements Initializable {
         DatePickerEndDate.setDisable(false);
     }
 
-    private void setBoxes(Appointment appointment){
+    private void setBoxes(Appointment appointment) throws SQLException {
         TextFieldAppointmentID.setText(String.valueOf(appointment.getAppointmentID()));
         TextFieldTitle.setText(appointment.getTitle());
         TextFieldDescription.setText(appointment.getDescription());
         TextFieldLocation.setText(appointment.getLocation());
-        ChoiceBoxContactID.setValue(appointment.getContactID());
         TextFieldType.setText(appointment.getType());
 
         TextFieldStartTime.setText(appointment.getStart().toLocalTime().toString());
@@ -299,8 +311,7 @@ public class appointmentController implements Initializable {
         TextFieldEndTime.setText(appointment.getEnd().toLocalTime().toString());
         DatePickerEndDate.setValue(appointment.getEnd().toLocalDate());
 
-        ChoiceBoxCustomerID.setValue(appointment.getCustomerID());
-        ChoiceBoxUserID.setValue(appointment.getUserID());
+        populateChoiceBoxes();
     }
 
     private Appointment getAppointmentFromSelection() throws SQLException {
@@ -308,10 +319,17 @@ public class appointmentController implements Initializable {
     }
 
     private void populateChoiceBoxes() throws SQLException {
+        ChoiceBoxContactID.getItems().clear();
+        ChoiceBoxCustomerID.getItems().clear();
+        ChoiceBoxUserID.getItems().clear();
+
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
         for (Appointment appointment: allAppointments) {
+            //TODO: get these from contactDAO
             ChoiceBoxContactID.getItems().add(appointment.getContactID());
+            //TODO: get these from userDAO
             ChoiceBoxUserID.getItems().add(appointment.getUserID());
+            //TODO: get these from customerdao
             ChoiceBoxCustomerID.getItems().add(appointment.getCustomerID());
         }
     }

@@ -90,7 +90,7 @@ public class AppointmentDAO {
             ps.setInt(14, appointment.getContactID());
 
             System.out.println(ps.toString());
-            ps.executeUpdate(); //not executeupdate
+            ps.executeUpdate();
 
 
         }catch(SQLException sqlException){sqlException.printStackTrace();}
@@ -103,7 +103,9 @@ public class AppointmentDAO {
         try{
             JDBC.makePreparedStatement(query, connection);
             PreparedStatement ps = JDBC.getPreparedStatement();
-            ps.setInt(1, appointment.getAppointmentID());}
+            ps.setInt(1, appointment.getAppointmentID());
+            ps.executeUpdate();
+        }
         catch(SQLException sqlException){sqlException.printStackTrace();}
     }
 }
