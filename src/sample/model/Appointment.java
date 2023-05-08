@@ -45,9 +45,11 @@ public class Appointment {
     }
 
     public ZonedDateTime getStartEST(){
+        System.out.println(appointmentID + " " + start);
         ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
-        //System.out.println(z)
+        System.out.println(appointmentID + " " + zdtUTC);
         ZonedDateTime zdtEST = zdtUTC.withZoneSameInstant(ZoneId.of("US/Eastern"));
+        System.out.println(appointmentID + " " + zdtEST);
         return zdtEST;
     }
 

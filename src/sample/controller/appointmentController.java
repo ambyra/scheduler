@@ -66,6 +66,8 @@ public class appointmentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        //TODO: convert Appointment LocalDateTime to ZonedDateTime :(
         //entry state
         try {
             selectState();
@@ -383,8 +385,8 @@ public class appointmentController implements Initializable {
 
         ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
         for(Appointment appointment : tableViewAppointments){
-            appointment.setStart(TimeZoneConversions.UTCToSystem(appointment.getStart()));
-            appointment.setEnd(TimeZoneConversions.UTCToSystem(appointment.getEnd()));
+            appointment.setStart(appointment.getStartSystem());
+            appointment.setEnd(appointment.getEndSystem());
         }
     }
 
