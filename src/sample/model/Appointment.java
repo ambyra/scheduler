@@ -1,6 +1,8 @@
 package sample.model;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class Appointment {
     private int appointmentID;
@@ -40,6 +42,24 @@ public class Appointment {
 
     public LocalDateTime getStart() {
         return start;
+    }
+
+    public ZonedDateTime getStartEST(){
+        ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
+        //System.out.println(z)
+        ZonedDateTime zdtEST = zdtUTC.withZoneSameInstant(ZoneId.of("US/Eastern"));
+        return zdtEST;
+    }
+
+    public ZonedDateTime getStartUTC(){
+        ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
+        return zdtUTC;
+    }
+
+    public ZonedDateTime getStartSystem(){
+        ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtSystem = zdtUTC.withZoneSameInstant(ZoneId.systemDefault());
+        return zdtSystem;
     }
 
     public void setAppointmentID(int appointmentID) {
@@ -94,12 +114,39 @@ public class Appointment {
         return end;
     }
 
+    public ZonedDateTime getEndEST(){
+        ZonedDateTime zdtUTC = end.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtEST = zdtUTC.withZoneSameInstant(ZoneId.of("US/Eastern"));
+        return zdtEST;
+    }
+
+    public ZonedDateTime getEndUTC(){
+        ZonedDateTime zdtUTC = end.atZone(ZoneId.of("UTC"));
+        return zdtUTC;
+    }
+
+    public ZonedDateTime getEndSystem(){
+        ZonedDateTime zdtUTC = end.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtSystem = zdtUTC.withZoneSameInstant(ZoneId.systemDefault());
+        return zdtSystem;
+    }
+
     public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
+    public void setStart(ZonedDateTime start){
+        ZonedDateTime startUTC = start.withZoneSameInstant(ZoneId.of("UTC"));
+        this.start = startUTC.toLocalDateTime();
+    }
+
     public void setEnd(LocalDateTime end) {
         this.end = end;
+    }
+
+    public void setEnd(ZonedDateTime end){
+        ZonedDateTime startUTC = end.withZoneSameInstant(ZoneId.of("UTC"));
+        this.end = startUTC.toLocalDateTime();
     }
 
     public LocalDateTime getCreateDate() {

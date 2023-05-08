@@ -61,6 +61,12 @@ public class TimeZoneConversions {
         }
     }
 
+    public static ZonedDateTime UTCtoEST(LocalDateTime utcLocalDateTime){
+        ZonedDateTime zdtUTC = utcLocalDateTime.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtEST = zdtUTC.withZoneSameInstant(ZoneId.of("US/Eastern"));
+        return zdtEST;
+    }
+
     public static LocalDateTime UTCToSystem(LocalDateTime UTCLocalDateTime){
         ZonedDateTime zdtUTC = UTCLocalDateTime.atZone(ZoneId.of("UTC"));
         ZonedDateTime zdtSystem = zdtUTC.withZoneSameInstant(ZoneId.systemDefault());

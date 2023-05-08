@@ -67,15 +67,38 @@ public class appointmentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //entry state
-        selectState();
-
-        checkAppointments();
+        try {
+            selectState();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
         //TODO: view appointment schedules by month and week using a TableView
     }
 
-    private void checkAppointments(){
+    private void checkAppointments() throws SQLException {
         //TODO: check for scheduling an appointment outside of business hours,
         // defined as 8:00 a.m. to 10:00 p.m. EST, including weekends
+
+        //convert all dates and times to EST
+        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+
+        for(Appointment appointment: allAppointments){
+            ZonedDateTime appointmentStart = appointment.getStartEST();
+            ZonedDateTime appointmentEnd = appointment.getEndEST();
+
+            int appointmentStartHour = appointmentStart.getHour();
+            int appointmentEndHour = appointmentEnd.getHour();
+            System.out.println("ID " +appointment.getAppointmentID() +
+                    " " +appointmentStartHour  + " - " +
+                    appointmentEndHour);
+
+            if(appointmentStartHour < 8 || appointmentEndHour > 22){
+                sendAlert("Appointment #" +
+                        appointment.getAppointmentID() +
+                        " is outside of business hours, " +
+                        "8:00 a.m. to 10:00 p.m. EST, including weekends");
+            }
+        }
 
         //TODO: check for scheduling overlapping appointments for customers
 
@@ -207,7 +230,7 @@ public class appointmentController implements Initializable {
     }
 
     @FXML
-    void ClickCancel (ActionEvent event){
+    void ClickCancel (ActionEvent event) throws SQLException {
         selectState();
     }
 
@@ -220,20 +243,24 @@ public class appointmentController implements Initializable {
         selectState();
     }
 
-    void selectState(){
+    void selectState() throws SQLException {
         TableViewAppointments.setDisable(false);
         TextFieldAppointmentID.setDisable(true);
+
         clearBoxes();
-        disableButtons();
         disableBoxes();
+        setTimers();
+
+        disableButtons();
         ButtonAdd.setDisable(false);
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);
 
-        populateTableView();
+        populateAppointmentsTableView();
         try {populateChoiceBoxes(); }
         catch (SQLException sqlException) { sqlException.printStackTrace();}
-        setTimers();
+        checkAppointments();
+
     }
     void addState(){
         TableViewAppointments.setDisable(true);
@@ -334,7 +361,7 @@ public class appointmentController implements Initializable {
         }
     }
 
-    private void populateTableView(){
+    private void populateAppointmentsTableView(){
         TableColumnAppointmentID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         TableColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         TableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -364,7 +391,7 @@ public class appointmentController implements Initializable {
     private void sendAlert(String alertMessage)
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Error");
+        alert.setTitle("Alert!");
         alert.setContentText(alertMessage);
         alert.showAndWait();
     }
