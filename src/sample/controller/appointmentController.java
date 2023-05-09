@@ -32,6 +32,9 @@ public class appointmentController implements Initializable {
     @FXML private DatePicker DatePickerStartDate;
 
     @FXML private ToggleGroup RadioGroupAppointments;
+    @FXML private RadioButton RadioButtonAllAppointments;
+    @FXML private RadioButton RadioButtonMonth;
+    @FXML private RadioButton RadioButtonWeek;
 
     @FXML private TableView<Appointment> TableViewAppointments;
 
@@ -66,22 +69,37 @@ public class appointmentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        //TODO: convert Appointment LocalDateTime to ZonedDateTime :(
         //entry state
         try {
             selectState();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+        startRadioGroupAppointmentsListener();
+
+    }
+
+    private void startRadioGroupAppointmentsListener(){
         //TODO: view appointment schedules by month and week using a TableView
+        RadioGroupAppointments.selectedToggleProperty().
+                addListener((observable, oldValue, newValue) -> {
+                    if(newValue.equals(RadioButtonAllAppointments)){
+                        System.out.println("All Appointments");
+                    }
+                    if(newValue.equals(RadioButtonMonth)){
+                        System.out.println("Month");
+                    }
+                    if(newValue.equals(RadioButtonWeek)){
+                        System.out.println("Week");
+                    }
+                });
+
     }
 
     private void checkAppointments() throws SQLException {
         //TODO: check for scheduling an appointment outside of business hours,
         // defined as 8:00 a.m. to 10:00 p.m. EST, including weekends
 
-        //convert all dates and times to EST
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
 
         for(Appointment appointment: allAppointments){
@@ -239,8 +257,6 @@ public class appointmentController implements Initializable {
     @FXML
     void ClickDelete (ActionEvent event) throws SQLException {
         Appointment appointment = getAppointmentFromSelection();
-
-        //TODO: not working?
         AppointmentDAO.deleteAppointment(appointment);
         selectState();
     }

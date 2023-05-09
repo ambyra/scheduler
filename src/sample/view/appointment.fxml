@@ -99,13 +99,13 @@
                         <ChoiceBox fx:id="ChoiceBoxCustomerID" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                         <ChoiceBox fx:id="ChoiceBoxUserID" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View:" />
-                        <RadioButton mnemonicParsing="false" prefWidth="169.0" selected="true" text="All Appointments" GridPane.columnIndex="1">
+                        <RadioButton fx:id="RadioButtonAllAppointments" mnemonicParsing="false" prefWidth="169.0" selected="true" text="All Appointments" GridPane.columnIndex="1">
                            <toggleGroup>
                               <ToggleGroup fx:id="RadioGroupAppointments" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton mnemonicParsing="false" text="Month" toggleGroup="$RadioGroupAppointments" GridPane.columnIndex="2" />
-                        <RadioButton mnemonicParsing="false" text="Week" toggleGroup="$RadioGroupAppointments" GridPane.columnIndex="3" />
+                        <RadioButton fx:id="RadioButtonMonth" mnemonicParsing="false" text="Month" toggleGroup="$RadioGroupAppointments" GridPane.columnIndex="2" />
+                        <RadioButton fx:id="RadioButtonWeek" mnemonicParsing="false" text="Week" toggleGroup="$RadioGroupAppointments" GridPane.columnIndex="3" />
                         <TextField fx:id="TextFieldStartTime" GridPane.columnIndex="3" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets right="5.0" />

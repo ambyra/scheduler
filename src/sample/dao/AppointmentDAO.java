@@ -88,8 +88,6 @@ public class AppointmentDAO {
             ps.setInt(12, appointment.getCustomerID());
             ps.setInt(13, appointment.getUserID());
             ps.setInt(14, appointment.getContactID());
-
-            System.out.println(ps.toString());
             ps.executeUpdate();
 
 
