@@ -1,6 +1,7 @@
 package sample.controller;
 
 import javafx.animation.AnimationTimer;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -91,10 +92,13 @@ public class appointmentController implements Initializable {
                     }
                     if(newValue.equals(RadioButtonWeek)){
                         System.out.println("Week");
+                        displayTableViewAppointmentsWeek();
                     }
                 });
 
     }
+
+
 
     private void checkAppointments() throws SQLException {
         //TODO: check for scheduling an appointment outside of business hours,
@@ -399,6 +403,57 @@ public class appointmentController implements Initializable {
             sqlException.printStackTrace();
         }
 
+        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
+        for(Appointment appointment : tableViewAppointments){
+            appointment.setStart(appointment.getStartSystem());
+            appointment.setEnd(appointment.getEndSystem());
+        }
+    }
+
+    private void displayTableViewAppointmentsAll(){
+        try {
+            ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+            TableViewAppointments.setItems(allAppointments);
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
+        for(Appointment appointment : tableViewAppointments){
+            appointment.setStart(appointment.getStartSystem());
+            appointment.setEnd(appointment.getEndSystem());
+        }
+    }
+    private void displayTableViewAppointmentsMonth(){
+        try {
+            ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+            TableViewAppointments.setItems(allAppointments);
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
+        for(Appointment appointment : tableViewAppointments){
+            appointment.setStart(appointment.getStartSystem());
+            appointment.setEnd(appointment.getEndSystem());
+        }
+    }
+    private void displayTableViewAppointmentsWeek(){
+        try {
+            ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+            ObservableList<Appointment> weekAppointments = FXCollections.observableArrayList();
+            for(Appointment appointment : allAppointments){
+                if(appointment.getStart().isAfter(LocalDateTime.now().minusDays(7))){
+                    weekAppointments.add(appointment);
+                }
+
+            }
+            TableViewAppointments.getItems().clear();
+            TableViewAppointments.setItems(weekAppointments);
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
         ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
         for(Appointment appointment : tableViewAppointments){
             appointment.setStart(appointment.getStartSystem());
