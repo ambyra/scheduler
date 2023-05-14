@@ -10,11 +10,11 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private LocalDateTime createDate;
+    private ZonedDateTime start;
+    private ZonedDateTime end;
+    private ZonedDateTime createDate;
     private String createdBy;
-    private LocalDateTime lastUpdate;
+    private ZonedDateTime lastUpdate;
     private String lastUpdatedBy;
     private int customerID;
     private int userID;
@@ -40,24 +40,24 @@ public class Appointment {
         return type;
     }
 
-    public LocalDateTime getStart() {
+    public ZonedDateTime getStart() {
         return start;
     }
 
     public ZonedDateTime getStartEST(){
-        ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
-        ZonedDateTime zdtEST = zdtUTC.withZoneSameInstant(ZoneId.of("US/Eastern"));
+        //ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtEST = start.withZoneSameInstant(ZoneId.of("US/Eastern"));
         return zdtEST;
     }
 
     public ZonedDateTime getStartUTC(){
-        ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtUTC = start.withZoneSameInstant(ZoneId.of("UTC"));
         return zdtUTC;
     }
 
     public ZonedDateTime getStartSystem(){
-        ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
-        ZonedDateTime zdtSystem = zdtUTC.withZoneSameInstant(ZoneId.systemDefault());
+        //ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtSystem = start.withZoneSameInstant(ZoneId.systemDefault());
         return zdtSystem;
     }
 
@@ -81,7 +81,7 @@ public class Appointment {
         this.type = type;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(ZonedDateTime createDate) {
         this.createDate = createDate;
     }
 
@@ -89,7 +89,7 @@ public class Appointment {
         this.createdBy = createdBy;
     }
 
-    public void setLastUpdate(LocalDateTime lastUpdate) {
+    public void setLastUpdate(ZonedDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
@@ -109,56 +109,49 @@ public class Appointment {
         this.contactID = contactID;
     }
 
-    public LocalDateTime getEnd() {
+    public ZonedDateTime getEnd() {
         return end;
     }
 
     public ZonedDateTime getEndEST(){
-        ZonedDateTime zdtUTC = end.atZone(ZoneId.of("UTC"));
-        ZonedDateTime zdtEST = zdtUTC.withZoneSameInstant(ZoneId.of("US/Eastern"));
+        //ZonedDateTime zdtUTC = end.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtEST = end.withZoneSameInstant(ZoneId.of("US/Eastern"));
         return zdtEST;
     }
 
     public ZonedDateTime getEndUTC(){
-        ZonedDateTime zdtUTC = end.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtUTC = end.withZoneSameInstant(ZoneId.of("UTC"));
         return zdtUTC;
     }
 
     public ZonedDateTime getEndSystem(){
-        ZonedDateTime zdtUTC = end.atZone(ZoneId.of("UTC"));
-        ZonedDateTime zdtSystem = zdtUTC.withZoneSameInstant(ZoneId.systemDefault());
+        //ZonedDateTime zdtUTC = end.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtSystem = end.withZoneSameInstant(ZoneId.systemDefault());
         return zdtSystem;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(ZonedDateTime start) {
         this.start = start;
     }
 
-    public void setStart(ZonedDateTime start){
-        ZonedDateTime startUTC = start.withZoneSameInstant(ZoneId.of("UTC"));
-        this.start = startUTC.toLocalDateTime();
-    }
-
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(ZonedDateTime end) {
         this.end = end;
     }
 
-    public void setEnd(ZonedDateTime end){
-        ZonedDateTime startUTC = end.withZoneSameInstant(ZoneId.of("UTC"));
-        this.end = startUTC.toLocalDateTime();
-    }
 
-    public LocalDateTime getCreateDate() {
+    public ZonedDateTime getCreateDate() {
         return createDate;
     }
+    public ZonedDateTime getCreateDateUTC(){return createDate.withZoneSameInstant(ZoneId.of("UTC"));}
 
     public String getCreatedBy() {
         return createdBy;
     }
 
-    public LocalDateTime getLastUpdate() {
+    public ZonedDateTime getLastUpdate() {
         return lastUpdate;
     }
+    public ZonedDateTime getLastUpdateUTC(){return lastUpdate.withZoneSameInstant(ZoneId.of("UTC"));}
 
     public String getLastUpdatedBy() {
         return lastUpdatedBy;
@@ -177,8 +170,8 @@ public class Appointment {
     }
 
     public Appointment(int appointmentID, String title, String description, String location,
-                       String type, LocalDateTime start, LocalDateTime end, LocalDateTime createDate,
-                       String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID){
+                       String type, ZonedDateTime start, ZonedDateTime end, ZonedDateTime createDate,
+                       String createdBy, ZonedDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID){
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;

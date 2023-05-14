@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.appointmentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.appointmentController">
    <children>
       <SplitPane dividerPositions="0.6939799331103679" minHeight="-Infinity" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -30,8 +30,8 @@
                         <TableColumn fx:id="TableColumnLocation" minWidth="70.0" prefWidth="70.0" text="Location" />
                         <TableColumn fx:id="TableColumnContact" minWidth="70.0" prefWidth="70.0" text="Contact ID" />
                         <TableColumn fx:id="TableColumnType" minWidth="100.0" prefWidth="100.0" text="Type" />
-                        <TableColumn fx:id="TableColumnStart" minWidth="110.0" prefWidth="110.0" text="Start" />
-                        <TableColumn fx:id="TableColumnEnd" minWidth="110.0" prefWidth="110.0" text="End" />
+                        <TableColumn fx:id="TableColumnStart" minWidth="180.0" prefWidth="180.0" text="Start" />
+                        <TableColumn fx:id="TableColumnEnd" minWidth="180.0" prefWidth="180.0" text="End" />
                         <TableColumn fx:id="TableColumnCustomerID" minWidth="60.0" prefWidth="60.0" text="Cust. ID" />
                         <TableColumn fx:id="TableColumnUserID" minWidth="60.0" prefWidth="60.0" text="User ID" />
                      </columns></TableView>

@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import sample.model.Appointment;
 
 import java.sql.*;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,11 +28,11 @@ public class AppointmentDAO {
                         rs.getString("Description"),
                         rs.getString("Location"),
                         rs.getString("Type"),
-                        rs.getTimestamp("Start").toLocalDateTime(),
-                        rs.getTimestamp("End").toLocalDateTime(),
-                        rs.getTimestamp("Create_Date").toLocalDateTime(),
+                        rs.getTimestamp("Start").toLocalDateTime().atZone(ZoneId.of("UTC")),
+                        rs.getTimestamp("End").toLocalDateTime().atZone(ZoneId.of("UTC")),
+                        rs.getTimestamp("Create_Date").toLocalDateTime().atZone(ZoneId.of("UTC")),
                         rs.getString("Created_By"),
-                        rs.getTimestamp("Last_Update").toLocalDateTime(),
+                        rs.getTimestamp("Last_Update").toLocalDateTime().atZone(ZoneId.of("UTC")),
                         rs.getString("Last_Updated_By"),
                         rs.getInt("Customer_ID"),
                         rs.getInt("User_ID"),
@@ -79,17 +79,16 @@ public class AppointmentDAO {
             ps.setString(3, appointment.getDescription());
             ps.setString(4,appointment.getLocation());
             ps.setString(5,appointment.getType());
-            ps.setTimestamp(6, Timestamp.valueOf(appointment.getStart()));
-            ps.setTimestamp(7,Timestamp.valueOf(appointment.getEnd()));
-            ps.setTimestamp(8,Timestamp.valueOf(appointment.getCreateDate()));
+            ps.setTimestamp(6, Timestamp.valueOf(appointment.getStartUTC().toLocalDateTime()));
+            ps.setTimestamp(7,Timestamp.valueOf(appointment.getEndUTC().toLocalDateTime()));
+            ps.setTimestamp(8,Timestamp.valueOf(appointment.getCreateDateUTC().toLocalDateTime()));
             ps.setString(9,appointment.getCreatedBy());
-            ps.setTimestamp(10,Timestamp.valueOf(appointment.getLastUpdate()));
+            ps.setTimestamp(10,Timestamp.valueOf(appointment.getLastUpdateUTC().toLocalDateTime()));
             ps.setString(11, appointment.getLastUpdatedBy());
             ps.setInt(12, appointment.getCustomerID());
             ps.setInt(13, appointment.getUserID());
             ps.setInt(14, appointment.getContactID());
             ps.executeUpdate();
-
 
         }catch(SQLException sqlException){sqlException.printStackTrace();}
     }

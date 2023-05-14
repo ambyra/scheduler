@@ -12,7 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.dao.AppointmentDAO;
 import sample.dao.UserDAO;
-import sample.helper.TimeZoneConversions;
 import sample.model.Appointment;
 import sample.model.User;
 
@@ -76,8 +75,9 @@ public class appointmentController implements Initializable {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+        setTimers();
+        setColumnsAppointmentsTableView();
         startRadioGroupAppointmentsListener();
-
     }
 
     private void startRadioGroupAppointmentsListener(){
@@ -131,12 +131,12 @@ public class appointmentController implements Initializable {
     void checkAppointmentOverlap() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
         for(Appointment appointment1: allAppointments){
-            LocalDateTime start1 = appointment1.getStart();
-            LocalDateTime end1 = appointment1.getEnd();
+            ZonedDateTime start1 = appointment1.getStart();
+            ZonedDateTime end1 = appointment1.getEnd();
             for(Appointment appointment2: allAppointments){
                 if(appointment1 != appointment2){
-                    LocalDateTime start2 = appointment2.getStart();
-                    LocalDateTime end2 = appointment2.getEnd();
+                    ZonedDateTime start2 = appointment2.getStart();
+                    ZonedDateTime end2 = appointment2.getEnd();
 
                     if(
                         start1.isBefore(start2) && end1.isAfter(end2) ||
@@ -229,8 +229,8 @@ public class appointmentController implements Initializable {
             sendAlert("Enter a valid start time in the format of HH:mm");
             return null;
         }
-        LocalDateTime startDateTimeSystem = LocalDateTime.of(startDate,startTime);
-        LocalDateTime startDateTimeUTC = TimeZoneConversions.SystemToUTC(startDateTimeSystem);
+
+        ZonedDateTime startSystem= ZonedDateTime.of(startDate, startTime, ZoneId.systemDefault());
 
         LocalDate endDate = DatePickerEndDate.getValue();
         LocalTime endTime = parseTime(TextFieldEndTime.getText());
@@ -238,12 +238,11 @@ public class appointmentController implements Initializable {
             sendAlert("Enter a valid end time in the format of HH:mm");
             return null;
         }
-        LocalDateTime endDateTimeSystem = LocalDateTime.of(endDate,endTime);
-        LocalDateTime endDateTimeUTC = TimeZoneConversions.SystemToUTC(endDateTimeSystem);
+
+        ZonedDateTime endSystem = ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault());
 
         User currentUser = UserDAO.getCurrentUser();
-
-        LocalDateTime createDate = ZonedDateTime.now(ZoneId.of("UTC")).toLocalDateTime();
+        ZonedDateTime createDate = ZonedDateTime.now(ZoneId.of("UTC"));
         String createdBy = currentUser.getUserName();
 
         //check if appointment already exists
@@ -253,11 +252,11 @@ public class appointmentController implements Initializable {
             createdBy = oldAppointment.getCreatedBy();
         }
 
-        LocalDateTime lastUpdate = ZonedDateTime.now(ZoneId.of("UTC")).toLocalDateTime();
+        ZonedDateTime lastUpdate = ZonedDateTime.now(ZoneId.of("UTC"));
         String lastUpdatedBy = currentUser.getUserName();
 
         Appointment appointment = new Appointment(appointmentid, title, description, location, type,
-                startDateTimeUTC, endDateTimeUTC, createDate, createdBy, lastUpdate, lastUpdatedBy,
+                startSystem, endSystem, createDate, createdBy, lastUpdate, lastUpdatedBy,
                 customerid, userid, contactid);
 
         return appointment;
@@ -289,21 +288,16 @@ public class appointmentController implements Initializable {
     }
 
     void selectState() throws SQLException {
+
         TableViewAppointments.setDisable(false);
-        TextFieldAppointmentID.setDisable(true);
+        displayTableViewAppointmentsAll();
 
         clearBoxes();
         disableBoxes();
-        setTimers();
-
         disableButtons();
         ButtonAdd.setDisable(false);
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);
-
-        populateAppointmentsTableView();
-        try {populateChoiceBoxes(); }
-        catch (SQLException sqlException) { sqlException.printStackTrace();}
 
         checkAppointmentHours();
         checkAppointmentOverlap();
@@ -387,12 +381,13 @@ public class appointmentController implements Initializable {
     }
 
     private void setBoxes(Appointment appointment) throws SQLException {
+        if(appointment == null){return;}
+
         populateChoiceBoxes();
         TextFieldAppointmentID.setText(String.valueOf(appointment.getAppointmentID()));
         ChoiceBoxUserID.setValue(appointment.getUserID());
         ChoiceBoxCustomerID.setValue(appointment.getCustomerID());
         ChoiceBoxContactID.setValue(appointment.getContactID());
-        System.out.println("okay");
 
         TextFieldTitle.setText(appointment.getTitle());
         TextFieldDescription.setText(appointment.getDescription());
@@ -408,6 +403,7 @@ public class appointmentController implements Initializable {
     }
 
     private Appointment getAppointmentFromSelection() throws SQLException {
+
         return TableViewAppointments.getSelectionModel().getSelectedItem();
     }
 
@@ -424,7 +420,7 @@ public class appointmentController implements Initializable {
         }
     }
 
-    private void populateAppointmentsTableView(){
+    private void setColumnsAppointmentsTableView(){
         TableColumnAppointmentID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         TableColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         TableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -436,15 +432,15 @@ public class appointmentController implements Initializable {
         TableColumnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         TableColumnUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
-        try {
-            ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
-            TableViewAppointments.setItems(allAppointments);
-
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-
-        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
+//        try {
+//            ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+//            TableViewAppointments.setItems(allAppointments);
+//
+//        } catch (SQLException sqlException) {
+//            sqlException.printStackTrace();
+//        }
+//
+//        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
 //        for(Appointment appointment : tableViewAppointments){
 //            appointment.setStart(appointment.getStartSystem());
 //            appointment.setEnd(appointment.getEndSystem());
@@ -459,18 +455,19 @@ public class appointmentController implements Initializable {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
-        for(Appointment appointment : tableViewAppointments){
-            appointment.setStart(appointment.getStartSystem());
-            appointment.setEnd(appointment.getEndSystem());
-        }
+
+//        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
+//        for(Appointment appointment : tableViewAppointments){
+//            appointment.setStart(appointment.getStartSystem());
+//            appointment.setEnd(appointment.getEndSystem());
+//        }
     }
     private void displayTableViewAppointmentsMonth(){
         try {
             ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
             ObservableList<Appointment> weekAppointments = FXCollections.observableArrayList();
             for(Appointment appointment : allAppointments){
-                if(appointment.getStart().isAfter(LocalDateTime.now().minusDays(30))){
+                if(appointment.getStart().isAfter(ZonedDateTime.now().minusDays(30))){
                     weekAppointments.add(appointment);
                 }
 
@@ -492,7 +489,7 @@ public class appointmentController implements Initializable {
             ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
             ObservableList<Appointment> weekAppointments = FXCollections.observableArrayList();
             for(Appointment appointment : allAppointments){
-                if(appointment.getStart().isAfter(LocalDateTime.now().minusDays(7))){
+                if(appointment.getStart().isAfter(ZonedDateTime.now().minusDays(7))){
                     weekAppointments.add(appointment);
                 }
 
