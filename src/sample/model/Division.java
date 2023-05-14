@@ -1,13 +1,13 @@
 package sample.model;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Division {
     private int divisionID;
     private String division;
-    private LocalDateTime createDate;
+    private ZonedDateTime createDate;
     private String createdBy;
-    private LocalDateTime lastUpdate;
+    private ZonedDateTime lastUpdate;
     private String lastUpdatedBy;
     private int countryID;
 
@@ -19,7 +19,7 @@ public class Division {
         return division;
     }
 
-    public LocalDateTime getCreateDate() {
+    public ZonedDateTime getCreateDate() {
         return createDate;
     }
 
@@ -27,7 +27,7 @@ public class Division {
         return createdBy;
     }
 
-    public LocalDateTime getLastUpdate() {
+    public ZonedDateTime getLastUpdate() {
         return lastUpdate;
     }
 
@@ -39,8 +39,8 @@ public class Division {
         return countryID;
     }
 
-    public Division(int divisionID, String division, LocalDateTime createDate, String createdBy,
-                    LocalDateTime lastUpdate, String lastUpdatedBy, int countryID){
+    public Division(int divisionID, String division, ZonedDateTime createDate, String createdBy,
+                    ZonedDateTime lastUpdate, String lastUpdatedBy, int countryID){
         this.divisionID = divisionID;
         this.division = division;
         this.createDate = createDate;

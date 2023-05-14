@@ -1,13 +1,13 @@
 package sample.model;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Country {
     private int countryID;
     private String country;
-    private LocalDateTime createDate;
+    private ZonedDateTime createDate;
     private String createdBy;
-    private LocalDateTime lastUpdate;
+    private ZonedDateTime lastUpdate;
     private String lastUpdatedBy;
 
     public int getCountryID() {
@@ -18,7 +18,7 @@ public class Country {
         return country;
     }
 
-    public LocalDateTime getCreateDate() {
+    public ZonedDateTime getCreateDate() {
         return createDate;
     }
 
@@ -26,7 +26,7 @@ public class Country {
         return createdBy;
     }
 
-    public LocalDateTime getLastUpdate() {
+    public ZonedDateTime getLastUpdate() {
         return lastUpdate;
     }
 
@@ -34,8 +34,8 @@ public class Country {
         return lastUpdatedBy;
     }
 
-    public Country(int countryID, String country, LocalDateTime createDate,
-                   String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy){
+    public Country(int countryID, String country, ZonedDateTime createDate,
+                   String createdBy, ZonedDateTime lastUpdate, String lastUpdatedBy){
         this.countryID = countryID;
         this.country = country;
         this.createDate = createDate;

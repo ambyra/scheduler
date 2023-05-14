@@ -73,13 +73,6 @@ public class AppointmentDAO {
                 "Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, " +
                 "User_ID, Contact_ID) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
-        System.out.println(appointment.getStartSystem());
-        System.out.println(appointment.getStartUTC());
-        System.out.println(appointment.getStartUTC().toLocalDateTime());
-        System.out.println(Timestamp.valueOf(appointment.getStartUTC().toLocalDateTime()));
-
-        System.out.println("---");
-
         try{
             JDBC.makePreparedStatement(query, connection);
             PreparedStatement ps = JDBC.getPreparedStatement();

@@ -1,6 +1,7 @@
 package sample.model;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Customer {
     private int customerID;
@@ -8,9 +9,9 @@ public class Customer {
     private String address;
     private String postalCode;
     private String phone;
-    private LocalDateTime createDate;
+    private ZonedDateTime createDate;
     private String createdBy;
-    private LocalDateTime lastUpdate;
+    private ZonedDateTime lastUpdate;
     private String lastUpdatedBy;
     private int divisionID;
 
@@ -34,7 +35,7 @@ public class Customer {
         return phone;
     }
 
-    public LocalDateTime getCreateDate() {
+    public ZonedDateTime getCreateDate() {
         return createDate;
     }
 
@@ -42,7 +43,7 @@ public class Customer {
         return createdBy;
     }
 
-    public LocalDateTime getLastUpdate() {
+    public ZonedDateTime getLastUpdate() {
         return lastUpdate;
     }
 
@@ -55,7 +56,7 @@ public class Customer {
     }
 
     public Customer(int customerID, String customerName, String address, String postalCode,
-                    String phone, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate,
+                    String phone, ZonedDateTime createDate, String createdBy, ZonedDateTime lastUpdate,
                     String lastUpdatedBy, int divisionID){
         this.customerID = customerID;
         this.customerName = customerName;

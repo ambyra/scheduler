@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public class CustomerDAO {
     public static ObservableList<Customer> getCustomers() throws SQLException {
@@ -28,9 +28,9 @@ public class CustomerDAO {
                         rs.getString("Address"),
                         rs.getString("Postal_Code"),
                         rs.getString("Phone"),
-                        rs.getTimestamp("Create_Date").toLocalDateTime(),
+                        rs.getTimestamp("Create_Date").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Created_By"),
-                        rs.getTimestamp("Last_Update").toLocalDateTime(),
+                        rs.getTimestamp("Last_Update").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Last_Updated_By"),
                         rs.getInt("Division_ID"));
                 customers.add(customer);

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZoneId;
 
 public class UserDAO {
     public static ObservableList<User> getUsers() throws SQLException {
@@ -26,9 +27,9 @@ public class UserDAO {
                         rs.getInt("User_ID"),
                         rs.getString("User_Name"),
                         rs.getString("Password"),
-                        rs.getTimestamp("Create_Date").toLocalDateTime(),
+                        rs.getTimestamp("Create_Date").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Created_By"),
-                        rs.getTimestamp("Last_Update").toLocalDateTime(),
+                        rs.getTimestamp("Last_Update").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Last_Updated_By"));
                 users.add(user);
             }

@@ -1,14 +1,14 @@
 package sample.model;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class User {
     private int userID;
     private String userName;
     private String password;
-    private LocalDateTime createDate;
+    private ZonedDateTime createDate;
     private String createdBy;
-    private LocalDateTime lastUpdate;
+    private ZonedDateTime lastUpdate;
     private String lastUpdatedBy;
 
     public int getUserID() {
@@ -23,7 +23,7 @@ public class User {
         return password;
     }
 
-    public LocalDateTime getCreateDate() {
+    public ZonedDateTime getCreateDate() {
         return createDate;
     }
 
@@ -31,7 +31,7 @@ public class User {
         return createdBy;
     }
 
-    public LocalDateTime getLastUpdate() {
+    public ZonedDateTime getLastUpdate() {
         return lastUpdate;
     }
 
@@ -39,8 +39,8 @@ public class User {
         return lastUpdatedBy;
     }
 
-    public User(int userID, String userName, String password, LocalDateTime createDate,
-                String createdBy, LocalDateTime lastUpdate, String lastUpdatedBy){
+    public User(int userID, String userName, String password, ZonedDateTime createDate,
+                String createdBy, ZonedDateTime lastUpdate, String lastUpdatedBy){
         this.userID = userID;
         this.userName = userName;
         this.password = password;

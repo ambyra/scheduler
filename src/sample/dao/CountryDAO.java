@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZoneId;
 
 public class CountryDAO {
     public static ObservableList<Country> getCountries() throws SQLException {
@@ -25,9 +26,9 @@ public class CountryDAO {
                 Country contact = new Country(
                         rs.getInt("Country_ID"),
                         rs.getString("Country"),
-                        rs.getTimestamp("Create_Date").toLocalDateTime(),
+                        rs.getTimestamp("Create_Date").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Created_By"),
-                        rs.getTimestamp("Last_Update").toLocalDateTime(),
+                        rs.getTimestamp("Last_Update").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Last_Updated_By"));
                 countries.add(contact);
             }

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZoneId;
 
 public class DivisionDAO {
     public static ObservableList<Division> getCustomers() throws SQLException {
@@ -24,9 +25,9 @@ public class DivisionDAO {
                 Division division = new Division(
                         rs.getInt("Division_ID"),
                         rs.getString("Division"),
-                        rs.getTimestamp("Create_Date").toLocalDateTime(),
+                        rs.getTimestamp("Create_Date").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Created_By"),
-                        rs.getTimestamp("Last_Update").toLocalDateTime(),
+                        rs.getTimestamp("Last_Update").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Last_Updated_By"),
                         rs.getInt("Country_ID"));
                 divisions.add(division);
