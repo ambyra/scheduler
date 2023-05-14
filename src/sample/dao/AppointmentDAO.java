@@ -28,16 +28,18 @@ public class AppointmentDAO {
                         rs.getString("Description"),
                         rs.getString("Location"),
                         rs.getString("Type"),
-                        rs.getTimestamp("Start").toLocalDateTime().atZone(ZoneId.of("UTC")),
-                        rs.getTimestamp("End").toLocalDateTime().atZone(ZoneId.of("UTC")),
-                        rs.getTimestamp("Create_Date").toLocalDateTime().atZone(ZoneId.of("UTC")),
+                        //TODO: timezone not loading at right time
+                        rs.getTimestamp("Start").toInstant().atZone(ZoneId.of("UTC")),
+                        rs.getTimestamp("End").toInstant().atZone(ZoneId.of("UTC")),
+                        rs.getTimestamp("Create_Date").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Created_By"),
-                        rs.getTimestamp("Last_Update").toLocalDateTime().atZone(ZoneId.of("UTC")),
+                        rs.getTimestamp("Last_Update").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Last_Updated_By"),
                         rs.getInt("Customer_ID"),
                         rs.getInt("User_ID"),
                         rs.getInt("Contact_ID"));
                 appointments.add(appointment);
+
             }
         } catch (SQLException sqlException) {}
         return appointments;
@@ -71,6 +73,13 @@ public class AppointmentDAO {
                 "Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, " +
                 "User_ID, Contact_ID) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
+        System.out.println(appointment.getStartSystem());
+        System.out.println(appointment.getStartUTC());
+        System.out.println(appointment.getStartUTC().toLocalDateTime());
+        System.out.println(Timestamp.valueOf(appointment.getStartUTC().toLocalDateTime()));
+
+        System.out.println("---");
+
         try{
             JDBC.makePreparedStatement(query, connection);
             PreparedStatement ps = JDBC.getPreparedStatement();
@@ -79,11 +88,11 @@ public class AppointmentDAO {
             ps.setString(3, appointment.getDescription());
             ps.setString(4,appointment.getLocation());
             ps.setString(5,appointment.getType());
-            ps.setTimestamp(6, Timestamp.valueOf(appointment.getStartUTC().toLocalDateTime()));
-            ps.setTimestamp(7,Timestamp.valueOf(appointment.getEndUTC().toLocalDateTime()));
-            ps.setTimestamp(8,Timestamp.valueOf(appointment.getCreateDateUTC().toLocalDateTime()));
+            ps.setObject(6, Timestamp.from(appointment.getStartUTC().toInstant()));
+            ps.setObject(7,Timestamp.from(appointment.getEndUTC().toInstant()));
+            ps.setObject(8,Timestamp.from(appointment.getCreateDateUTC().toInstant()));
             ps.setString(9,appointment.getCreatedBy());
-            ps.setTimestamp(10,Timestamp.valueOf(appointment.getLastUpdateUTC().toLocalDateTime()));
+            ps.setObject(10,Timestamp.from(appointment.getLastUpdateUTC().toInstant()));
             ps.setString(11, appointment.getLastUpdatedBy());
             ps.setInt(12, appointment.getCustomerID());
             ps.setInt(13, appointment.getUserID());

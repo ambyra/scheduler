@@ -107,9 +107,6 @@ public class appointmentController implements Initializable {
 
             int appointmentStartHour = appointmentStart.getHour();
             int appointmentEndHour = appointmentEnd.getHour();
-            System.out.println("ID " +appointment.getAppointmentID() +
-                    " " +appointmentStartHour  + " - " +
-                    appointmentEndHour);
 
             if(appointmentStartHour < 8 || appointmentEndHour > 22){
                 sendAlert("Appointment #" +
@@ -299,8 +296,8 @@ public class appointmentController implements Initializable {
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);
 
-        checkAppointmentHours();
-        checkAppointmentOverlap();
+        //checkAppointmentHours();
+        //checkAppointmentOverlap();
 
     }
     void addState(){
@@ -396,7 +393,6 @@ public class appointmentController implements Initializable {
 
         TextFieldStartTime.setText(appointment.getStartSystem().toLocalTime().toString());
 
-
         DatePickerStartDate.setValue(appointment.getStartSystem().toLocalDate());
         TextFieldEndTime.setText(appointment.getEndSystem().toLocalTime().toString());
         DatePickerEndDate.setValue(appointment.getEndSystem().toLocalDate());
@@ -456,11 +452,11 @@ public class appointmentController implements Initializable {
             sqlException.printStackTrace();
         }
 
-//        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
-//        for(Appointment appointment : tableViewAppointments){
-//            appointment.setStart(appointment.getStartSystem());
-//            appointment.setEnd(appointment.getEndSystem());
-//        }
+        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
+        for(Appointment appointment : tableViewAppointments){
+            appointment.setStart(appointment.getStartSystem());
+            appointment.setEnd(appointment.getEndSystem());
+        }
     }
     private void displayTableViewAppointmentsMonth(){
         try {
