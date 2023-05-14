@@ -116,7 +116,6 @@ public class appointmentController implements Initializable {
             }
         }
 
-        //TODO: check for scheduling overlapping appointments for customers
 
         //TODO: provide an alert when there is an appointment within 15 minutes
         // of the user’s log-in. A custom message should be displayed in the user interface
@@ -296,8 +295,8 @@ public class appointmentController implements Initializable {
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);
 
-        //checkAppointmentHours();
-        //checkAppointmentOverlap();
+        checkAppointmentHours();
+        checkAppointmentOverlap();
 
     }
     void addState(){
