@@ -1,6 +1,5 @@
 package sample.controller;
 
-import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +20,6 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 public class appointmentController implements Initializable {
     @FXML private ChoiceBox<Integer> ChoiceBoxContactID;
@@ -56,10 +54,6 @@ public class appointmentController implements Initializable {
     @FXML private TextField TextFieldStartTime;
     @FXML private TextField TextFieldTitle;
     @FXML private TextField TextFieldType;
-    @FXML private TextField TextFieldLocalDateTime;
-    @FXML private TextField TextFieldLocalTimeZone;
-    @FXML private TextField TextFieldUTCDateTime;
-    @FXML private TextField TextFieldESTDateTime;
 
     @FXML private Button ButtonAdd;
     @FXML private Button ButtonEdit;
@@ -75,28 +69,25 @@ public class appointmentController implements Initializable {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-        setTimers();
         setColumnsAppointmentsTableView();
         startRadioGroupAppointmentsListener();
     }
 
     private void startRadioGroupAppointmentsListener(){
+        //lambda
         RadioGroupAppointments.selectedToggleProperty().
                 addListener((observable, oldValue, newValue) -> {
                     if(newValue.equals(RadioButtonAllAppointments)){
-                        displayTableViewAppointmentsAll();
+                        displayTableViewAppointments(9999);
                     }
                     if(newValue.equals(RadioButtonMonth)){
-                        displayTableViewAppointmentsMonth();
+                        displayTableViewAppointments(30);
                     }
                     if(newValue.equals(RadioButtonWeek)){
-                        displayTableViewAppointmentsWeek();
+                        displayTableViewAppointments(7);
                     }
                 });
-
     }
-
-
 
     private void checkAppointmentHours() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
@@ -116,7 +107,6 @@ public class appointmentController implements Initializable {
             }
         }
 
-
         //TODO: provide an alert when there is an appointment within 15 minutes
         // of the user’s log-in. A custom message should be displayed in the user interface
         // and include the appointment ID, date, and time.
@@ -133,7 +123,6 @@ public class appointmentController implements Initializable {
                 if(appointment1 != appointment2){
                     ZonedDateTime start2 = appointment2.getStart();
                     ZonedDateTime end2 = appointment2.getEnd();
-
                     if(
                         start1.isBefore(start2) && end1.isAfter(end2) ||
                         start1.isBefore(end2) && end1.isAfter(end2) ||
@@ -147,23 +136,6 @@ public class appointmentController implements Initializable {
                 }
             }
         }
-
-    }
-
-    void setTimers(){
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                String format = "yyyy-MM-dd HH:mm:ss";
-
-                TextFieldLocalDateTime.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern(format)));
-                TextFieldLocalTimeZone.setText(ZoneId.systemDefault().toString());
-
-                TextFieldUTCDateTime.setText(ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern(format)));
-                TextFieldESTDateTime.setText(ZonedDateTime.now(ZoneId.of("US/Eastern")).format(DateTimeFormatter.ofPattern(format)));
-            }
-        };
-        timer.start();
     }
 
     @FXML
@@ -177,19 +149,17 @@ public class appointmentController implements Initializable {
     void ClickEdit(ActionEvent event) throws SQLException {
         editState();
         clearBoxes();
-
         setBoxes(getAppointmentFromSelection());
     }
 
     @FXML
     void ClickSave (ActionEvent event) throws SQLException {
         Appointment appointment = parseInput();
-        AppointmentDAO.updateAppointment(appointment);
-        //exitstate
         if(appointment != null){
+            AppointmentDAO.updateAppointment(appointment);
+            //exit state
             selectState();
         }
-
     }
 
     private Appointment parseInput() throws SQLException {
@@ -251,13 +221,10 @@ public class appointmentController implements Initializable {
         ZonedDateTime lastUpdate = ZonedDateTime.now(ZoneId.of("UTC"));
         String lastUpdatedBy = currentUser.getUserName();
 
-        Appointment appointment = new Appointment(appointmentid, title, description, location, type,
+        return new Appointment(appointmentid, title, description, location, type,
                 startSystem, endSystem, createDate, createdBy, lastUpdate, lastUpdatedBy,
                 customerid, userid, contactid);
-
-        return appointment;
     }
-
 
     LocalTime parseTime(String time){
         LocalTime parsedTime;
@@ -284,13 +251,13 @@ public class appointmentController implements Initializable {
     }
 
     void selectState() throws SQLException {
-
         TableViewAppointments.setDisable(false);
-        displayTableViewAppointmentsAll();
+        displayTableViewAppointments(9999);
+        RadioButtonAllAppointments.setSelected(true);
 
         clearBoxes();
-        disableBoxes();
-        disableButtons();
+        setBoxesEnabled(false);
+        setButtonsEnabled(false);
         ButtonAdd.setDisable(false);
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);
@@ -302,22 +269,21 @@ public class appointmentController implements Initializable {
     void addState(){
         clearBoxes();
         TableViewAppointments.setDisable(true);
-        disableButtons();
-        enableBoxes();
+        setButtonsEnabled(false);
+        setBoxesEnabled(true);
         ButtonSave.setDisable(false);
         ButtonCancel.setDisable(false);
     }
     void editState(){
         TableViewAppointments.setDisable(true);
-        enableBoxes();
-        disableButtons();
+        setBoxesEnabled(true);
+        setButtonsEnabled(false);
         ButtonSave.setDisable(false);
         ButtonCancel.setDisable(false);
 
     }
     void clearBoxes(){
         TextFieldAppointmentID.clear();
-
         ChoiceBoxContactID.getItems().clear();
         ChoiceBoxCustomerID.getItems().clear();
         ChoiceBoxUserID.getItems().clear();
@@ -335,45 +301,29 @@ public class appointmentController implements Initializable {
         TextFieldType.clear();
         DatePickerStartDate.setValue(null);
         DatePickerEndDate.setValue(null);
-
     }
 
-    void disableButtons(){
-        ButtonAdd.setDisable(true);
-        ButtonEdit.setDisable(true);
-        ButtonSave.setDisable(true);
-        ButtonCancel.setDisable(true);
-        ButtonDelete.setDisable(true);
+    void setButtonsEnabled(boolean areEnabled){
+        ButtonAdd.setDisable(areEnabled);
+        ButtonEdit.setDisable(areEnabled);
+        ButtonSave.setDisable(areEnabled);
+        ButtonCancel.setDisable(areEnabled);
+        ButtonDelete.setDisable(areEnabled);
     }
 
-    void disableBoxes(){
-        TextFieldAppointmentID.setDisable(true);
-        TextFieldDescription.setDisable(true);
-        TextFieldEndTime.setDisable(true);
-        TextFieldLocation.setDisable(true);
-        TextFieldStartTime.setDisable(true);
-        TextFieldTitle.setDisable(true);
-        TextFieldType.setDisable(true);
-        ChoiceBoxUserID.setDisable(true);
-        ChoiceBoxCustomerID.setDisable(true);
-        ChoiceBoxContactID.setDisable(true);
-        DatePickerStartDate.setDisable(true);
-        DatePickerEndDate.setDisable(true);
-    }
-
-    void enableBoxes(){
-        TextFieldAppointmentID.setDisable(false);
-        TextFieldDescription.setDisable(false);
-        TextFieldEndTime.setDisable(false);
-        TextFieldLocation.setDisable(false);
-        TextFieldStartTime.setDisable(false);
-        TextFieldTitle.setDisable(false);
-        TextFieldType.setDisable(false);
-        ChoiceBoxUserID.setDisable(false);
-        ChoiceBoxCustomerID.setDisable(false);
-        ChoiceBoxContactID.setDisable(false);
-        DatePickerStartDate.setDisable(false);
-        DatePickerEndDate.setDisable(false);
+    void setBoxesEnabled(boolean areEnabled){
+        TextFieldAppointmentID.setDisable(areEnabled);
+        TextFieldDescription.setDisable(areEnabled);
+        TextFieldEndTime.setDisable(areEnabled);
+        TextFieldLocation.setDisable(areEnabled);
+        TextFieldStartTime.setDisable(areEnabled);
+        TextFieldTitle.setDisable(areEnabled);
+        TextFieldType.setDisable(areEnabled);
+        ChoiceBoxUserID.setDisable(areEnabled);
+        ChoiceBoxCustomerID.setDisable(areEnabled);
+        ChoiceBoxContactID.setDisable(areEnabled);
+        DatePickerStartDate.setDisable(areEnabled);
+        DatePickerEndDate.setDisable(areEnabled);
     }
 
     private void setBoxes(Appointment appointment) throws SQLException {
@@ -397,13 +347,11 @@ public class appointmentController implements Initializable {
         DatePickerEndDate.setValue(appointment.getEndSystem().toLocalDate());
     }
 
-    private Appointment getAppointmentFromSelection() throws SQLException {
-
+    private Appointment getAppointmentFromSelection(){
         return TableViewAppointments.getSelectionModel().getSelectedItem();
     }
 
     private void populateChoiceBoxes() throws SQLException {
-
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
         for (Appointment appointment: allAppointments) {
             //TODO: get these from contactDAO
@@ -426,79 +374,24 @@ public class appointmentController implements Initializable {
         TableColumnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
         TableColumnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         TableColumnUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
-
-//        try {
-//            ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
-//            TableViewAppointments.setItems(allAppointments);
-//
-//        } catch (SQLException sqlException) {
-//            sqlException.printStackTrace();
-//        }
-//
-//        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
-//        for(Appointment appointment : tableViewAppointments){
-//            appointment.setStart(appointment.getStartSystem());
-//            appointment.setEnd(appointment.getEndSystem());
-//        }
     }
 
-    private void displayTableViewAppointmentsAll(){
+    private void displayTableViewAppointments(int daysBack){
         try {
             ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
-            TableViewAppointments.setItems(allAppointments);
-
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-
-        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
-        for(Appointment appointment : tableViewAppointments){
-            appointment.setStart(appointment.getStartSystem());
-            appointment.setEnd(appointment.getEndSystem());
-        }
-    }
-    private void displayTableViewAppointmentsMonth(){
-        try {
-            ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
-            ObservableList<Appointment> weekAppointments = FXCollections.observableArrayList();
+            ObservableList<Appointment> displayAppointments = FXCollections.observableArrayList();
             for(Appointment appointment : allAppointments){
-                if(appointment.getStart().isAfter(ZonedDateTime.now().minusDays(30))){
-                    weekAppointments.add(appointment);
+                if(appointment.getStart().isAfter(ZonedDateTime.now().minusDays(daysBack))){
+                    appointment.setStart(appointment.getStartSystem());
+                    appointment.setEnd(appointment.getEndSystem());
+                    displayAppointments.add(appointment);
                 }
-
             }
             TableViewAppointments.getItems().clear();
-            TableViewAppointments.setItems(weekAppointments);
+            TableViewAppointments.setItems(displayAppointments);
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
-        }
-        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
-        for(Appointment appointment : tableViewAppointments){
-            appointment.setStart(appointment.getStartSystem());
-            appointment.setEnd(appointment.getEndSystem());
-        }
-    }
-    private void displayTableViewAppointmentsWeek(){
-        try {
-            ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
-            ObservableList<Appointment> weekAppointments = FXCollections.observableArrayList();
-            for(Appointment appointment : allAppointments){
-                if(appointment.getStart().isAfter(ZonedDateTime.now().minusDays(7))){
-                    weekAppointments.add(appointment);
-                }
-
-            }
-            TableViewAppointments.getItems().clear();
-            TableViewAppointments.setItems(weekAppointments);
-
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-        ObservableList<Appointment> tableViewAppointments = TableViewAppointments.getItems();
-        for(Appointment appointment : tableViewAppointments){
-            appointment.setStart(appointment.getStartSystem());
-            appointment.setEnd(appointment.getEndSystem());
         }
     }
 

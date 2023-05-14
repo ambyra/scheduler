@@ -146,46 +146,6 @@
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="LocalTime/Date" GridPane.columnIndex="5" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets left="5.0" />
-                           </GridPane.margin>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="UTC Time/Date" GridPane.columnIndex="5" GridPane.rowIndex="4">
-                           <GridPane.margin>
-                              <Insets left="5.0" />
-                           </GridPane.margin>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="EST Time/Date" GridPane.columnIndex="5" GridPane.rowIndex="5">
-                           <GridPane.margin>
-                              <Insets left="5.0" />
-                           </GridPane.margin>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Local Time Zone" GridPane.columnIndex="5" GridPane.rowIndex="3">
-                           <GridPane.margin>
-                              <Insets left="5.0" />
-                           </GridPane.margin>
-                        </Text>
-                        <TextField fx:id="TextFieldESTDateTime" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="5">
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
-                        </TextField>
-                        <TextField fx:id="TextFieldLocalDateTime" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
-                        </TextField>
-                        <TextField fx:id="TextFieldLocalTimeZone" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="3">
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
-                        </TextField>
-                        <TextField fx:id="TextFieldUTCDateTime" editable="false" GridPane.columnIndex="6" GridPane.rowIndex="4">
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
-                        </TextField>
                      </children>
                   </GridPane>
                </children>
