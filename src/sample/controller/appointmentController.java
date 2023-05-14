@@ -139,21 +139,22 @@ public class appointmentController implements Initializable {
     }
 
     @FXML
-    void ClickAdd (ActionEvent event) throws SQLException {
+    void ClickAdd() throws SQLException {
         addState();
         int newAppointmentID = AppointmentDAO.newAppointmentID();
         TextFieldAppointmentID.setText(String.valueOf(newAppointmentID));
     }
 
     @FXML
-    void ClickEdit(ActionEvent event) throws SQLException {
+    void ClickEdit() throws SQLException {
         editState();
         clearBoxes();
+        setBoxesEnabled(true);
         setBoxes(getAppointmentFromSelection());
     }
 
     @FXML
-    void ClickSave (ActionEvent event) throws SQLException {
+    void ClickSave() throws SQLException {
         Appointment appointment = parseInput();
         if(appointment != null){
             AppointmentDAO.updateAppointment(appointment);
@@ -175,19 +176,32 @@ public class appointmentController implements Initializable {
             userid = ChoiceBoxUserID.getValue();
         }catch(NullPointerException e){
             sendAlert("ID Field cannot be empty");
+            return null;
         }
 
         String title = TextFieldTitle.getText();
-        if(title.isEmpty()){sendAlert("Title cannot be empty"); return null;}
+        if(title.isEmpty()){
+            sendAlert("Title cannot be empty");
+            return null;
+        }
 
         String description = TextFieldDescription.getText();
-        if(description.isEmpty()){sendAlert("Description cannot be empty"); return null;}
+        if(description.isEmpty()){
+            sendAlert("Description cannot be empty");
+            return null;
+        }
 
         String location = TextFieldLocation.getText();
-        if(location.isEmpty()){sendAlert("Location cannot be empty"); return null;}
+        if(location.isEmpty()){
+            sendAlert("Location cannot be empty");
+            return null;
+        }
 
         String type = TextFieldType.getText();
-        if(type.length()==0){sendAlert("Type cannot be empty"); return null;}
+        if(type.length()==0){
+            sendAlert("Type cannot be empty");
+            return null;
+        }
 
         LocalDate startDate = DatePickerStartDate.getValue();
         LocalTime startTime = parseTime(TextFieldStartTime.getText());
@@ -221,9 +235,10 @@ public class appointmentController implements Initializable {
         ZonedDateTime lastUpdate = ZonedDateTime.now(ZoneId.of("UTC"));
         String lastUpdatedBy = currentUser.getUserName();
 
-        return new Appointment(appointmentid, title, description, location, type,
+        Appointment appointment = new Appointment(appointmentid, title, description, location, type,
                 startSystem, endSystem, createDate, createdBy, lastUpdate, lastUpdatedBy,
                 customerid, userid, contactid);
+        return appointment;
     }
 
     LocalTime parseTime(String time){
@@ -233,7 +248,6 @@ public class appointmentController implements Initializable {
 
         }catch (DateTimeParseException e){
             return null;
-
         }
         return parsedTime;
     }
@@ -246,7 +260,9 @@ public class appointmentController implements Initializable {
     @FXML
     void ClickDelete (ActionEvent event) throws SQLException {
         Appointment appointment = getAppointmentFromSelection();
-        AppointmentDAO.deleteAppointment(appointment);
+        if(appointment != null){
+            AppointmentDAO.deleteAppointment(appointment);
+        }
         selectState();
     }
 
@@ -258,6 +274,7 @@ public class appointmentController implements Initializable {
         clearBoxes();
         setBoxesEnabled(false);
         setButtonsEnabled(false);
+
         ButtonAdd.setDisable(false);
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);
@@ -266,11 +283,13 @@ public class appointmentController implements Initializable {
         checkAppointmentOverlap();
 
     }
-    void addState(){
+    void addState() throws SQLException {
         clearBoxes();
         TableViewAppointments.setDisable(true);
         setButtonsEnabled(false);
         setBoxesEnabled(true);
+        populateChoiceBoxes();
+
         ButtonSave.setDisable(false);
         ButtonCancel.setDisable(false);
     }
@@ -304,6 +323,7 @@ public class appointmentController implements Initializable {
     }
 
     void setButtonsEnabled(boolean areEnabled){
+        areEnabled = !areEnabled;
         ButtonAdd.setDisable(areEnabled);
         ButtonEdit.setDisable(areEnabled);
         ButtonSave.setDisable(areEnabled);
@@ -312,6 +332,7 @@ public class appointmentController implements Initializable {
     }
 
     void setBoxesEnabled(boolean areEnabled){
+        areEnabled = !areEnabled;
         TextFieldAppointmentID.setDisable(areEnabled);
         TextFieldDescription.setDisable(areEnabled);
         TextFieldEndTime.setDisable(areEnabled);
