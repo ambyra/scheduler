@@ -20,6 +20,9 @@ public class Appointment {
     private int userID;
     private int contactID;
 
+    private LocalDateTime startLocal;
+    private LocalDateTime endLocal;
+
     public int getAppointmentID() {
         return appointmentID;
     }
@@ -43,6 +46,10 @@ public class Appointment {
     public ZonedDateTime getStart() {
         return start;
     }
+
+    public LocalDateTime getStartLocal(){return startLocal;}
+    public LocalDateTime getEndLocal(){return endLocal;}
+
 
     public ZonedDateTime getStartEST(){
         //ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
@@ -132,10 +139,12 @@ public class Appointment {
 
     public void setStart(ZonedDateTime start) {
         this.start = start;
+        this.startLocal = this.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public void setEnd(ZonedDateTime end) {
         this.end = end;
+        this.endLocal = this.end.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
 
 
@@ -171,7 +180,8 @@ public class Appointment {
 
     public Appointment(int appointmentID, String title, String description, String location,
                        String type, ZonedDateTime start, ZonedDateTime end, ZonedDateTime createDate,
-                       String createdBy, ZonedDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID, int contactID){
+                       String createdBy, ZonedDateTime lastUpdate, String lastUpdatedBy,
+                       int customerID, int userID, int contactID){
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
@@ -186,6 +196,9 @@ public class Appointment {
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;
+
+        this.startLocal = this.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+        this.endLocal = this.end.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
 }
 

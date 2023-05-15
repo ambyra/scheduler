@@ -69,6 +69,7 @@ public class appointmentController implements Initializable {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+
         setColumnsAppointmentsTableView();
         startRadioGroupAppointmentsListener();
     }
@@ -106,12 +107,22 @@ public class appointmentController implements Initializable {
                         "8:00 a.m. to 10:00 p.m. EST, including weekends");
             }
         }
+    }
 
-        //TODO: provide an alert when there is an appointment within 15 minutes
-        // of the user’s log-in. A custom message should be displayed in the user interface
-        // and include the appointment ID, date, and time.
-        // If the user does not have any appointments within 15 minutes of logging in,
-        // display a custom message in the user interface indicating there are no upcoming appointments.
+    void checkAppointmentUpcoming() throws SQLException {
+        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+        ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("UTC"));
+        boolean isAppointment = false;
+        for (Appointment appointment : allAppointments) {
+            ZonedDateTime appStart = appointment.getStartUTC();
+            if (appStart.isAfter(currentTime) && appStart.isBefore(currentTime.plusMinutes(15))) {
+                sendAlert("Upcoming appointment within 15 minutes.\n" +
+                        "Appointment #" + appointment.getAppointmentID() + "\n" +
+                        "Starts: " + appointment.getStartLocal());
+                isAppointment = true;
+            }
+        }
+        if (!isAppointment) {sendAlert("No upcoming appointment within 15 minutes");}
     }
 
     void checkAppointmentOverlap() throws SQLException {
@@ -281,7 +292,7 @@ public class appointmentController implements Initializable {
 
         checkAppointmentHours();
         checkAppointmentOverlap();
-
+        checkAppointmentUpcoming();
     }
     void addState() throws SQLException {
         clearBoxes();
@@ -391,8 +402,8 @@ public class appointmentController implements Initializable {
         TableColumnLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
         TableColumnContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
         TableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
-        TableColumnStart.setCellValueFactory(new PropertyValueFactory<>("start"));
-        TableColumnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+        TableColumnStart.setCellValueFactory(new PropertyValueFactory<>("startLocal"));
+        TableColumnEnd.setCellValueFactory(new PropertyValueFactory<>("endLocal"));
         TableColumnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         TableColumnUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
     }
