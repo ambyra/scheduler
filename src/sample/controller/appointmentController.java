@@ -10,8 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.dao.AppointmentDAO;
+import sample.dao.ContactDAO;
+import sample.dao.CustomerDAO;
 import sample.dao.UserDAO;
 import sample.model.Appointment;
+import sample.model.Contact;
+import sample.model.Customer;
 import sample.model.User;
 
 import java.net.URL;
@@ -294,6 +298,7 @@ public class appointmentController implements Initializable {
         checkAppointmentOverlap();
         checkAppointmentUpcoming();
     }
+
     void addState() throws SQLException {
         clearBoxes();
         TableViewAppointments.setDisable(true);
@@ -384,14 +389,19 @@ public class appointmentController implements Initializable {
     }
 
     private void populateChoiceBoxes() throws SQLException {
-        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
-        for (Appointment appointment: allAppointments) {
-            //TODO: get these from contactDAO
-            ChoiceBoxContactID.getItems().add(appointment.getContactID());
-            //TODO: get these from userDAO
-            ChoiceBoxUserID.getItems().add(appointment.getUserID());
-            //TODO: get these from customerdao
-            ChoiceBoxCustomerID.getItems().add(appointment.getCustomerID());
+        ObservableList<Contact> allContacts = ContactDAO.getContacts();
+        for (Contact contact: allContacts) {
+            ChoiceBoxContactID.getItems().add(contact.getContactID());
+        }
+
+        ObservableList<User> allUsers = UserDAO.getUsers();
+        for (User user: allUsers) {
+            ChoiceBoxUserID.getItems().add(user.getUserID());
+        }
+
+        ObservableList<Customer> allCustomers = CustomerDAO.getCustomers();
+        for (Customer customer: allCustomers){
+            ChoiceBoxCustomerID.getItems().add(customer.getCustomerID());
         }
     }
 

@@ -99,7 +99,7 @@ public class loginController implements Initializable {
     }
 
     private void login(int userid) throws IOException {
-        //TODO
+        //TODO logger
         System.out.println("User " + userid + " logged in at TIME");
 
         Stage stage = Main.getStage();
