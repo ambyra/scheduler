@@ -113,6 +113,22 @@ public class appointmentController implements Initializable {
         }
     }
 
+    private boolean checkAppointmentHours(Appointment appointment){
+        ZonedDateTime appointmentStart = appointment.getStartEST();
+        ZonedDateTime appointmentEnd = appointment.getEndEST();
+
+        int appointmentStartHour = appointmentStart.getHour();
+        int appointmentEndHour = appointmentEnd.getHour();
+
+        if(appointmentStartHour < 8 || appointmentEndHour > 22){
+            sendAlert("Cannot create appointment. " +
+                    "Appointment must be scheduled during business hours, "+
+                    "8:00 a.m. to 10:00 p.m. EST, including weekends");
+            return true;
+        }
+        return false;
+    }
+
     void checkAppointmentUpcoming() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("UTC"));
@@ -284,6 +300,7 @@ public class appointmentController implements Initializable {
                 customerid, userid, contactid);
 
         if(checkAppointmentOverlap(appointment)){return null;}
+        if(checkAppointmentHours(appointment)){return null;}
         return appointment;
     }
 
