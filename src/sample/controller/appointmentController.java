@@ -153,6 +153,30 @@ public class appointmentController implements Initializable {
         }
     }
 
+    private boolean checkAppointmentOverlap(Appointment appointment1) throws SQLException {
+        ZonedDateTime start1 = appointment1.getStart();
+        ZonedDateTime end1 = appointment1.getEnd();
+        ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+        for(Appointment appointment2: allAppointments){
+            if(appointment1 != appointment2){
+                ZonedDateTime start2 = appointment2.getStart();
+                ZonedDateTime end2 = appointment2.getEnd();
+                if(
+                        start1.isBefore(start2) && end1.isAfter(end2) ||
+                                start1.isBefore(end2) && end1.isAfter(end2) ||
+                                start1.isBefore(start2) && end1.isAfter(end2) ||
+                                start1.isAfter(start2) && end1.isBefore(end2))
+                {
+                    String alertString ="Cannot create appointment. This appointment"+
+                            " overlaps with Appointment " + appointment2.getAppointmentID();
+                    sendAlert(alertString);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @FXML
     void ClickAdd() throws SQLException {
         addState();
@@ -236,6 +260,11 @@ public class appointmentController implements Initializable {
 
         ZonedDateTime endSystem = ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault());
 
+        if(startSystem.isAfter(endSystem)){
+            sendAlert("Appointment end must be after appointment start");
+            return null;
+        }
+
         User currentUser = UserDAO.getCurrentUser();
         ZonedDateTime createDate = ZonedDateTime.now(ZoneId.of("UTC"));
         String createdBy = currentUser.getUserName();
@@ -253,6 +282,8 @@ public class appointmentController implements Initializable {
         Appointment appointment = new Appointment(appointmentid, title, description, location, type,
                 startSystem, endSystem, createDate, createdBy, lastUpdate, lastUpdatedBy,
                 customerid, userid, contactid);
+
+        if(checkAppointmentOverlap(appointment)){return null;}
         return appointment;
     }
 
