@@ -346,8 +346,8 @@ public class appointmentController implements Initializable {
 
         clearBoxes();
         setBoxesEnabled(false);
-        setButtonsEnabled(false);
 
+        setButtonsEnabled(false);
         ButtonAdd.setDisable(false);
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);

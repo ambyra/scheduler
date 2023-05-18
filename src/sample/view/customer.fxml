@@ -116,7 +116,7 @@
                               <Insets left="137.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="OnClickAppointments" mnemonicParsing="false" onAction="#ClickAppointments" text="Appointments" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                        <Button fx:id="ButtonAppointments" mnemonicParsing="false" onAction="#ClickAppointments" text="Appointments" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                         <Button fx:id="ButtonSave" mnemonicParsing="false" onAction="#ClickSave" text="Save" GridPane.columnIndex="4">
                            <GridPane.margin>
                               <Insets left="90.0" />

@@ -10,7 +10,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import sample.dao.AppointmentDAO;
 import sample.dao.CustomerDAO;
+import sample.model.Appointment;
 import sample.model.Customer;
 
 import java.net.URL;
@@ -23,7 +25,7 @@ public class customerController implements Initializable {
     @FXML private Button ButtonSave;
     @FXML private Button ButtonCancel;
     @FXML private Button ButtonDelete;
-    @FXML private Button OnClickAppointments;
+    @FXML private Button ButtonAppointments;
 
     @FXML private ComboBox<?> ComboBoxCountry;
     @FXML private ComboBox<?> ComboBoxFirstLevelDivision;
@@ -87,6 +89,7 @@ public class customerController implements Initializable {
         ButtonSave.setDisable(areEnabled);
         ButtonCancel.setDisable(areEnabled);
         ButtonDelete.setDisable(areEnabled);
+        ButtonAppointments.setDisable(areEnabled);
     }
 
     void clearBoxes(){
@@ -105,40 +108,86 @@ public class customerController implements Initializable {
     }
 
     @FXML
-    void ClickAdd(ActionEvent event) {
+    void ClickAdd(ActionEvent event) throws SQLException {
+        clearBoxes();
+        setBoxesEnabled(true);
+        //TODO: populateChoiceBoxes();
+
+        TableViewCustomers.setDisable(true);
+        setButtonsEnabled(false);
+        ButtonSave.setDisable(false);
+        ButtonCancel.setDisable(false);
+
+        int newCustomerID = CustomerDAO.newCustomerID();
+        TextFieldCustomerId.setText(String.valueOf(newCustomerID));
 
     }
 
     @FXML
     void ClickEdit(ActionEvent event) {
+        //TODO: Customer selectedCustomer = getCustomerFromSelection();
+        //if(selectedCustomer == null){return;}
 
-    }
-
-    @FXML
-    void ClickSave(ActionEvent event) {
-
-    }
-
-    @FXML
-    void ClickCancel(ActionEvent event) {
-
-    }
-
-    @FXML
-    void ClickDelete(ActionEvent event) {
-
-    }
-
-    void selectState() throws SQLException {
-        displayTableViewCustomers();
-    }
-
-    void editState(){
         TableViewCustomers.setDisable(true);
+        clearBoxes();
         setBoxesEnabled(true);
         setButtonsEnabled(false);
         ButtonSave.setDisable(false);
         ButtonCancel.setDisable(false);
+        //setBoxes(selectedCustomer);
+
+    }
+
+    @FXML
+    void ClickSave(ActionEvent event) throws SQLException {
+        //TODO: Customer customer = parseInput();
+//        if(customer != null){
+//            CustomerDAO.updateCustomer(customer);
+//            //exit state
+//            selectState();
+//        }
+    }
+
+
+    @FXML
+    void ClickCancel(ActionEvent event) throws SQLException {
+        selectState();
+    }
+
+    @FXML
+    void ClickDelete(ActionEvent event) {
+        //TODO: CustomerDAO.delete(getCustomerFromSelection());
+    }
+
+
+    @FXML
+    void ClickAppointments(ActionEvent event) {
+    }
+
+    void selectState() throws SQLException {
+        displayTableViewCustomers();
+        TableViewCustomers.setDisable(false);
+
+        clearBoxes();
+        setBoxesEnabled(false);
+
+        setButtonsEnabled(false);
+        ButtonAdd.setDisable(false);
+        ButtonEdit.setDisable(false);
+        ButtonDelete.setDisable(false);
+    }
+
+    void editState(){
+       //TODO: Customer selectedCustomer = getCustomerFromSelection();
+       // if(selectedCustomer == null){return;}
+
+        TableViewCustomers.setDisable(true);
+        clearBoxes();
+        setBoxesEnabled(true);
+        setButtonsEnabled(false);
+        ButtonSave.setDisable(false);
+        ButtonCancel.setDisable(false);
+        //setBoxes(selectedCustomer);
     }
 
 }
