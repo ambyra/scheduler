@@ -2,21 +2,18 @@ package sample.controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import sample.dao.AppointmentDAO;
 import sample.dao.CustomerDAO;
-import sample.model.Appointment;
+import sample.dao.UserDAO;
 import sample.model.Customer;
+import sample.model.User;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 public class customerController implements Initializable {
@@ -27,8 +24,8 @@ public class customerController implements Initializable {
     @FXML private Button ButtonDelete;
     @FXML private Button ButtonAppointments;
 
-    @FXML private ComboBox<?> ComboBoxCountry;
-    @FXML private ComboBox<?> ComboBoxFirstLevelDivision;
+    @FXML private ComboBox<Integer> ComboBoxCountry;
+    @FXML private ComboBox<Integer> ComboBoxFirstLevelDivision;
 
     @FXML private TableView<Customer> TableViewCustomers;
     @FXML private TableColumn<?, ?> TableColumnAddress;
@@ -103,15 +100,86 @@ public class customerController implements Initializable {
         ComboBoxFirstLevelDivision.getItems().clear();
     }
 
-    void setComboBoxes(){
+    void setBoxes(Customer customer){
+        TextFieldCustomerId.setText(String.valueOf(customer.getCustomerID()));
+        TextFieldName.setText(customer.getCustomerName());
+        TextFieldPhone.setText(customer.getPhone());
+        //TODO ComboBoxCountry.set();
+        //TODO ComboBoxFirstLevelDivision.set();
+        TextFieldAddress.setText(customer.getAddress());
+        TextFieldPostalCode.setText(customer.getPostalCode());
+    }
 
+    private Customer getCustomerFromBoxes() throws SQLException {
+        int customerId;
+        try{
+            customerId = Integer.parseInt(TextFieldCustomerId.getText());
+        }catch(NullPointerException e){
+            sendAlert("ID Field cannot be empty");
+            return null;
+        }
+
+        String customerName = TextFieldName.getText();
+        if(customerName.isEmpty()){
+            sendAlert("Customer name cannot be empty");
+            return null;
+        }
+
+        String address = TextFieldAddress.getText();
+        if(address.isEmpty()){
+            sendAlert("Address cannot be empty");
+            return null;
+        }
+
+        String postalCode = TextFieldPostalCode.getText();
+        if(postalCode.isEmpty()){
+            sendAlert("Postal code cannot be empty");
+            return null;
+        }
+
+        String phone = TextFieldPhone.getText();
+        if(phone.isEmpty()){
+            sendAlert("Phone number cannot be empty");
+            return null;
+        }
+
+        User currentUser = UserDAO.getCurrentUser();
+
+        ZonedDateTime createDate = ZonedDateTime.now(ZoneId.of("UTC"));
+
+        String createdBy = currentUser.getUserName();
+
+        Customer oldCustomer = CustomerDAO.getCustomer(customerId);
+        if(oldCustomer != null){
+            createDate  = oldCustomer.getCreateDate();
+            createdBy = oldCustomer.getCreatedBy();
+        }
+
+        ZonedDateTime lastUpdate = ZonedDateTime.now(ZoneId.of("UTC"));
+
+        String lastUpdatedBy = currentUser.getLastUpdatedBy();
+
+        int divisionId;
+        try{
+            divisionId = ComboBoxFirstLevelDivision.getValue();
+        }catch(NullPointerException e){
+            sendAlert("State/Province cannot be empty");
+            return null;
+        }
+
+        return new Customer(customerId, customerName, address, postalCode, phone,
+                createDate,createdBy, lastUpdate, lastUpdatedBy, divisionId);
+    }
+
+    private Customer getCustomerFromSelection(){
+        return TableViewCustomers.getSelectionModel().getSelectedItem();
     }
 
     @FXML
-    void ClickAdd(ActionEvent event) throws SQLException {
+    void ClickAdd() throws SQLException {
         clearBoxes();
         setBoxesEnabled(true);
-        //TODO: populateChoiceBoxes();
+        //TODO: setComboBoxOptions();
 
         TableViewCustomers.setDisable(true);
         setButtonsEnabled(false);
@@ -120,13 +188,12 @@ public class customerController implements Initializable {
 
         int newCustomerID = CustomerDAO.newCustomerID();
         TextFieldCustomerId.setText(String.valueOf(newCustomerID));
-
     }
 
     @FXML
-    void ClickEdit(ActionEvent event) {
-        //TODO: Customer selectedCustomer = getCustomerFromSelection();
-        //if(selectedCustomer == null){return;}
+    void ClickEdit() {
+        Customer selectedCustomer = getCustomerFromSelection();
+        if(selectedCustomer == null){return;}
 
         TableViewCustomers.setDisable(true);
         clearBoxes();
@@ -134,34 +201,31 @@ public class customerController implements Initializable {
         setButtonsEnabled(false);
         ButtonSave.setDisable(false);
         ButtonCancel.setDisable(false);
-        //setBoxes(selectedCustomer);
-
+        setBoxes(selectedCustomer);
     }
 
     @FXML
-    void ClickSave(ActionEvent event) throws SQLException {
-        //TODO: Customer customer = parseInput();
-//        if(customer != null){
-//            CustomerDAO.updateCustomer(customer);
-//            //exit state
-//            selectState();
-//        }
+    void ClickSave() throws SQLException {
+        Customer customer = getCustomerFromBoxes();
+        if(customer != null){
+            CustomerDAO.updateCustomer(customer);
+            selectState();
+        }
     }
 
-
     @FXML
-    void ClickCancel(ActionEvent event) throws SQLException {
+    void ClickCancel() throws SQLException {
         selectState();
     }
 
     @FXML
-    void ClickDelete(ActionEvent event) {
+    void ClickDelete() {
         //TODO: CustomerDAO.delete(getCustomerFromSelection());
     }
 
-
     @FXML
-    void ClickAppointments(ActionEvent event) {
+    void ClickAppointments() {
+        //TODO: load appointment form
     }
 
     void selectState() throws SQLException {
@@ -177,17 +241,12 @@ public class customerController implements Initializable {
         ButtonDelete.setDisable(false);
     }
 
-    void editState(){
-       //TODO: Customer selectedCustomer = getCustomerFromSelection();
-       // if(selectedCustomer == null){return;}
-
-        TableViewCustomers.setDisable(true);
-        clearBoxes();
-        setBoxesEnabled(true);
-        setButtonsEnabled(false);
-        ButtonSave.setDisable(false);
-        ButtonCancel.setDisable(false);
-        //setBoxes(selectedCustomer);
+    private void sendAlert(String alertMessage)
+    {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Alert!");
+        alert.setContentText(alertMessage);
+        alert.showAndWait();
     }
 
 }
