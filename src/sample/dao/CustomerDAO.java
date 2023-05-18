@@ -2,7 +2,6 @@ package sample.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sample.model.Appointment;
 import sample.model.Customer;
 
 import java.sql.*;
@@ -40,6 +39,16 @@ public class CustomerDAO {
         return customers;
     }
 
+    public static Customer getCustomer(int customerID) throws SQLException {
+        ObservableList<Customer> customers = getCustomers();
+        for (Customer customer : customers) {
+            if (customer.getCustomerID() == customerID) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
     public static void deleteCustomer(Customer customer){
         if(customer == null){return;}
         Connection connection = JDBC.getConnection();
@@ -54,17 +63,7 @@ public class CustomerDAO {
         catch(SQLException sqlException){sqlException.printStackTrace();}
     }
 
-//SELECT `customers`.`Customer_ID`,
-//        `customers`.`Customer_Name`,
-//        `customers`.`Address`,
-//        `customers`.`Postal_Code`,
-//        `customers`.`Phone`,
-//        `customers`.`Create_Date`,
-//        `customers`.`Created_By`,
-//        `customers`.`Last_Update`,
-//        `customers`.`Last_Updated_By`,
-//        `customers`.`Division_ID`
-//        FROM `client_schedule`.`customers`;
+
     public static void updateCustomer(Customer customer) throws SQLException{
         if (customer == null){return;}
         Connection connection = JDBC.getConnection();
@@ -103,3 +102,14 @@ public class CustomerDAO {
     }
 }
 
+//SELECT `customers`.`Customer_ID`,
+//        `customers`.`Customer_Name`,
+//        `customers`.`Address`,
+//        `customers`.`Postal_Code`,
+//        `customers`.`Phone`,
+//        `customers`.`Create_Date`,
+//        `customers`.`Created_By`,
+//        `customers`.`Last_Update`,
+//        `customers`.`Last_Updated_By`,
+//        `customers`.`Division_ID`
+//        FROM `client_schedule`.`customers`;

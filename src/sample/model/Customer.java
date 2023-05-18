@@ -1,6 +1,7 @@
 package sample.model;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 
@@ -33,22 +34,21 @@ public class Customer {
     public ZonedDateTime getCreateDate() {
         return createDate;
     }
-
     public String getCreatedBy() {
         return createdBy;
     }
-
     public ZonedDateTime getLastUpdate() {
         return lastUpdate;
     }
-
     public String getLastUpdatedBy() {
         return lastUpdatedBy;
     }
-
     public int getDivisionID() {
         return divisionID;
     }
+
+    public ZonedDateTime getCreateDateUTC() {return createDate.withZoneSameInstant(ZoneId.of("UTC"));}
+    public ZonedDateTime getLastUpdateUTC() {return lastUpdate.withZoneSameInstant(ZoneId.of("UTC"));}
 
     public Customer(int customerID, String customerName, String address, String postalCode,
                     String phone, ZonedDateTime createDate, String createdBy, ZonedDateTime lastUpdate,
@@ -65,13 +65,7 @@ public class Customer {
         this.divisionID = divisionID;
     };
 
-    public Calendar getCreateDateUTC() {
-        return null;
-    }
 
-    public Calendar getLastUpdateUTC() {
-        return null;
-    }
 }
 //
 //SELECT `customers`.`Customer_ID`,
