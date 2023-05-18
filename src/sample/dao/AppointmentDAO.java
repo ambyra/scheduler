@@ -66,6 +66,7 @@ public class AppointmentDAO {
     }
 
     public static void updateAppointment(Appointment appointment) throws SQLException{
+        if(appointment == null){return;}
         Connection connection = JDBC.getConnection();
 
         String query = "replace into client_schedule.appointments " +
@@ -96,6 +97,7 @@ public class AppointmentDAO {
     }
 
     public static void deleteAppointment(Appointment appointment){
+        if(appointment == null){return;}
         Connection connection = JDBC.getConnection();
         String query = "delete from client_schedule.appointments where Appointment_ID = ?";
 

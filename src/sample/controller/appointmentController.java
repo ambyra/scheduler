@@ -67,15 +67,15 @@ public class appointmentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setColumnsAppointmentsTableView();
+        startRadioGroupAppointmentsListener();
+
         //entry state
         try {
             selectState();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-
-        setColumnsAppointmentsTableView();
-        startRadioGroupAppointmentsListener();
     }
 
     private void startRadioGroupAppointmentsListener(){
@@ -195,17 +195,31 @@ public class appointmentController implements Initializable {
 
     @FXML
     void ClickAdd() throws SQLException {
-        addState();
+        clearBoxes();
+        setBoxesEnabled(true);
+        populateChoiceBoxes();
+
+        TableViewAppointments.setDisable(true);
+        setButtonsEnabled(false);
+        ButtonSave.setDisable(false);
+        ButtonCancel.setDisable(false);
+
         int newAppointmentID = AppointmentDAO.newAppointmentID();
         TextFieldAppointmentID.setText(String.valueOf(newAppointmentID));
     }
 
     @FXML
     void ClickEdit() throws SQLException {
-        editState();
+        Appointment selectedAppointment = getAppointmentFromSelection();
+        if(selectedAppointment == null){return;}
+
+        TableViewAppointments.setDisable(true);
         clearBoxes();
         setBoxesEnabled(true);
-        setBoxes(getAppointmentFromSelection());
+        setButtonsEnabled(false);
+        ButtonSave.setDisable(false);
+        ButtonCancel.setDisable(false);
+        setBoxes(selectedAppointment);
     }
 
     @FXML
@@ -321,12 +335,8 @@ public class appointmentController implements Initializable {
     }
 
     @FXML
-    void ClickDelete (ActionEvent event) throws SQLException {
-        Appointment appointment = getAppointmentFromSelection();
-        if(appointment != null){
-            AppointmentDAO.deleteAppointment(appointment);
-        }
-        selectState();
+    void ClickDelete (ActionEvent event) {
+            AppointmentDAO.deleteAppointment(getAppointmentFromSelection());
     }
 
     void selectState() throws SQLException {
@@ -347,24 +357,6 @@ public class appointmentController implements Initializable {
         checkAppointmentUpcoming();
     }
 
-    void addState() throws SQLException {
-        clearBoxes();
-        TableViewAppointments.setDisable(true);
-        setButtonsEnabled(false);
-        setBoxesEnabled(true);
-        populateChoiceBoxes();
-
-        ButtonSave.setDisable(false);
-        ButtonCancel.setDisable(false);
-    }
-    void editState(){
-        TableViewAppointments.setDisable(true);
-        setBoxesEnabled(true);
-        setButtonsEnabled(false);
-        ButtonSave.setDisable(false);
-        ButtonCancel.setDisable(false);
-
-    }
     void clearBoxes(){
         TextFieldAppointmentID.clear();
         ChoiceBoxContactID.getItems().clear();

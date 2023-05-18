@@ -2,6 +2,7 @@ package sample.model;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 
 public class Customer {
     private int customerID;
@@ -18,19 +19,13 @@ public class Customer {
     public int getCustomerID() {
         return customerID;
     }
-
     public String getCustomerName() {
         return customerName;
     }
-
     public String getAddress() {
         return address;
     }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
+    public String getPostalCode() { return postalCode;}
     public String getPhone() {
         return phone;
     }
@@ -69,6 +64,14 @@ public class Customer {
         this.lastUpdatedBy = lastUpdatedBy;
         this.divisionID = divisionID;
     };
+
+    public Calendar getCreateDateUTC() {
+        return null;
+    }
+
+    public Calendar getLastUpdateUTC() {
+        return null;
+    }
 }
 //
 //SELECT `customers`.`Customer_ID`,
