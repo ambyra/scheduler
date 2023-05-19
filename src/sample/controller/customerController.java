@@ -63,7 +63,7 @@ public class customerController implements Initializable {
 
     void displayTableViewCustomers() throws SQLException {
         ObservableList<Customer> allCustomers = CustomerDAO.getCustomers();
-        TableViewCustomers.getItems().clear();
+
         TableViewCustomers.setItems(allCustomers);
     }
 
@@ -106,8 +106,8 @@ public class customerController implements Initializable {
         TextFieldPostalCode.clear();
         TextFieldPhone.clear();
 
-        ComboBoxCountry.getItems().clear();
-        ComboBoxFirstLevelDivision.getItems().clear();
+        ComboBoxCountry.getSelectionModel().select("");
+        ComboBoxFirstLevelDivision.getSelectionModel().select("");
     }
 
     void setBoxes(Customer customer) throws SQLException {
@@ -116,15 +116,6 @@ public class customerController implements Initializable {
         TextFieldPhone.setText(customer.getPhone());
         TextFieldAddress.setText(customer.getAddress());
         TextFieldPostalCode.setText(customer.getPostalCode());
-
-        setComboBoxes(customer);
-    }
-
-    void setComboBoxes(Customer customer) throws SQLException {
-        int customerDivisionID = customer.getDivisionID();
-        Division division = DivisionDAO.getDivision((customerDivisionID));
-
-
     }
 
     void setComboBoxCountry(Division division){
@@ -133,30 +124,35 @@ public class customerController implements Initializable {
         countries.add("United Kingdom");
         countries.add("Canada");
 
-        ComboBoxCountry.getItems().clear();
         ComboBoxCountry.setItems(countries);
-        int countryIndex = division.getCountryID();
+        int countryIndex = division.getCountryID() - 1;
         ComboBoxCountry.getSelectionModel().select(countryIndex);
+    }
+
+    void setComboBoxCountry(){
+        ObservableList<String> countries = FXCollections.observableArrayList();
+        countries.add("United States");
+        countries.add("United Kingdom");
+        countries.add("Canada");
+
+        ComboBoxCountry.setItems(countries);
     }
 
     void setComboBoxDivision(Division division) throws SQLException {
         int countryIndex = ComboBoxCountry.getSelectionModel().getSelectedIndex() + 1;
         ObservableList<String> divisionNames = DivisionDAO.getDivisionsFromCountryID(countryIndex);
-        ComboBoxFirstLevelDivision.getItems().clear();
         ComboBoxFirstLevelDivision.setItems(divisionNames);
-        ComboBoxFirstLevelDivision.getSelectionModel().select(division.getDivisionID());
+        ComboBoxFirstLevelDivision.getSelectionModel().select(division.getDivision());
     }
 
     void setComboBoxDivision() throws SQLException {
-        int countryIndex = ComboBoxCountry.getSelectionModel().getSelectedIndex();
+        int countryIndex = ComboBoxCountry.getSelectionModel().getSelectedIndex() + 1;
         ObservableList<String> divisionNames = DivisionDAO.getDivisionsFromCountryID(countryIndex);
-        ComboBoxFirstLevelDivision.getItems().clear();
         ComboBoxFirstLevelDivision.setItems(divisionNames);
     }
 
     @FXML
     void ActionCountry() throws SQLException {
-
         setComboBoxDivision();
     }
 
@@ -234,7 +230,7 @@ public class customerController implements Initializable {
     void ClickAdd() throws SQLException {
         clearBoxes();
         setBoxesEnabled(true);
-        //TODO: setComboBoxOptions();
+        setComboBoxCountry();
 
         TableViewCustomers.setDisable(true);
         setButtonsEnabled(false);
