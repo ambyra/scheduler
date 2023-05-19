@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 
 public class DivisionDAO {
-    public static ObservableList<Division> getCustomers() throws SQLException {
+    public static ObservableList<Division> getDivisions() throws SQLException {
         ObservableList<Division> divisions= FXCollections.observableArrayList();
 
         Connection connection = JDBC.getConnection();
@@ -34,6 +34,38 @@ public class DivisionDAO {
             }
         } catch (SQLException sqlException) {}
         return divisions;
+    }
+
+    public static Division getDivision(int divisionID) throws SQLException {
+        ObservableList<Division> divisions = getDivisions();
+        for(Division division : divisions){
+            if (division.getDivisionID() == divisionID){
+                return division;
+            }
+        }
+        return null;
+    }
+
+    public static Division getDivision(String divisionName) throws SQLException {
+        ObservableList<Division> divisions = getDivisions();
+        for(Division division : divisions){
+            if (division.getDivision() == divisionName){
+                return division;
+            }
+        }
+        return null;
+    }
+
+    public static ObservableList<String> getDivisionsFromCountryID(int countryID) throws SQLException {
+        if (countryID < 1 || countryID > 3){return null;}
+        ObservableList<Division> divisions = getDivisions();
+        ObservableList<String> divisionNames = FXCollections.observableArrayList();
+        for(Division division : divisions){
+            if(division.getCountryID() == countryID){
+                divisionNames.add(division.getDivision());
+            }
+        }
+        return divisionNames;
     }
 }
 //SELECT `first_level_divisions`.`Division_ID`,

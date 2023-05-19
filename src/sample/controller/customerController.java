@@ -1,13 +1,17 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.dao.CustomerDAO;
+import sample.dao.DivisionDAO;
 import sample.dao.UserDAO;
 import sample.model.Customer;
+import sample.model.Division;
 import sample.model.User;
 
 import java.net.URL;
@@ -24,8 +28,8 @@ public class customerController implements Initializable {
     @FXML private Button ButtonDelete;
     @FXML private Button ButtonAppointments;
 
-    @FXML private ComboBox<Integer> ComboBoxCountry;
-    @FXML private ComboBox<Integer> ComboBoxFirstLevelDivision;
+    @FXML private ComboBox<String> ComboBoxCountry;
+    @FXML private ComboBox<String> ComboBoxFirstLevelDivision;
 
     @FXML private TableView<Customer> TableViewCustomers;
     @FXML private TableColumn<?, ?> TableColumnAddress;
@@ -40,6 +44,12 @@ public class customerController implements Initializable {
     @FXML private TextField TextFieldAddress;
     @FXML private TextField TextFieldPhone;
     @FXML private TextField TextFieldPostalCode;
+
+    private enum Countries{
+        UnitedStates(1), Canada(2), UnitedKingdom(3);
+        private Countries(int i) {
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -100,14 +110,54 @@ public class customerController implements Initializable {
         ComboBoxFirstLevelDivision.getItems().clear();
     }
 
-    void setBoxes(Customer customer){
+    void setBoxes(Customer customer) throws SQLException {
         TextFieldCustomerId.setText(String.valueOf(customer.getCustomerID()));
         TextFieldName.setText(customer.getCustomerName());
         TextFieldPhone.setText(customer.getPhone());
-        //TODO ComboBoxCountry.set();
-        //TODO ComboBoxFirstLevelDivision.set();
         TextFieldAddress.setText(customer.getAddress());
         TextFieldPostalCode.setText(customer.getPostalCode());
+
+        setComboBoxes(customer);
+    }
+
+    void setComboBoxes(Customer customer) throws SQLException {
+        int customerDivisionID = customer.getDivisionID();
+        Division division = DivisionDAO.getDivision((customerDivisionID));
+
+
+    }
+
+    void setComboBoxCountry(Division division){
+        ObservableList<String> countries = FXCollections.observableArrayList();
+        countries.add("United States");
+        countries.add("United Kingdom");
+        countries.add("Canada");
+
+        ComboBoxCountry.getItems().clear();
+        ComboBoxCountry.setItems(countries);
+        int countryIndex = division.getCountryID();
+        ComboBoxCountry.getSelectionModel().select(countryIndex);
+    }
+
+    void setComboBoxDivision(Division division) throws SQLException {
+        int countryIndex = ComboBoxCountry.getSelectionModel().getSelectedIndex() + 1;
+        ObservableList<String> divisionNames = DivisionDAO.getDivisionsFromCountryID(countryIndex);
+        ComboBoxFirstLevelDivision.getItems().clear();
+        ComboBoxFirstLevelDivision.setItems(divisionNames);
+        ComboBoxFirstLevelDivision.getSelectionModel().select(division.getDivisionID());
+    }
+
+    void setComboBoxDivision() throws SQLException {
+        int countryIndex = ComboBoxCountry.getSelectionModel().getSelectedIndex();
+        ObservableList<String> divisionNames = DivisionDAO.getDivisionsFromCountryID(countryIndex);
+        ComboBoxFirstLevelDivision.getItems().clear();
+        ComboBoxFirstLevelDivision.setItems(divisionNames);
+    }
+
+    @FXML
+    void ActionCountry() throws SQLException {
+
+        setComboBoxDivision();
     }
 
     private Customer getCustomerFromBoxes() throws SQLException {
@@ -159,14 +209,19 @@ public class customerController implements Initializable {
 
         String lastUpdatedBy = currentUser.getLastUpdatedBy();
 
-        int divisionId;
+        int divisionId = 0;
         try{
-            divisionId = ComboBoxFirstLevelDivision.getValue();
-        }catch(NullPointerException e){
+            String divisionName = ComboBoxFirstLevelDivision.getValue();
+            divisionId = DivisionDAO.getDivision(divisionName).getDivisionID();
+            if(divisionId == 0){
+                sendAlert("State/Province not found");
+                return null;
+            }
+        }
+        catch(NullPointerException e){
             sendAlert("State/Province cannot be empty");
             return null;
         }
-
         return new Customer(customerId, customerName, address, postalCode, phone,
                 createDate,createdBy, lastUpdate, lastUpdatedBy, divisionId);
     }
@@ -191,7 +246,7 @@ public class customerController implements Initializable {
     }
 
     @FXML
-    void ClickEdit() {
+    void ClickEdit() throws SQLException {
         Customer selectedCustomer = getCustomerFromSelection();
         if(selectedCustomer == null){return;}
 
@@ -202,6 +257,10 @@ public class customerController implements Initializable {
         ButtonSave.setDisable(false);
         ButtonCancel.setDisable(false);
         setBoxes(selectedCustomer);
+
+        Division division = DivisionDAO.getDivision(selectedCustomer.getDivisionID());
+        setComboBoxCountry(division);
+        setComboBoxDivision(division);
     }
 
     @FXML
@@ -248,5 +307,4 @@ public class customerController implements Initializable {
         alert.setContentText(alertMessage);
         alert.showAndWait();
     }
-
 }

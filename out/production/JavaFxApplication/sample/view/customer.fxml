@@ -87,7 +87,7 @@
                         </TextField>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Country" GridPane.columnIndex="2" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="State/Province" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <ComboBox fx:id="ComboBoxCountry" prefWidth="150.0" GridPane.columnIndex="3">
+                        <ComboBox fx:id="ComboBoxCountry" onAction="#ActionCountry" prefWidth="150.0" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>

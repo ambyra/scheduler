@@ -47,8 +47,6 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="296.0" minWidth="120.0" prefWidth="120.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="391.0" minWidth="120.0" prefWidth="120.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="120.0" prefWidth="120.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="140.0" prefWidth="140.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="360.0" minWidth="5.0" prefWidth="360.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -121,31 +119,32 @@
                               <Insets right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <Button fx:id="ButtonAdd" mnemonicParsing="false" onAction="#ClickAdd" text="Add" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS">
+                        <Button fx:id="ButtonAdd" mnemonicParsing="false" onAction="#ClickAdd" text="Add" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
                            <GridPane.margin>
                               <Insets />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="ButtonSave" mnemonicParsing="false" onAction="#ClickSave" text="Save" GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
+                        <Button fx:id="ButtonSave" mnemonicParsing="false" onAction="#ClickSave" text="Save" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
                            <GridPane.margin>
-                              <Insets left="65.0" />
+                              <Insets left="90.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="ButtonDelete" mnemonicParsing="false" onAction="#ClickDelete" text="Delete" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS">
+                        <Button fx:id="ButtonDelete" mnemonicParsing="false" onAction="#ClickDelete" text="Delete" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS">
                            <GridPane.margin>
-                              <Insets />
+                              <Insets left="195.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="ButtonEdit" mnemonicParsing="false" onAction="#ClickEdit" text="Edit" GridPane.columnIndex="4">
+                        <Button fx:id="ButtonEdit" mnemonicParsing="false" onAction="#ClickEdit" text="Edit" GridPane.columnIndex="5">
                            <GridPane.margin>
-                              <Insets left="15.0" />
+                              <Insets left="45.0" />
                            </GridPane.margin>
                         </Button>
                         <Button fx:id="ButtonCancel" mnemonicParsing="false" onAction="#ClickCancel" text="Cancel" GridPane.columnIndex="5" GridPane.halignment="LEFT">
                            <GridPane.margin>
-                              <Insets right="5.0" />
+                              <Insets left="137.0" />
                            </GridPane.margin>
                         </Button>
+                        <Button fx:id="ButtonCustomers" mnemonicParsing="false" onAction="#OnClickCustomers" text="Customers" GridPane.columnIndex="5" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </children>
