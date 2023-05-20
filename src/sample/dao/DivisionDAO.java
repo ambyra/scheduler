@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZoneId;
+import java.util.Locale;
 
 public class DivisionDAO {
     public static ObservableList<Division> getDivisions() throws SQLException {
@@ -49,7 +50,7 @@ public class DivisionDAO {
     public static Division getDivision(String divisionName) throws SQLException {
         ObservableList<Division> divisions = getDivisions();
         for(Division division : divisions){
-            if (division.getDivision() == divisionName){
+            if (division.getDivision().compareToIgnoreCase(divisionName)==0){
                 return division;
             }
         }

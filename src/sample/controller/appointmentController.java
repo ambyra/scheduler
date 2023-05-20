@@ -4,11 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import sample.Main;
 import sample.dao.AppointmentDAO;
 import sample.dao.ContactDAO;
 import sample.dao.CustomerDAO;
@@ -18,6 +23,7 @@ import sample.model.Contact;
 import sample.model.Customer;
 import sample.model.User;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.*;
@@ -335,8 +341,18 @@ public class appointmentController implements Initializable {
     }
 
     @FXML
-    void ClickDelete (ActionEvent event) {
-            AppointmentDAO.deleteAppointment(getAppointmentFromSelection());
+    void ClickDelete (ActionEvent event) throws SQLException {
+        AppointmentDAO.deleteAppointment(getAppointmentFromSelection());
+        selectState();
+    }
+
+    @FXML
+    void ClickCustomers (ActionEvent event) throws IOException {
+        Stage stage = Main.getStage();
+        URL resource = getClass().getResource("/sample/view/customer.fxml");
+        Parent root = FXMLLoader.load(resource);
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     void selectState() throws SQLException {

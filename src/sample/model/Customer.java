@@ -47,6 +47,7 @@ public class Customer {
         return divisionID;
     }
 
+
     public ZonedDateTime getCreateDateUTC() {return createDate.withZoneSameInstant(ZoneId.of("UTC"));}
     public ZonedDateTime getLastUpdateUTC() {return lastUpdate.withZoneSameInstant(ZoneId.of("UTC"));}
 

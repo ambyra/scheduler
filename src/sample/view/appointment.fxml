@@ -144,7 +144,7 @@
                               <Insets left="137.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="ButtonCustomers" mnemonicParsing="false" onAction="#OnClickCustomers" text="Customers" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                        <Button fx:id="ButtonCustomers" mnemonicParsing="false" onAction="#ClickCustomers" text="Customers" GridPane.columnIndex="5" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </children>

@@ -68,10 +68,13 @@ public class CustomerDAO {
         if (customer == null){return;}
         Connection connection = JDBC.getConnection();
 
-        String query = "replace into client_schedule.customers " +
+        String query = "insert into client_schedule.customers " +
                 "(Customer_ID, Customer_Name, Address, Postal_Code, " +
-                "Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID, " +
-                "User_ID, Contact_ID) values (?,?,?,?,?,?,?,?,?,?) ";
+                "Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) " +
+                "values (?,?,?,?,?,?,?,?,?,?) on duplicate key update " +
+                "Customer_ID = ?, Customer_Name = ?, Address = ?, Postal_Code = ?, " +
+                "Phone = ?, Create_Date = ?, Created_By = ?, Last_Update = ?, " +
+                "Last_Updated_By = ?, Division_ID = ?";
 
         try{
             JDBC.makePreparedStatement(query, connection);
@@ -86,6 +89,16 @@ public class CustomerDAO {
             ps.setObject(8,Timestamp.from(customer.getLastUpdateUTC().toInstant()));
             ps.setString(9, customer.getLastUpdatedBy());
             ps.setInt(10, customer.getDivisionID());
+            ps.setInt(11, customer.getCustomerID());
+            ps.setString(12, customer.getCustomerName());
+            ps.setString(13, customer.getAddress());
+            ps.setString(14, customer.getPostalCode());
+            ps.setString(15, customer.getPhone());
+            ps.setObject(16, Timestamp.from(customer.getCreateDateUTC().toInstant()));
+            ps.setString(17, customer.getCreatedBy());
+            ps.setObject(18,Timestamp.from(customer.getLastUpdateUTC().toInstant()));
+            ps.setString(19, customer.getLastUpdatedBy());
+            ps.setInt(20, customer.getDivisionID());
             ps.executeUpdate();
 
         }catch(SQLException sqlException){sqlException.printStackTrace();}
@@ -100,6 +113,7 @@ public class CustomerDAO {
         int largest = Collections.max(customerIDs);
         return largest + 1;
     }
+
 }
 
 //SELECT `customers`.`Customer_ID`,
