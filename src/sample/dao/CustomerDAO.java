@@ -15,7 +15,10 @@ public class CustomerDAO {
         ObservableList<Customer> customers= FXCollections.observableArrayList();
 
         Connection connection = JDBC.getConnection();
-        String query = "select * from client_schedule.customers";
+        String query = "select * from client_schedule.customers " +
+                "inner join  client_schedule.first_level_divisions " +
+                "on client_schedule.customers.Division_ID = " +
+                "client_schedule.first_level_divisions.Division_ID";
 
         try {
             JDBC.makePreparedStatement(query, connection);
@@ -33,6 +36,7 @@ public class CustomerDAO {
                         rs.getTimestamp("Last_Update").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getString("Last_Updated_By"),
                         rs.getInt("Division_ID"));
+                customer.setDivision(rs.getString("Division"));
                 customers.add(customer);
             }
         } catch (SQLException sqlException) {}

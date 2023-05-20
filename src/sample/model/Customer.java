@@ -6,6 +6,7 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 
 public class Customer {
+    private String division;
     private int customerID;
     private String customerName;
     private String address;
@@ -47,6 +48,9 @@ public class Customer {
         return divisionID;
     }
 
+    public void setDivision(String division){this.division = division;}
+    public String getDivision(){return division;}
+
 
     public ZonedDateTime getCreateDateUTC() {return createDate.withZoneSameInstant(ZoneId.of("UTC"));}
     public ZonedDateTime getLastUpdateUTC() {return lastUpdate.withZoneSameInstant(ZoneId.of("UTC"));}
@@ -64,7 +68,7 @@ public class Customer {
         this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = lastUpdatedBy;
         this.divisionID = divisionID;
-    };
+    }
 
 
 }

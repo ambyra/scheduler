@@ -72,7 +72,7 @@ public class customerController implements Initializable {
         TableColumnAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         TableColumnPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         TableColumnPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        TableColumnStateProvince.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
+        TableColumnStateProvince.setCellValueFactory(new PropertyValueFactory<>("division"));
     }
 
     void setBoxesEnabled(boolean areEnabled){
