@@ -1,12 +1,9 @@
 package sample.model;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 
 public class Customer {
-    private String division;
     private int customerID;
     private String customerName;
     private String address;
@@ -16,6 +13,7 @@ public class Customer {
     private String createdBy;
     private ZonedDateTime lastUpdate;
     private String lastUpdatedBy;
+    private String division;
     private int divisionID;
 
     public int getCustomerID() {
@@ -69,8 +67,6 @@ public class Customer {
         this.lastUpdatedBy = lastUpdatedBy;
         this.divisionID = divisionID;
     }
-
-
 }
 //
 //SELECT `customers`.`Customer_ID`,

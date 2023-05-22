@@ -71,6 +71,12 @@ public class appointmentController implements Initializable {
     @FXML private Button ButtonCancel;
     @FXML private Button ButtonDelete;
 
+    @FXML private Button ButtonCustomers;
+    @FXML private Button ButtonTotal;
+    @FXML private Button ButtonContact;
+    @FXML private Button ButtonAdditional;
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setColumnsAppointmentsTableView();
@@ -336,24 +342,36 @@ public class appointmentController implements Initializable {
     }
 
     @FXML
-    void ClickCancel (ActionEvent event) throws SQLException {
+    void ClickCancel () throws SQLException {
         selectState();
     }
 
     @FXML
-    void ClickDelete (ActionEvent event) throws SQLException {
-        AppointmentDAO.deleteAppointment(getAppointmentFromSelection());
+    void ClickDelete () throws SQLException {
+        Appointment selectedAppointment = getAppointmentFromSelection();
+        if(selectedAppointment != null){
+            AppointmentDAO.deleteAppointment(selectedAppointment);
+            sendAlert("Appointment ID#" +
+                    selectedAppointment.getAppointmentID() +
+                    " deleted.");
+        }else{
+            sendAlert("No appointment selected.");
+        }
         selectState();
     }
 
     @FXML
-    void ClickCustomers (ActionEvent event) throws IOException {
+    void ClickCustomers () throws IOException {
         Stage stage = Main.getStage();
         URL resource = getClass().getResource("/sample/view/customer.fxml");
         Parent root = FXMLLoader.load(resource);
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+    @FXML void ClickTotal(){} //TODO: implement
+    @FXML void ClickContact(){} //TODO: implement
+    @FXML void ClickAdditional(){} //TODO: implement
 
     void selectState() throws SQLException {
         TableViewAppointments.setDisable(false);
@@ -367,6 +385,11 @@ public class appointmentController implements Initializable {
         ButtonAdd.setDisable(false);
         ButtonEdit.setDisable(false);
         ButtonDelete.setDisable(false);
+
+        ButtonCustomers.setDisable(false);
+        ButtonTotal.setDisable(false);
+        ButtonContact.setDisable(false);
+        ButtonAdditional.setDisable(false);
 
         checkAppointmentHours();
         checkAppointmentOverlap();
@@ -401,6 +424,13 @@ public class appointmentController implements Initializable {
         ButtonSave.setDisable(areEnabled);
         ButtonCancel.setDisable(areEnabled);
         ButtonDelete.setDisable(areEnabled);
+
+        ButtonCustomers.setDisable(areEnabled);
+
+        ButtonTotal.setDisable(areEnabled);
+        ButtonContact.setDisable(areEnabled);
+        ButtonAdditional.setDisable(areEnabled);
+
     }
 
     void setBoxesEnabled(boolean areEnabled){

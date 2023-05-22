@@ -26,7 +26,7 @@ public class Main extends Application {
         setStage(primaryStage);
 
         //DEBUG
-        Parent root = FXMLLoader.load(getClass().getResource("view/customer.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/appointment.fxml"));
         loginController.debugSetCurrentUserID();
         //END DEBUG
 

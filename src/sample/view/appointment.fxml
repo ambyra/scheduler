@@ -92,8 +92,14 @@
                         <TextField fx:id="TextFieldDescription" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <TextField fx:id="TextFieldLocation" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <ChoiceBox fx:id="ChoiceBoxContactID" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <DatePicker fx:id="DatePickerStartDate" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                        <DatePicker fx:id="DatePickerEndDate" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                        <DatePicker fx:id="DatePickerStartDate" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets right="5.0" />
+                           </GridPane.margin></DatePicker>
+                        <DatePicker fx:id="DatePickerEndDate" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets right="5.0" />
+                           </GridPane.margin></DatePicker>
                         <ChoiceBox fx:id="ChoiceBoxCustomerID" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                         <ChoiceBox fx:id="ChoiceBoxUserID" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="View:" />
@@ -145,6 +151,14 @@
                            </GridPane.margin>
                         </Button>
                         <Button fx:id="ButtonCustomers" mnemonicParsing="false" onAction="#ClickCustomers" text="Customers" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                        <Button fx:id="ButtonContact" mnemonicParsing="false" onAction="#ClickContact" text="Contact Schedules" GridPane.columnIndex="5" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </Button>
+                        <Button fx:id="ButtonTotal" mnemonicParsing="false" onAction="#ClickTotal" text="Total Customer Appointments" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                        <Button fx:id="ButtonAdditional" mnemonicParsing="false" onAction="#ClickAdditional" text="Additional Report" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reports" GridPane.columnIndex="5" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                </children>

@@ -274,7 +274,13 @@ public class customerController implements Initializable {
 
     @FXML
     void ClickDelete() throws SQLException {
-        CustomerDAO.deleteCustomer(getCustomerFromSelection());
+        Customer selectedCustomer = getCustomerFromSelection();
+        if(selectedCustomer == null){
+            sendAlert("No customer selected");
+        }else{
+            CustomerDAO.deleteCustomer(getCustomerFromSelection());
+            sendAlert("Customer ID#" + selectedCustomer.getCustomerID() + " deleted.");
+        }
         selectState();
     }
 
