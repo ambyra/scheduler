@@ -3,6 +3,7 @@ package sample.dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.model.Appointment;
+import sample.model.Customer;
 
 import java.sql.*;
 import java.time.ZoneId;
@@ -43,6 +44,18 @@ public class AppointmentDAO {
             }
         } catch (SQLException sqlException) {}
         return appointments;
+    }
+
+    public static ObservableList<Appointment> getAppointments(Customer customer) throws SQLException {
+        ObservableList<Appointment> allAppointments = getAppointments();
+        ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
+
+        for(Appointment appointment : allAppointments){
+            if(appointment.getCustomerID() == customer.getCustomerID()){
+                customerAppointments.add(appointment);
+            }
+        }
+        return customerAppointments;
     }
 
     public static Appointment getAppointment(int appointmentID) throws SQLException {
@@ -108,6 +121,10 @@ public class AppointmentDAO {
             ps.executeUpdate();
         }
         catch(SQLException sqlException){sqlException.printStackTrace();}
+    }
+
+    public static void deleteAppointments(Customer customer){
+        //todo: implement
     }
 }
 

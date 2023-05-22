@@ -2,6 +2,7 @@ package sample.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import sample.model.Appointment;
 import sample.model.Customer;
 
 import java.sql.*;

@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.Main;
+import sample.dao.AppointmentDAO;
 import sample.dao.CustomerDAO;
 import sample.dao.DivisionDAO;
 import sample.dao.UserDAO;
@@ -280,6 +281,9 @@ public class customerController implements Initializable {
         }else{
             CustomerDAO.deleteCustomer(getCustomerFromSelection());
             sendAlert("Customer ID#" + selectedCustomer.getCustomerID() + " deleted.");
+            AppointmentDAO.deleteAppointments(selectedCustomer);
+            //TODO: When deleting a customer record, all of the customer’s appointments
+            // must be deleted first, due to foreign key constraints.
         }
         selectState();
     }
