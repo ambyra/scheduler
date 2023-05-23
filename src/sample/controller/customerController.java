@@ -272,9 +272,10 @@ public class customerController implements Initializable {
         if(selectedCustomer == null){
             sendAlert("No customer selected");
         }else{
-            CustomerDAO.deleteCustomer(getCustomerFromSelection());
-            sendAlert("Customer ID#" + selectedCustomer.getCustomerID() + " deleted.");
             AppointmentDAO.deleteAppointments(selectedCustomer);
+            CustomerDAO.deleteCustomer(getCustomerFromSelection());
+            sendAlert("Customer ID#" + selectedCustomer.getCustomerID() +
+                    " and associated appointments deleted.");
         }
         selectState();
     }
