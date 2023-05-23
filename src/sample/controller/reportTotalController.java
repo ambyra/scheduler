@@ -1,10 +1,14 @@
 package sample.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.ResourceBundle;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +20,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.Main;
+import sample.model.Appointment;
 
 class MonthTotal{
     private YearMonth yearMonth;
@@ -56,11 +61,27 @@ public class reportTotalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        TableColumnMonth.setCellValueFactory(new PropertyValueFactory<>("month"));
+        TableColumnMonth.setCellValueFactory(new PropertyValueFactory<>("yearMonth"));
         TableColumnMonthTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         TableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
         TableColumnTypeTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
+        countMonths();
+        countTypes();
+    }
+
+    void countMonths(){
+        //todo: implement
+        ObservableList<MonthTotal> monthTotals = FXCollections.observableArrayList();
+        monthTotals.add(new MonthTotal(YearMonth.now()));
+        TableViewMonth.setItems(monthTotals);
+    }
+
+    void countTypes(){
+        //todo: implement
+        ObservableList<TypeTotal> typeTotals = FXCollections.observableArrayList();
+        typeTotals.add(new TypeTotal("example"));
+        TableViewType.setItems(typeTotals);
     }
 
     @FXML
