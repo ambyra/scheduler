@@ -1,12 +1,17 @@
 package sample.controller;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URL;
-import java.time.Month;
+import java.sql.SQLException;
 import java.time.YearMonth;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,34 +25,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.Main;
+import sample.dao.AppointmentDAO;
 import sample.model.Appointment;
+import sample.model.MonthTotal;
+import sample.model.TypeTotal;
 
-class MonthTotal{
-    private YearMonth yearMonth;
-    private int total;
-
-    public YearMonth getYearMonth() {return yearMonth;}
-    public int getTotal(){return total;}
-    public void setTotal(int total){this.total = total;}
-
-    public MonthTotal(YearMonth yearMonth){
-        this.yearMonth = yearMonth;
-        this.total = 0;
-    }
-}
-class TypeTotal{
-    private String type;
-    private int total;
-
-    public String getType() {return type;}
-    public int getTotal(){return total;}
-    public void setTotal(int total){this.total = total;}
-
-    public TypeTotal(String type){
-        this.type = type;
-        this.total = 0;
-    }
-}
 
 public class reportTotalController implements Initializable {
 
@@ -61,19 +43,42 @@ public class reportTotalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        TableColumnMonth.setCellValueFactory(new PropertyValueFactory<>("yearMonth"));
+        TableColumnMonth.setCellValueFactory(new PropertyValueFactory<>("yearMonthString"));
         TableColumnMonthTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         TableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
         TableColumnTypeTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
-        countMonths();
-        countTypes();
+        try {
+            countMonths();
+            countTypes();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
     }
 
-    void countMonths(){
-        //todo: implement
+    void countMonths() throws SQLException {
         ObservableList<MonthTotal> monthTotals = FXCollections.observableArrayList();
-        monthTotals.add(new MonthTotal(YearMonth.now()));
+        ObservableList<Appointment> appointments = AppointmentDAO.getAppointments();
+        if(appointments == null || appointments.isEmpty()){return;}
+
+        List<YearMonth> allYearMonths = new ArrayList<>();
+        for(Appointment appointment :appointments){
+            ZonedDateTime start = appointment.getStartUTC();
+            allYearMonths.add(YearMonth.of(start.getYear(), start.getMonth()));
+        }
+
+        Map<YearMonth, Long> monthCounts =
+            allYearMonths
+                .stream()
+                .collect(
+                    Collectors.groupingBy(
+                        YearMonth :: from ,
+                        Collectors.counting()
+                    )
+                );
+
+        //lambda
+        monthCounts.forEach((k, v) -> monthTotals.add(new MonthTotal(k, v.intValue())));
         TableViewMonth.setItems(monthTotals);
     }
 
