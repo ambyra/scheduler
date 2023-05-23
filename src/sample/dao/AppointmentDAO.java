@@ -30,7 +30,6 @@ public class AppointmentDAO {
                         rs.getString("Description"),
                         rs.getString("Location"),
                         rs.getString("Type"),
-                        //TODO: timezone not loading at right time
                         rs.getTimestamp("Start").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getTimestamp("End").toInstant().atZone(ZoneId.of("UTC")),
                         rs.getTimestamp("Create_Date").toInstant().atZone(ZoneId.of("UTC")),

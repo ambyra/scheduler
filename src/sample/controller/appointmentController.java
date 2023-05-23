@@ -2,7 +2,6 @@ package sample.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -79,10 +78,19 @@ public class appointmentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setColumnsAppointmentsTableView();
+        TableColumnAppointmentID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        TableColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        TableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        TableColumnLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        TableColumnContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+        TableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        TableColumnStart.setCellValueFactory(new PropertyValueFactory<>("startLocal"));
+        TableColumnEnd.setCellValueFactory(new PropertyValueFactory<>("endLocal"));
+        TableColumnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        TableColumnUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
         startRadioGroupAppointmentsListener();
 
-        //entry state
         try {
             selectState();
         } catch (SQLException sqlException) {
@@ -369,7 +377,16 @@ public class appointmentController implements Initializable {
         stage.show();
     }
 
-    @FXML void ClickTotal(){} //TODO: implement
+    @FXML void ClickTotal() throws SQLException, IOException {
+        //TODO: implement the total number of customer appointments by type and month
+        Stage stage = Main.getStage();
+        URL resource = getClass().getResource("/sample/view/reportTotal.fxml");
+        assert resource != null;
+        Parent root = FXMLLoader.load(resource);
+        stage.setScene(new Scene(root));
+        stage.show();
+
+    }
     @FXML void ClickContact(){} //TODO: implement
     @FXML void ClickAdditional(){} //TODO: implement
 
@@ -424,13 +441,10 @@ public class appointmentController implements Initializable {
         ButtonSave.setDisable(areEnabled);
         ButtonCancel.setDisable(areEnabled);
         ButtonDelete.setDisable(areEnabled);
-
         ButtonCustomers.setDisable(areEnabled);
-
         ButtonTotal.setDisable(areEnabled);
         ButtonContact.setDisable(areEnabled);
         ButtonAdditional.setDisable(areEnabled);
-
     }
 
     void setBoxesEnabled(boolean areEnabled){
@@ -489,19 +503,6 @@ public class appointmentController implements Initializable {
         for (Customer customer: allCustomers){
             ChoiceBoxCustomerID.getItems().add(customer.getCustomerID());
         }
-    }
-
-    private void setColumnsAppointmentsTableView(){
-        TableColumnAppointmentID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-        TableColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-        TableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-        TableColumnLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        TableColumnContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
-        TableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
-        TableColumnStart.setCellValueFactory(new PropertyValueFactory<>("startLocal"));
-        TableColumnEnd.setCellValueFactory(new PropertyValueFactory<>("endLocal"));
-        TableColumnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        TableColumnUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
     }
 
     private void displayTableViewAppointments(int daysBack){
