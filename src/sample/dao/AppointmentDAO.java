@@ -21,6 +21,7 @@ public class AppointmentDAO {
         try {
             JDBC.makePreparedStatement(query, connection);
             PreparedStatement ps = JDBC.getPreparedStatement();
+            assert ps != null;
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Appointment appointment = new Appointment(
@@ -42,24 +43,23 @@ public class AppointmentDAO {
                 appointments.add(appointment);
 
             }
-        } catch (SQLException sqlException) {}
+        } catch (SQLException sqlException) {return null;}
         return appointments;
     }
 
-    public static ObservableList<Appointment> getAppointments(Customer customer) throws SQLException {
+    public static void deleteAppointments(Customer customer) throws SQLException {
         ObservableList<Appointment> allAppointments = getAppointments();
-        ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
-
+        if(allAppointments == null){return;}
         for(Appointment appointment : allAppointments){
             if(appointment.getCustomerID() == customer.getCustomerID()){
-                customerAppointments.add(appointment);
+                deleteAppointment(appointment);
             }
         }
-        return customerAppointments;
     }
 
     public static Appointment getAppointment(int appointmentID) throws SQLException {
         ObservableList<Appointment> appointments = getAppointments();
+        if(appointments == null){return null;}
         for (Appointment appointment: appointments) {
             if (appointment.getAppointmentID() == appointmentID) {
                 return appointment;
@@ -70,7 +70,8 @@ public class AppointmentDAO {
 
     public static int newAppointmentID() throws SQLException {
         ObservableList<Appointment> appointments = getAppointments();
-        List<Integer> appointmentIDs = new ArrayList<Integer>();
+        if(appointments == null){return 1;}
+        List<Integer> appointmentIDs = new ArrayList<>();
         for (Appointment appointment: appointments) {
             appointmentIDs.add(appointment.getAppointmentID());
         }
@@ -78,7 +79,7 @@ public class AppointmentDAO {
         return largest + 1;
     }
 
-    public static void updateAppointment(Appointment appointment) throws SQLException{
+    public static void updateAppointment(Appointment appointment){
         if(appointment == null){return;}
         Connection connection = JDBC.getConnection();
 
@@ -90,6 +91,7 @@ public class AppointmentDAO {
         try{
             JDBC.makePreparedStatement(query, connection);
             PreparedStatement ps = JDBC.getPreparedStatement();
+            assert ps!= null;
             ps.setInt(1, appointment.getAppointmentID());
             ps.setString(2, appointment.getTitle());
             ps.setString(3, appointment.getDescription());
@@ -117,24 +119,13 @@ public class AppointmentDAO {
         try{
             JDBC.makePreparedStatement(query, connection);
             PreparedStatement ps = JDBC.getPreparedStatement();
+            assert ps != null;
             ps.setInt(1, appointment.getAppointmentID());
             ps.executeUpdate();
         }
         catch(SQLException sqlException){sqlException.printStackTrace();}
     }
-
-    public static void deleteAppointments(Customer customer){
-        //todo: implement
-    }
 }
-
-/*
-
-String query = " update client_schedule.appointments " +
-"set Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Create_Date = ?, " +
-"Created_By = ?, Last_Update = ?, Last_Updated_By =?, Customer_ID = ?, User_ID = ?, Contact_ID = ? "+
-"where Appointment_ID = ?";
- */
 
 //Appointment_ID INT(10) (PK)
 //Title VARCHAR(50)

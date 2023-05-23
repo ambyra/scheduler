@@ -63,7 +63,6 @@ public class customerController implements Initializable {
 
     void displayTableViewCustomers() throws SQLException {
         ObservableList<Customer> allCustomers = CustomerDAO.getCustomers();
-
         TableViewCustomers.setItems(allCustomers);
     }
 
@@ -110,7 +109,7 @@ public class customerController implements Initializable {
         ComboBoxFirstLevelDivision.getSelectionModel().select("");
     }
 
-    void setBoxes(Customer customer) throws SQLException {
+    void setBoxes(Customer customer){
         TextFieldCustomerId.setText(String.valueOf(customer.getCustomerID()));
         TextFieldName.setText(customer.getCustomerName());
         TextFieldPhone.setText(customer.getPhone());
@@ -119,12 +118,7 @@ public class customerController implements Initializable {
     }
 
     void setComboBoxCountry(Division division){
-        ObservableList<String> countries = FXCollections.observableArrayList();
-        countries.add("United States");
-        countries.add("United Kingdom");
-        countries.add("Canada");
-
-        ComboBoxCountry.setItems(countries);
+        setComboBoxCountry();
         int countryIndex = division.getCountryID() - 1;
         ComboBoxCountry.getSelectionModel().select(countryIndex);
     }
@@ -134,14 +128,12 @@ public class customerController implements Initializable {
         countries.add("United States");
         countries.add("United Kingdom");
         countries.add("Canada");
-
         ComboBoxCountry.setItems(countries);
     }
 
     void setComboBoxDivision(Division division) throws SQLException {
-        int countryIndex = ComboBoxCountry.getSelectionModel().getSelectedIndex() + 1;
-        ObservableList<String> divisionNames = DivisionDAO.getDivisionsFromCountryID(countryIndex);
-        ComboBoxFirstLevelDivision.setItems(divisionNames);
+        if(division == null){return;}
+        setComboBoxDivision();
         ComboBoxFirstLevelDivision.getSelectionModel().select(division.getDivision());
     }
 
@@ -193,6 +185,7 @@ public class customerController implements Initializable {
 
         ZonedDateTime createDate = ZonedDateTime.now(ZoneId.of("UTC"));
 
+        assert currentUser != null;
         String createdBy = currentUser.getUserName();
 
         Customer oldCustomer = CustomerDAO.getCustomer(customerId);
@@ -205,7 +198,7 @@ public class customerController implements Initializable {
 
         String lastUpdatedBy = currentUser.getLastUpdatedBy();
 
-        int divisionId = 0;
+        int divisionId;
         try{
             String divisionName = ComboBoxFirstLevelDivision.getValue();
             divisionId = DivisionDAO.getDivision(divisionName).getDivisionID();
@@ -282,8 +275,6 @@ public class customerController implements Initializable {
             CustomerDAO.deleteCustomer(getCustomerFromSelection());
             sendAlert("Customer ID#" + selectedCustomer.getCustomerID() + " deleted.");
             AppointmentDAO.deleteAppointments(selectedCustomer);
-            //TODO: When deleting a customer record, all of the customer’s appointments
-            // must be deleted first, due to foreign key constraints.
         }
         selectState();
     }
@@ -292,6 +283,7 @@ public class customerController implements Initializable {
     void ClickAppointments() throws IOException {
         Stage stage = Main.getStage();
         URL resource = getClass().getResource("/sample/view/appointment.fxml");
+        assert resource != null;
         Parent root = FXMLLoader.load(resource);
         stage.setScene(new Scene(root));
         stage.show();
