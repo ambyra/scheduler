@@ -57,7 +57,7 @@ public class reportTotalController implements Initializable {
     }
 
     void countMonths() throws SQLException {
-        ObservableList<MonthTotal> monthTotals = FXCollections.observableArrayList();
+
         ObservableList<Appointment> appointments = AppointmentDAO.getAppointments();
         if(appointments == null || appointments.isEmpty()){return;}
 
@@ -76,16 +76,34 @@ public class reportTotalController implements Initializable {
                         Collectors.counting()
                     )
                 );
-
         //lambda
+        ObservableList<MonthTotal> monthTotals = FXCollections.observableArrayList();
         monthCounts.forEach((k, v) -> monthTotals.add(new MonthTotal(k, v.intValue())));
         TableViewMonth.setItems(monthTotals);
     }
 
-    void countTypes(){
+    void countTypes() throws SQLException {
         //todo: implement
+        ObservableList<Appointment> appointments = AppointmentDAO.getAppointments();
+        if(appointments == null || appointments.isEmpty()){return;}
+
+        List<String> allTypes = new ArrayList<>();
+        for(Appointment appointment :appointments){
+            allTypes.add(appointment.getType());
+        }
+
+        Map<String, Long> typeCounts =
+            allTypes
+                .stream()
+                .collect(
+                    Collectors.groupingBy(
+                            s -> s,
+                            Collectors.counting()
+                    )
+                );
+
         ObservableList<TypeTotal> typeTotals = FXCollections.observableArrayList();
-        typeTotals.add(new TypeTotal("example"));
+        typeCounts.forEach((k, v) -> typeTotals.add(new TypeTotal(k, v.intValue())));
         TableViewType.setItems(typeTotals);
     }
 

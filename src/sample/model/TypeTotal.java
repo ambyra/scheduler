@@ -8,8 +8,8 @@ public class TypeTotal{
     public int getTotal(){return total;}
     public void setTotal(int total){this.total = total;}
 
-    public TypeTotal(String type){
+    public TypeTotal(String type, int total){
         this.type = type;
-        this.total = 0;
+        this.total = total;
     }
 }
