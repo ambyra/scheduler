@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.ZoneId;
-import java.util.Locale;
 
 public class DivisionDAO {
     public static ObservableList<Division> getDivisions() throws SQLException {
@@ -33,7 +32,7 @@ public class DivisionDAO {
                         rs.getInt("Country_ID"));
                 divisions.add(division);
             }
-        } catch (SQLException sqlException) {}
+        } catch (SQLException sqlException) {return null;}
         return divisions;
     }
 

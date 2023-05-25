@@ -8,16 +8,12 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
@@ -30,8 +26,7 @@ import sample.model.Appointment;
 import sample.model.MonthTotal;
 import sample.model.TypeTotal;
 
-
-public class reportTotalController implements Initializable {
+public class reportTotalController{
 
     @FXML private TableView<MonthTotal> TableViewMonth;
     @FXML private TableColumn<?, ?> TableColumnMonth;
@@ -41,19 +36,15 @@ public class reportTotalController implements Initializable {
     @FXML private TableColumn<?, ?> TableColumnType;
     @FXML private TableColumn<?, ?> TableColumnTypeTotal;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    @FXML
+    public void initialize() throws SQLException {
         TableColumnMonth.setCellValueFactory(new PropertyValueFactory<>("yearMonthString"));
         TableColumnMonthTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         TableColumnType.setCellValueFactory(new PropertyValueFactory<>("type"));
         TableColumnTypeTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
-        try {
-            countMonths();
-            countTypes();
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
+        countMonths();
+        countTypes();
     }
 
     void countMonths() throws SQLException {
@@ -107,7 +98,7 @@ public class reportTotalController implements Initializable {
     }
 
     @FXML
-    void ClickReturn(ActionEvent event) throws IOException {
+    void ClickReturn() throws IOException {
         Stage stage = Main.getStage();
         URL resource = getClass().getResource("/sample/view/appointment.fxml");
         assert resource != null;

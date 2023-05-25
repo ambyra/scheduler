@@ -61,7 +61,7 @@ public class customerController implements Initializable {
         }
     }
 
-    void displayTableViewCustomers() throws SQLException {
+    void displayTableViewCustomers(){
         ObservableList<Customer> allCustomers = CustomerDAO.getCustomers();
         TableViewCustomers.setItems(allCustomers);
     }
@@ -201,7 +201,11 @@ public class customerController implements Initializable {
         int divisionId;
         try{
             String divisionName = ComboBoxFirstLevelDivision.getValue();
-            divisionId = DivisionDAO.getDivision(divisionName).getDivisionID();
+            Division division = DivisionDAO.getDivision(divisionName);
+            if(division == null){
+                sendAlert("State/Province not found");
+            }
+            divisionId = division.getDivisionID();
             if(divisionId == 0){
                 sendAlert("State/Province not found");
                 return null;
@@ -220,7 +224,7 @@ public class customerController implements Initializable {
     }
 
     @FXML
-    void ClickAdd() throws SQLException {
+    void ClickAdd(){
         clearBoxes();
         setBoxesEnabled(true);
         setComboBoxCountry();
@@ -248,8 +252,10 @@ public class customerController implements Initializable {
         setBoxes(selectedCustomer);
 
         Division division = DivisionDAO.getDivision(selectedCustomer.getDivisionID());
-        setComboBoxCountry(division);
-        setComboBoxDivision(division);
+        if(division != null){
+            setComboBoxCountry(division);
+            setComboBoxDivision(division);
+        }
     }
 
     @FXML

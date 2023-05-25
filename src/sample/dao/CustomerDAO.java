@@ -2,7 +2,6 @@ package sample.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sample.model.Appointment;
 import sample.model.Customer;
 
 import java.sql.*;
@@ -12,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class CustomerDAO {
-    public static ObservableList<Customer> getCustomers() throws SQLException {
+    public static ObservableList<Customer> getCustomers(){
         ObservableList<Customer> customers= FXCollections.observableArrayList();
 
         Connection connection = JDBC.getConnection();
@@ -40,12 +39,13 @@ public class CustomerDAO {
                 customer.setDivision(rs.getString("Division"));
                 customers.add(customer);
             }
-        } catch (SQLException sqlException) {}
+        } catch (SQLException sqlException) {return null;}
         return customers;
     }
 
-    public static Customer getCustomer(int customerID) throws SQLException {
+    public static Customer getCustomer(int customerID){
         ObservableList<Customer> customers = getCustomers();
+        if(customers.isEmpty()){return null;}
         for (Customer customer : customers) {
             if (customer.getCustomerID() == customerID) {
                 return customer;
@@ -69,7 +69,7 @@ public class CustomerDAO {
     }
 
 
-    public static void updateCustomer(Customer customer) throws SQLException{
+    public static void updateCustomer(Customer customer){
         if (customer == null){return;}
         Connection connection = JDBC.getConnection();
 
@@ -109,9 +109,9 @@ public class CustomerDAO {
         }catch(SQLException sqlException){sqlException.printStackTrace();}
     }
 
-    public static int newCustomerID() throws SQLException {
+    public static int newCustomerID(){
         ObservableList<Customer> customers= getCustomers();
-        List<Integer> customerIDs = new ArrayList<Integer>();
+        List<Integer> customerIDs = new ArrayList<>();
         for (Customer customer: customers) {
             customerIDs.add(customer.getCustomerID());
         }

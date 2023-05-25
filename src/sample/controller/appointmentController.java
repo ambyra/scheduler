@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -28,7 +27,6 @@ import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ResourceBundle;
 
 public class appointmentController{
     @FXML private ChoiceBox<Integer> ChoiceBoxContactID;
@@ -112,6 +110,7 @@ public class appointmentController{
     private void checkAppointmentHours() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
 
+        if(allAppointments == null){return;}
         for(Appointment appointment: allAppointments){
             ZonedDateTime appointmentStart = appointment.getStartEST();
             ZonedDateTime appointmentEnd = appointment.getEndEST();
@@ -146,6 +145,7 @@ public class appointmentController{
 
     void checkAppointmentUpcoming() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+        if(allAppointments == null){return;}
         ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of("UTC"));
         boolean isAppointment = false;
         for (Appointment appointment : allAppointments) {
@@ -162,6 +162,7 @@ public class appointmentController{
 
     void checkAppointmentOverlap() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
+        if(allAppointments.isEmpty()){return;}
         for(Appointment appointment1: allAppointments){
             ZonedDateTime start1 = appointment1.getStart();
             ZonedDateTime end1 = appointment1.getEnd();
@@ -248,10 +249,10 @@ public class appointmentController{
     }
 
     private Appointment parseInput() throws SQLException {
-        int appointmentid = 0;
-        int contactid = 0;
-        int customerid = 0;
-        int userid = 0;
+        int appointmentid;
+        int contactid;
+        int customerid;
+        int userid;
 
         try{
             appointmentid = Integer.parseInt(TextFieldAppointmentID.getText());
@@ -364,7 +365,7 @@ public class appointmentController{
         loadStage("/sample/view/customer.fxml");
     }
 
-    @FXML void ClickTotal() throws SQLException, IOException {
+    @FXML void ClickTotal() throws IOException {
         loadStage("/sample/view/reportTotal.fxml");
     }
 

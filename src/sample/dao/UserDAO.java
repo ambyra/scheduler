@@ -33,7 +33,7 @@ public class UserDAO {
                         rs.getString("Last_Updated_By"));
                 users.add(user);
             }
-        } catch (SQLException sqlException) {}
+        } catch (SQLException sqlException) {return null;}
         return users;
     }
 

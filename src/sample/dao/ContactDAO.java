@@ -1,6 +1,5 @@
 package sample.dao;
 
-import sample.model.Appointment;
 import sample.model.Contact;
 
 import javafx.collections.FXCollections;
@@ -11,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ContactDAO {
-    public static ObservableList<Contact> getContacts() throws SQLException {
+    public static ObservableList<Contact> getContacts(){
         ObservableList<Contact> contacts = FXCollections.observableArrayList();
 
         Connection connection = JDBC.getConnection();
@@ -28,13 +27,13 @@ public class ContactDAO {
                         rs.getString("Email"));
                 contacts.add(contact);
             }
-        } catch (SQLException sqlException) {}
+        } catch (SQLException sqlException) {return null;}
         return contacts;
     }
 
-    public static Contact getContact(String contactName) throws SQLException {
+    public static Contact getContact(String contactName){
         ObservableList<Contact> contacts= getContacts();
-        if(contacts == null){return null;}
+        if (contacts.isEmpty()){return null;}
         for (Contact contact: contacts) {
             if (contact.getContactName().compareToIgnoreCase(contactName)==0) {
                 return contact;

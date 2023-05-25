@@ -127,6 +127,7 @@ public class AppointmentDAO {
 
     public static ObservableList<Appointment> getAppointmentsFromContact(int contactID) throws SQLException {
         ObservableList<Appointment> appointments = getAppointments();
+        if(appointments.isEmpty()){return null;}
         ObservableList<Appointment> appointmentsFromContact = FXCollections.observableArrayList();
         for(Appointment appointment: appointments){
             if(appointment.getContactID() == contactID){

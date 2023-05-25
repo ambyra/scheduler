@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -58,7 +57,7 @@ public class loginController implements Initializable {
     }
 
     @FXML
-    void ClickLogin(ActionEvent event){
+    void ClickLogin(){
         String user = TextFieldUserName.getText();
         String pass = PasswordFieldPassword.getText();
 

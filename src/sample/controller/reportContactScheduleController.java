@@ -14,7 +14,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import sample.Main;
 import sample.dao.AppointmentDAO;
@@ -36,7 +35,7 @@ public class reportContactScheduleController{
     @FXML private TableColumn<?, ?> TableColumnType;
 
     @FXML
-    public void initialize() throws SQLException {
+    public void initialize(){
         TableColumnAppointmentID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         TableColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         TableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -48,8 +47,9 @@ public class reportContactScheduleController{
         populateChoiceBox();
     }
 
-    private void populateChoiceBox() throws SQLException {
+    private void populateChoiceBox(){
         ObservableList<Contact> allContacts = ContactDAO.getContacts();
+        if(allContacts.isEmpty()){return;}
         for (Contact contact: allContacts) {
             ChoiceBoxContact.getItems().add(contact.getContactName());
         }
