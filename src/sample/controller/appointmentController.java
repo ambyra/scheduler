@@ -378,7 +378,6 @@ public class appointmentController implements Initializable {
     }
 
     @FXML void ClickTotal() throws SQLException, IOException {
-        //TODO: implement the total number of customer appointments by type and month
         Stage stage = Main.getStage();
         URL resource = getClass().getResource("/sample/view/reportTotal.fxml");
         assert resource != null;
@@ -387,7 +386,11 @@ public class appointmentController implements Initializable {
         stage.show();
 
     }
-    @FXML void ClickContact(){} //TODO: implement
+    @FXML void ClickContact(){//TODO: implement
+        //a schedule for each contact in your organization that includes
+        // appointment ID, title, type and description, start date and time,
+        // end date and time, and customer ID
+    }
     @FXML void ClickAdditional(){} //TODO: implement
 
     void selectState() throws SQLException {
