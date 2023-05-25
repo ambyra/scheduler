@@ -92,6 +92,8 @@ public class appointmentController{
     }
 
     private void startRadioGroupAppointmentsListener(){
+
+        //todo: fix so just displays current week/month using temporal adjuster
         //lambda
         RadioGroupAppointments.selectedToggleProperty().
                 addListener((observable, oldValue, newValue) -> {
@@ -372,7 +374,10 @@ public class appointmentController{
     @FXML void ClickContact() throws IOException {
         loadStage("/sample/view/reportContactSchedule.fxml");
     }
-    @FXML void ClickAdditional(){} //TODO: implement
+
+    @FXML void ClickAdditional() throws IOException {
+        loadStage("/sample/view/reportAdditional.fxml");
+    }
 
     void selectState() throws SQLException {
         TableViewAppointments.setDisable(false);
