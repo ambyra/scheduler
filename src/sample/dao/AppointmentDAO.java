@@ -124,6 +124,17 @@ public class AppointmentDAO {
         }
         catch(SQLException sqlException){sqlException.printStackTrace();}
     }
+
+    public static ObservableList<Appointment> getAppointmentsFromContact(int contactID) throws SQLException {
+        ObservableList<Appointment> appointments = getAppointments();
+        ObservableList<Appointment> appointmentsFromContact = FXCollections.observableArrayList();
+        for(Appointment appointment: appointments){
+            if(appointment.getContactID() == contactID){
+                appointmentsFromContact.add(appointment);
+            }
+        }
+        return appointmentsFromContact;
+    }
 }
 
 //Appointment_ID INT(10) (PK)

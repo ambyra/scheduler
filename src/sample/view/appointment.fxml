@@ -156,7 +156,7 @@
                               <Insets />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="ButtonTotal" mnemonicParsing="false" onAction="#ClickTotal" text="Total Customer Appointments" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                        <Button fx:id="ButtonTotal" mnemonicParsing="false" onAction="#ClickTotal" text="Customer Appointments" GridPane.columnIndex="5" GridPane.rowIndex="3" />
                         <Button fx:id="ButtonAdditional" mnemonicParsing="false" onAction="#ClickAdditional" text="Additional Report" GridPane.columnIndex="5" GridPane.rowIndex="5" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reports" GridPane.columnIndex="5" GridPane.rowIndex="2" />
                      </children>

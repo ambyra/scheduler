@@ -30,7 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
-public class appointmentController implements Initializable {
+public class appointmentController{
     @FXML private ChoiceBox<Integer> ChoiceBoxContactID;
     @FXML private ChoiceBox<Integer> ChoiceBoxCustomerID;
     @FXML private ChoiceBox<Integer> ChoiceBoxUserID;
@@ -76,8 +76,8 @@ public class appointmentController implements Initializable {
     @FXML private Button ButtonAdditional;
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    @FXML
+    public void initialize() throws SQLException {
         TableColumnAppointmentID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         TableColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         TableColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -90,12 +90,7 @@ public class appointmentController implements Initializable {
         TableColumnUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
         startRadioGroupAppointmentsListener();
-
-        try {
-            selectState();
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
+        selectState();
     }
 
     private void startRadioGroupAppointmentsListener(){
@@ -294,19 +289,13 @@ public class appointmentController implements Initializable {
 
         LocalDate startDate = DatePickerStartDate.getValue();
         LocalTime startTime = parseTime(TextFieldStartTime.getText());
-        if (startTime==null){
-            sendAlert("Enter a valid start time in the format of HH:mm");
-            return null;
-        }
+        if (startTime==null){return null;}
 
         ZonedDateTime startSystem= ZonedDateTime.of(startDate, startTime, ZoneId.systemDefault());
 
         LocalDate endDate = DatePickerEndDate.getValue();
         LocalTime endTime = parseTime(TextFieldEndTime.getText());
-        if (endTime==null){
-            sendAlert("Enter a valid end time in the format of HH:mm");
-            return null;
-        }
+        if (endTime==null){return null;}
 
         ZonedDateTime endSystem = ZonedDateTime.of(endDate, endTime, ZoneId.systemDefault());
 
@@ -340,10 +329,12 @@ public class appointmentController implements Initializable {
 
     LocalTime parseTime(String time){
         LocalTime parsedTime;
+        String timeFormat = "[HH:mm]" + "[H:mm]";
         try{
-            parsedTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+            parsedTime = LocalTime.parse(time, DateTimeFormatter.ofPattern(timeFormat));
 
         }catch (DateTimeParseException e){
+            sendAlert("Time format must be of pattern [HH:mm] or [H:mm]");
             return null;
         }
         return parsedTime;
@@ -370,26 +361,15 @@ public class appointmentController implements Initializable {
 
     @FXML
     void ClickCustomers () throws IOException {
-        Stage stage = Main.getStage();
-        URL resource = getClass().getResource("/sample/view/customer.fxml");
-        Parent root = FXMLLoader.load(resource);
-        stage.setScene(new Scene(root));
-        stage.show();
+        loadStage("/sample/view/customer.fxml");
     }
 
     @FXML void ClickTotal() throws SQLException, IOException {
-        Stage stage = Main.getStage();
-        URL resource = getClass().getResource("/sample/view/reportTotal.fxml");
-        assert resource != null;
-        Parent root = FXMLLoader.load(resource);
-        stage.setScene(new Scene(root));
-        stage.show();
-
+        loadStage("/sample/view/reportTotal.fxml");
     }
-    @FXML void ClickContact(){//TODO: implement
-        //a schedule for each contact in your organization that includes
-        // appointment ID, title, type and description, start date and time,
-        // end date and time, and customer ID
+
+    @FXML void ClickContact() throws IOException {
+        loadStage("/sample/view/reportContactSchedule.fxml");
     }
     @FXML void ClickAdditional(){} //TODO: implement
 
@@ -533,6 +513,15 @@ public class appointmentController implements Initializable {
         alert.setTitle("Alert!");
         alert.setContentText(alertMessage);
         alert.showAndWait();
+    }
+
+    void loadStage(String stageName) throws IOException {
+        Stage stage = Main.getStage();
+        URL resource = getClass().getResource(stageName);
+        assert resource != null;
+        Parent root = FXMLLoader.load(resource);
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
 

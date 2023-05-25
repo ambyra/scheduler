@@ -1,5 +1,6 @@
 package sample.dao;
 
+import sample.model.Appointment;
 import sample.model.Contact;
 
 import javafx.collections.FXCollections;
@@ -29,5 +30,16 @@ public class ContactDAO {
             }
         } catch (SQLException sqlException) {}
         return contacts;
+    }
+
+    public static Contact getContact(String contactName) throws SQLException {
+        ObservableList<Contact> contacts= getContacts();
+        if(contacts == null){return null;}
+        for (Contact contact: contacts) {
+            if (contact.getContactName().compareToIgnoreCase(contactName)==0) {
+                return contact;
+            }
+        }
+        return null;
     }
 }
