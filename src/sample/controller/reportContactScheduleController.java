@@ -3,16 +3,13 @@ package sample.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
+
 
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -27,8 +24,6 @@ import sample.model.Contact;
 
 public class reportContactScheduleController{
 
-    @FXML private Button ButtonReturn;
-    @FXML private Text TextContactID;
     @FXML private ChoiceBox<String> ChoiceBoxContact;
 
     @FXML private TableView<Appointment> TableViewContact;
@@ -39,16 +34,6 @@ public class reportContactScheduleController{
     @FXML private TableColumn<?, ?> TableColumnStart;
     @FXML private TableColumn<?, ?> TableColumnTitle;
     @FXML private TableColumn<?, ?> TableColumnType;
-
-    @FXML
-    void ClickReturn(ActionEvent event) throws IOException {
-        Stage stage = Main.getStage();
-        URL resource = getClass().getResource("/sample/view/appointment.fxml");
-        assert resource != null;
-        Parent root = FXMLLoader.load(resource);
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
 
     @FXML
     public void initialize() throws SQLException {
@@ -68,7 +53,17 @@ public class reportContactScheduleController{
         for (Contact contact: allContacts) {
             ChoiceBoxContact.getItems().add(contact.getContactName());
         }
-        ChoiceBoxContact.setValue("");
+        ChoiceBoxContact.setValue(null);
+    }
+
+    @FXML
+    void ClickReturn() throws IOException {
+        Stage stage = Main.getStage();
+        URL resource = getClass().getResource("/sample/view/appointment.fxml");
+        assert resource != null;
+        Parent root = FXMLLoader.load(resource);
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     public void ClickChange() throws SQLException {
@@ -79,7 +74,5 @@ public class reportContactScheduleController{
         ObservableList<Appointment> appointments = AppointmentDAO.getAppointmentsFromContact(contact.getContactID());
         if(appointments.isEmpty()){return;}
         TableViewContact.setItems(appointments);
-
-        TextContactID.setText("Contact ID #"+contact.getContactID());
     }
 }

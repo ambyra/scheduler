@@ -5,7 +5,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.reportContactScheduleController">
    <children>
@@ -22,6 +21,5 @@
       </TableView>
       <Button fx:id="ButtonReturn" layoutX="604.0" layoutY="8.0" mnemonicParsing="false" onAction="#ClickReturn" text="Return" />
       <ChoiceBox fx:id="ChoiceBoxContact" layoutX="14.0" layoutY="8.0" onAction="#ClickChange" prefWidth="150.0" />
-      <Text fx:id="TextContactID" layoutX="171.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact ID #" />
    </children>
 </AnchorPane>
