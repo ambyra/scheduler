@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.reportAdditionalController">
+   <children>
+      <TableView fx:id="TableViewDatabase" layoutY="126.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+        <columns>
+          <TableColumn fx:id="TableColumnDatabase" minWidth="110.0" prefWidth="75.0" text="Database" />
+          <TableColumn fx:id="TableColumnEntries" minWidth="70.0" prefWidth="70.0" text="Entries" />
+        </columns>
+      </TableView>
+      <Button fx:id="ButtonReturn" layoutX="234.0" layoutY="8.0" mnemonicParsing="false" onAction="#ClickReturn" text="Return" />
+   </children>
+</AnchorPane>

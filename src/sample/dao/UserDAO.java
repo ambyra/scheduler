@@ -2,7 +2,6 @@ package sample.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sample.controller.loginController;
 import sample.model.User;
 
 import java.sql.Connection;
@@ -37,16 +36,23 @@ public class UserDAO {
         return users;
     }
 
-    public static User getCurrentUser() throws SQLException {
+    public static User login(String userName, String password) throws SQLException {
         ObservableList<User> users = getUsers();
-        int currentUser = loginController.getCurrentUserID();
         for (User user: users){
-            if (user.getUserID() == currentUser){
+            if (user.getUserName().compareToIgnoreCase(userName) == 0 &&
+            user.getPassword().compareTo(password) == 0){return user;}
+        }
+        return null;
+    }
+
+    public static User getUser(int userID) throws SQLException {
+        ObservableList<User> users = getUsers();
+        for (User user: users){
+            if (user.getUserID() == userID){
                 return user;
             }
         }
         return null;
-
     }
 }
 

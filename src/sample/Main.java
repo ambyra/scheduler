@@ -5,10 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import sample.controller.loginController;
 import sample.dao.JDBC;
-
-import java.util.Locale;
 
 public class Main extends Application {
     private static Stage mainStage;
@@ -24,14 +21,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         setStage(primaryStage);
-
-        //DEBUG
-        Parent root = FXMLLoader.load(getClass().getResource("view/appointment.fxml"));
-        loginController.debugSetCurrentUserID();
-        //END DEBUG
-
-        //Parent root = FXMLLoader.load(getClass().getResource("view/login.fxml"));
-
+        Parent root = FXMLLoader.load(getClass().getResource("view/login.fxml"));
         primaryStage.setTitle("Scheduler");
         primaryStage.setScene(new Scene(root));//(new Scene(root, 300, 275));
         primaryStage.show();

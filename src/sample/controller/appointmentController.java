@@ -307,7 +307,12 @@ public class appointmentController{
             return null;
         }
 
-        User currentUser = UserDAO.getCurrentUser();
+        User currentUser = loginController.getCurrentUser();
+        if(currentUser == null){
+            sendAlert("No user logged in");
+            return null;
+        }
+
         ZonedDateTime createDate = ZonedDateTime.now(ZoneId.of("UTC"));
         String createdBy = currentUser.getUserName();
 
