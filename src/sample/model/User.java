@@ -11,13 +11,59 @@ public class User {
     private ZonedDateTime lastUpdate;
     private String lastUpdatedBy;
 
+    /**
+     * get user id
+     * @return
+     */
+
     public int getUserID() {return userID;}
+
+    /**
+     * get user name
+     * @return
+     */
     public String getUserName() {return userName;}
+
+    /**
+     * get password
+     * @return
+     */
     public String getPassword() {return password; }
+
+    /**
+     * get create date
+     * @return
+     */
     public ZonedDateTime getCreateDate() {return createDate;}
+
+    /**
+     * get created by
+     * @return
+     */
     public String getCreatedBy() {return createdBy;}
+
+    /**
+     * get last update
+     * @return
+     */
     public ZonedDateTime getLastUpdate() {return lastUpdate; }
+
+    /**
+     * get last updated by
+     * @return
+     */
     public String getLastUpdatedBy() {return lastUpdatedBy; }
+
+    /**
+     * create new user
+     * @param userID
+     * @param userName
+     * @param password
+     * @param createDate
+     * @param createdBy
+     * @param lastUpdate
+     * @param lastUpdatedBy
+     */
 
     public User(int userID, String userName, String password, ZonedDateTime createDate,
                 String createdBy, ZonedDateTime lastUpdate, String lastUpdatedBy){

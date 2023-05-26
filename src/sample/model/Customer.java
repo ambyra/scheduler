@@ -16,35 +16,92 @@ public class Customer {
     private String division;
     private int divisionID;
 
+    /**
+     * get customer id
+     * @return
+     */
+
     public int getCustomerID() {
         return customerID;
     }
+
+    /**
+     * get customer name
+     * @return
+     */
+
+
     public String getCustomerName() {
         return customerName;
     }
+
+    /**
+     * get customer address
+     * @return
+     */
     public String getAddress() {
         return address;
     }
+
+    /**
+     * get postal code
+     * @return
+     */
     public String getPostalCode() { return postalCode;}
+
+    /**
+     * get phone number
+     * @return
+     */
     public String getPhone() {
         return phone;
     }
 
+    /**
+     * get creation date
+     * @return
+     */
+
     public ZonedDateTime getCreateDate() {
         return createDate;
     }
+
+    /**
+     * get created by
+     * @return
+     */
     public String getCreatedBy() {
         return createdBy;
     }
+
+    /**
+     * get last update
+     * @return
+     */
     public ZonedDateTime getLastUpdate() {
         return lastUpdate;
     }
+
+    /**
+     * get last updated by
+     * @return
+     */
     public String getLastUpdatedBy() {
         return lastUpdatedBy;
     }
+
+    /**
+     * get division id
+     * @return
+     */
     public int getDivisionID() {
         return divisionID;
     }
+
+    /**
+     * set division id
+     * @param division
+     */
 
     public void setDivision(String division){this.division = division;}
     public String getDivision(){return division;}
@@ -60,6 +117,20 @@ public class Customer {
      * @return
      */
     public ZonedDateTime getLastUpdateUTC() {return lastUpdate.withZoneSameInstant(ZoneId.of("UTC"));}
+
+    /**
+     * create new customer
+     * @param customerID
+     * @param customerName
+     * @param address
+     * @param postalCode
+     * @param phone
+     * @param createDate
+     * @param createdBy
+     * @param lastUpdate
+     * @param lastUpdatedBy
+     * @param divisionID
+     */
 
     public Customer(int customerID, String customerName, String address, String postalCode,
                     String phone, ZonedDateTime createDate, String createdBy, ZonedDateTime lastUpdate,

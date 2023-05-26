@@ -5,11 +5,32 @@ public class Contact {
     private String contactName;
     private String email;
 
+    /**
+     * get contact id
+     * @return
+     */
     public int getContactID() { return contactID; }
+
+    /**
+     * get contact name
+     * @return
+     */
 
     public String getContactName() { return contactName; }
 
+    /**
+     * get email
+     * @return
+     */
+
     public String getEmail() {return email; }
+
+    /**
+     * create new contact
+     * @param contactID
+     * @param contactName
+     * @param email
+     */
 
     public Contact(int contactID, String contactName, String email){
         this.contactID = contactID;

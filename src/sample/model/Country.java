@@ -10,12 +10,51 @@ public class Country {
     private ZonedDateTime lastUpdate;
     private String lastUpdatedBy;
 
+    /**
+     * get country id
+     * @return
+     */
     public int getCountryID() {return countryID; }
+
+    /**
+     * get country
+     * @return
+     */
     public String getCountry() {return country; }
+
+    /**
+     * get create date
+     * @return
+     */
     public ZonedDateTime getCreateDate() {return createDate; }
+
+    /**
+     * get created by
+     * @return
+     */
     public String getCreatedBy() {return createdBy; }
+
+    /**
+     * get last update
+     * @return
+     */
     public ZonedDateTime getLastUpdate() {return lastUpdate; }
+
+    /**
+     * get last updated by
+     * @return
+     */
     public String getLastUpdatedBy() {return lastUpdatedBy; }
+
+    /**
+     * create new country
+     * @param countryID
+     * @param country
+     * @param createDate
+     * @param createdBy
+     * @param lastUpdate
+     * @param lastUpdatedBy
+     */
 
     public Country(int countryID, String country, ZonedDateTime createDate,
                    String createdBy, ZonedDateTime lastUpdate, String lastUpdatedBy){

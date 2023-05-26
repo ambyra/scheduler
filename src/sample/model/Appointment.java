@@ -23,31 +23,73 @@ public class Appointment {
     private LocalDateTime startLocal;
     private LocalDateTime endLocal;
 
+    /**
+     * get appt id
+     * @return
+     */
+
     public int getAppointmentID() {
         return appointmentID;
     }
+
+    /**
+     * get title
+     * @return
+     */
 
     public String getTitle() {
         return title;
     }
 
+    /**
+     * get description
+     * @return
+     */
+
     public String getDescription() {
         return description;
     }
+
+    /**
+     * get location
+     * @return
+     */
 
     public String getLocation() {
         return location;
     }
 
+    /**
+     * get type
+     * @return
+     */
+
     public String getType() {
         return type;
     }
+
+    /**
+     * get start
+     * @return
+     */
 
     public ZonedDateTime getStart() {
         return start;
     }
 
+    /**
+     * get local start time
+     * @return
+     */
+
     public LocalDateTime getStartLocal(){return startLocal;}
+
+    /**
+     * get local end time
+     * @return
+     */
+
+
     public LocalDateTime getEndLocal(){return endLocal;}
 
     /**
@@ -83,53 +125,116 @@ public class Appointment {
         return zdtSystem;
     }
 
+    /**
+     * set appt id
+     * @param appointmentID
+     */
+
     public void setAppointmentID(int appointmentID) {
         this.appointmentID = appointmentID;
     }
 
+    /**
+     * set title
+     * @param title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
+
+    /**
+     * set description
+     * @param description
+     */
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * set location
+     * @param location
+     */
+
     public void setLocation(String location) {
         this.location = location;
     }
 
+    /**
+     * set type
+     * @param type
+     */
     public void setType(String type) {
         this.type = type;
     }
+
+    /**
+     * set create date
+     * @param createDate
+     */
 
     public void setCreateDate(ZonedDateTime createDate) {
         this.createDate = createDate;
     }
 
+    /**
+     * set created by
+     * @param createdBy
+     */
+
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
+
+    /**
+     * set last update
+     * @param lastUpdate
+     */
 
     public void setLastUpdate(ZonedDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
+    /**
+     * set last updated by
+     * @param lastUpdatedBy
+     */
+
     public void setLastUpdatedBy(String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
+
+    /**
+     * set customer id
+     * @param customerID
+     */
 
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
     }
 
+    /**
+     * set user id
+     * @param userID
+     */
+
     public void setUserID(int userID) {
         this.userID = userID;
     }
 
+    /**
+     * set contact id
+     * @param contactID
+     */
+
     public void setContactID(int contactID) {
         this.contactID = contactID;
     }
+
+    /**
+     * get end
+     * @return
+     */
 
     public ZonedDateTime getEnd() {
         return end;
@@ -185,6 +290,11 @@ public class Appointment {
         this.endLocal = this.end.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
 
+    /**
+     * get create date
+     * @return
+     */
+
     public ZonedDateTime getCreateDate() {return createDate;}
 
     /**
@@ -193,7 +303,16 @@ public class Appointment {
      */
     public ZonedDateTime getCreateDateUTC(){return createDate.withZoneSameInstant(ZoneId.of("UTC"));}
 
+    /**
+     * get created by
+     * @return
+     */
     public String getCreatedBy() {return createdBy;}
+
+    /**
+     * get last update
+     * @return
+     */
 
     public ZonedDateTime getLastUpdate() {return lastUpdate;}
 
@@ -203,10 +322,47 @@ public class Appointment {
      */
     public ZonedDateTime getLastUpdateUTC(){return lastUpdate.withZoneSameInstant(ZoneId.of("UTC"));}
 
+    /**
+     * get last updated by
+     * @return
+     */
     public String getLastUpdatedBy() {return lastUpdatedBy; }
+
+    /**
+     * get customer id
+     * @return
+     */
     public int getCustomerID() {return customerID; }
+
+    /**
+     * get user id
+     * @return
+     */
     public int getUserID() {return userID;}
+
+    /**
+     * get contact id
+     * @return
+     */
     public int getContactID() {return contactID; }
+
+    /**
+     * create new appointment
+     * @param appointmentID
+     * @param title
+     * @param description
+     * @param location
+     * @param type
+     * @param start
+     * @param end
+     * @param createDate
+     * @param createdBy
+     * @param lastUpdate
+     * @param lastUpdatedBy
+     * @param customerID
+     * @param userID
+     * @param contactID
+     */
 
     public Appointment(int appointmentID, String title, String description, String location,
                        String type, ZonedDateTime start, ZonedDateTime end, ZonedDateTime createDate,

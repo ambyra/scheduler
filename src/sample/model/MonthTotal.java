@@ -3,7 +3,7 @@ import java.time.YearMonth;
 
 /**
  * class for tableview display, organizes data in to month of year and total
- * @return
+ *
  */
 
 public class MonthTotal{
@@ -11,10 +11,22 @@ public class MonthTotal{
     private String yearMonthString;
     private int total;
 
-
-
+    /**
+     * get yearmonth
+     * @return
+     */
     public YearMonth getYearMonth() {return yearMonth;}
+
+    /**
+     * get total
+     * @return
+     */
     public int getTotal(){return total;}
+
+    /**
+     * set total
+     * @param total
+     */
     public void setTotal(int total){this.total = total;}
 
     /**
@@ -27,6 +39,11 @@ public class MonthTotal{
         return month + " " + year;
         }
 
+    /**
+     * create new yearmonth
+     * @param yearMonth
+     * @param total
+     */
     public MonthTotal(YearMonth yearMonth, int total){
         this.yearMonth = yearMonth;
         this.total = total;
