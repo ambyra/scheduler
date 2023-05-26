@@ -5,10 +5,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.Main;
+
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -34,13 +39,20 @@ public class loginController{
     private static User currentUser;
     private String passwordError;
 
+    private PrintWriter printWriter;
+
     public static User getCurrentUser(){return currentUser;}
 
     @FXML
-    public void initialize(){
+    public void initialize() throws IOException {
         setLanguage();
+
         ZoneId timezone = ZoneId.systemDefault();
         TextCurrentZone.setText(timezone.toString());
+
+        FileWriter fileWriter = new FileWriter("login_activity.txt", true);
+        printWriter = new PrintWriter(fileWriter);
+        Main.getStage().setOnHiding( event -> {printWriter.close();} );
     }
 
     @FXML
@@ -56,7 +68,10 @@ public class loginController{
         currentUser = UserDAO.login(user, pass);
         if(currentUser == null){
             sendAlert(passwordError);
+            logMessage("[Username: " + user + "] failed login attempt");
         }else{
+            logMessage("[Username: " + user + "] successful login");
+            printWriter.close();
             login();
         }
     }
@@ -73,9 +88,6 @@ public class loginController{
     }
 
     private void login() throws IOException {
-        //TODO logger
-        System.out.println("User " + currentUser.getUserID()+ " logged in at TIME");
-
         Stage stage = Main.getStage();
         URL resource = getClass().getResource("/sample/view/appointment.fxml");
         Parent root = FXMLLoader.load(resource);
@@ -89,5 +101,11 @@ public class loginController{
         alert.setTitle("Alert!");
         alert.setContentText(alertMessage);
         alert.showAndWait();
+    }
+
+    private void logMessage(String message){
+        //user log-in attempts, dates, and time stamps
+        String timestamp= "[" + Timestamp.valueOf(ZonedDateTime.now().toLocalDateTime()) + "] ";
+        printWriter.print(timestamp + message + "\n");
     }
 }
