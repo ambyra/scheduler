@@ -92,8 +92,6 @@ public class appointmentController{
     }
 
     private void startRadioGroupAppointmentsListener(){
-
-        //todo: fix so just displays current week/month using temporal adjuster
         //lambda
         RadioGroupAppointments.selectedToggleProperty().
                 addListener((observable, oldValue, newValue) -> {
