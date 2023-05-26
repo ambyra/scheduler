@@ -11,6 +11,11 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 
 public class UserDAO {
+    /**
+     * get all users from database
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<User> getUsers() throws SQLException {
         ObservableList<User> users= FXCollections.observableArrayList();
 
@@ -36,6 +41,14 @@ public class UserDAO {
         return users;
     }
 
+    /**
+     * return user login
+     * @param userName
+     * @param password
+     * @return
+     * @throws SQLException
+     */
+
     public static User login(String userName, String password) throws SQLException {
         ObservableList<User> users = getUsers();
         for (User user: users){
@@ -44,6 +57,13 @@ public class UserDAO {
         }
         return null;
     }
+
+    /**
+     * get user by id
+     * @param userID
+     * @return
+     * @throws SQLException
+     */
 
     public static User getUser(int userID) throws SQLException {
         ObservableList<User> users = getUsers();

@@ -11,6 +11,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class CustomerDAO {
+    /**
+     * get all customers from db
+     * @return
+     */
     public static ObservableList<Customer> getCustomers(){
         ObservableList<Customer> customers= FXCollections.observableArrayList();
 
@@ -43,6 +47,12 @@ public class CustomerDAO {
         return customers;
     }
 
+    /**
+     * get customer from database
+     * @param customerID
+     * @return
+     */
+
     public static Customer getCustomer(int customerID){
         ObservableList<Customer> customers = getCustomers();
         if(customers.isEmpty()){return null;}
@@ -53,6 +63,11 @@ public class CustomerDAO {
         }
         return null;
     }
+
+    /**
+     * remove customer from database
+     * @param customer
+     */
 
     public static void deleteCustomer(Customer customer){
         if(customer == null){return;}
@@ -68,6 +83,10 @@ public class CustomerDAO {
         catch(SQLException sqlException){sqlException.printStackTrace();}
     }
 
+    /**
+     * update customer in database or add customer
+     * @param customer
+     */
 
     public static void updateCustomer(Customer customer){
         if (customer == null){return;}
@@ -108,6 +127,11 @@ public class CustomerDAO {
 
         }catch(SQLException sqlException){sqlException.printStackTrace();}
     }
+
+    /**
+     * generate new customer id
+     * @return
+     */
 
     public static int newCustomerID(){
         ObservableList<Customer> customers= getCustomers();

@@ -11,7 +11,11 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 
 public class DivisionDAO {
-    public static ObservableList<Division> getDivisions() throws SQLException {
+    /**
+     * get all divisions from database
+     * @return
+     */
+    public static ObservableList<Division> getDivisions(){
         ObservableList<Division> divisions= FXCollections.observableArrayList();
 
         Connection connection = JDBC.getConnection();
@@ -36,6 +40,13 @@ public class DivisionDAO {
         return divisions;
     }
 
+    /**
+     * get division by ID number
+     * @param divisionID
+     * @return
+     * @throws SQLException
+     */
+
     public static Division getDivision(int divisionID) throws SQLException {
         ObservableList<Division> divisions = getDivisions();
         for(Division division : divisions){
@@ -46,6 +57,13 @@ public class DivisionDAO {
         return null;
     }
 
+    /**
+     * get division by name
+     * @param divisionName
+     * @return
+     * @throws SQLException
+     */
+
     public static Division getDivision(String divisionName) throws SQLException {
         ObservableList<Division> divisions = getDivisions();
         for(Division division : divisions){
@@ -55,6 +73,13 @@ public class DivisionDAO {
         }
         return null;
     }
+
+    /**
+     * get all divisions by country
+     * @param countryID
+     * @return
+     * @throws SQLException
+     */
 
     public static ObservableList<String> getDivisionsFromCountryID(int countryID) throws SQLException {
         if (countryID < 1 || countryID > 3){return null;}

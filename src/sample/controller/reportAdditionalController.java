@@ -30,6 +30,11 @@ public class reportAdditionalController {
         countDBEntries();
     }
 
+    /**
+     * count entries in each database and display in tableview
+     * @throws SQLException
+     */
+
     private void countDBEntries() throws SQLException {
         int appointmentSize = AppointmentDAO.getAppointments().size();
         int contactSize = ContactDAO.getContacts().size();
@@ -49,6 +54,11 @@ public class reportAdditionalController {
 
         TableViewDatabase.setItems(dbEntries);
     }
+
+    /**
+     * return to appointments form
+     * @throws IOException
+     */
 
     @FXML
     void ClickReturn() throws IOException {

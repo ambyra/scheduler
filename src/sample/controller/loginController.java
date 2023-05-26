@@ -43,6 +43,11 @@ public class loginController{
 
     public static User getCurrentUser(){return currentUser;}
 
+    /**
+     * initialize login form
+     * @throws IOException
+     */
+
     @FXML
     public void initialize() throws IOException {
         setLanguage();
@@ -55,6 +60,11 @@ public class loginController{
         Main.getStage().setOnHiding( event -> {printWriter.close();} );
     }
 
+    /**
+     * check username and password
+     * @throws SQLException
+     * @throws IOException
+     */
     @FXML
     void ClickLogin() throws SQLException, IOException {
         String user = TextFieldUserName.getText();
@@ -76,6 +86,10 @@ public class loginController{
         }
     }
 
+    /**
+     * set form language
+     */
+
     private void setLanguage(){
         ResourceBundle resourceBundle = ResourceBundle.getBundle("languages", Locale.getDefault());
 
@@ -87,6 +101,11 @@ public class loginController{
         passwordError = resourceBundle.getString("passworderror");
     }
 
+    /**
+     * load appointments upon successful login
+     * @throws IOException
+     */
+
     private void login() throws IOException {
         Stage stage = Main.getStage();
         URL resource = getClass().getResource("/sample/view/appointment.fxml");
@@ -95,6 +114,11 @@ public class loginController{
         stage.show();
     }
 
+    /**
+     * helper function
+     * @param alertMessage
+     */
+
     private void sendAlert(String alertMessage)
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -102,6 +126,11 @@ public class loginController{
         alert.setContentText(alertMessage);
         alert.showAndWait();
     }
+
+    /**
+     * log form activity
+     * @param message
+     */
 
     private void logMessage(String message){
         //user log-in attempts, dates, and time stamps

@@ -73,6 +73,10 @@ public class appointmentController{
     @FXML private Button ButtonContact;
     @FXML private Button ButtonAdditional;
 
+    /**
+     * initialize form
+     * @throws SQLException
+     */
 
     @FXML
     public void initialize() throws SQLException {
@@ -91,6 +95,11 @@ public class appointmentController{
         selectState();
     }
 
+    /**
+     * starts RadioGroup listener
+     * listener applies lambda function when radiogroup is changed
+     */
+
     private void startRadioGroupAppointmentsListener(){
         //lambda
         RadioGroupAppointments.selectedToggleProperty().
@@ -106,6 +115,11 @@ public class appointmentController{
                     }
                 });
     }
+
+    /**
+     * verify appointment hours between 0800-2200 EST
+     * @throws SQLException
+     */
 
     private void checkAppointmentHours() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
@@ -127,6 +141,12 @@ public class appointmentController{
         }
     }
 
+    /**
+     * verify appointment hours for one appointment
+     * @param appointment
+     * @return
+     */
+
     private boolean checkAppointmentHours(Appointment appointment){
         ZonedDateTime appointmentStart = appointment.getStartEST();
         ZonedDateTime appointmentEnd = appointment.getEndEST();
@@ -142,6 +162,11 @@ public class appointmentController{
         }
         return false;
     }
+
+    /**
+     * check for upcoming appointment within 15 minutes
+     * @throws SQLException
+     */
 
     void checkAppointmentUpcoming() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
@@ -159,6 +184,11 @@ public class appointmentController{
         }
         if (!isAppointment) {sendAlert("No upcoming appointment within 15 minutes");}
     }
+
+    /**
+     * check for overlapping appointments
+     * @throws SQLException
+     */
 
     void checkAppointmentOverlap() throws SQLException {
         ObservableList<Appointment> allAppointments = AppointmentDAO.getAppointments();
@@ -185,6 +215,13 @@ public class appointmentController{
         }
     }
 
+    /**
+     * check for overlapping appointment  with this appointment
+     * @param appointment1
+     * @return
+     * @throws SQLException
+     */
+
     private boolean checkAppointmentOverlap(Appointment appointment1) throws SQLException {
         ZonedDateTime start1 = appointment1.getStart();
         ZonedDateTime end1 = appointment1.getEnd();
@@ -209,6 +246,11 @@ public class appointmentController{
         return false;
     }
 
+    /**
+     * add new appointment
+     * @throws SQLException
+     */
+
     @FXML
     void ClickAdd() throws SQLException {
         clearBoxes();
@@ -224,6 +266,11 @@ public class appointmentController{
         TextFieldAppointmentID.setText(String.valueOf(newAppointmentID));
     }
 
+    /**
+     * edit selected appointment
+     * @throws SQLException
+     */
+
     @FXML
     void ClickEdit() throws SQLException {
         Appointment selectedAppointment = getAppointmentFromSelection();
@@ -238,6 +285,11 @@ public class appointmentController{
         setBoxes(selectedAppointment);
     }
 
+    /**
+     * save appointment being edited
+     * @throws SQLException
+     */
+
     @FXML
     void ClickSave() throws SQLException {
         Appointment appointment = parseInput();
@@ -247,6 +299,12 @@ public class appointmentController{
             selectState();
         }
     }
+
+    /**
+     * make new appointment from input values
+     * @return
+     * @throws SQLException
+     */
 
     private Appointment parseInput() throws SQLException {
         int appointmentid;
@@ -333,6 +391,12 @@ public class appointmentController{
         return appointment;
     }
 
+    /**
+     * helper function
+     * @param time
+     * @return
+     */
+
     LocalTime parseTime(String time){
         LocalTime parsedTime;
         String timeFormat = "[HH:mm]" + "[H:mm]";
@@ -346,10 +410,20 @@ public class appointmentController{
         return parsedTime;
     }
 
+    /**
+     * return to appointment select
+     * @throws SQLException
+     */
+
     @FXML
     void ClickCancel () throws SQLException {
         selectState();
     }
+
+    /**
+     * delete selected appointment
+     * @throws SQLException
+     */
 
     @FXML
     void ClickDelete () throws SQLException {
@@ -365,23 +439,47 @@ public class appointmentController{
         selectState();
     }
 
+    /**
+     * goto customer form
+     * @throws IOException
+     */
+
     @FXML
     void ClickCustomers () throws IOException {
         loadStage("/sample/view/customer.fxml");
     }
 
+    /**
+     * go to totals report
+     * @throws IOException
+     */
+
     @FXML void ClickTotal() throws IOException {
         loadStage("/sample/view/reportTotal.fxml");
     }
+
+    /**
+     * go to contacts report
+     * @throws IOException
+     */
 
     @FXML void ClickContact() throws IOException {
         loadStage("/sample/view/reportContactSchedule.fxml");
     }
 
+    /**
+     * goto additional report
+     * @throws IOException
+     */
+
     @FXML void ClickAdditional() throws IOException {
         loadStage("/sample/view/reportAdditional.fxml");
     }
 
+    /**
+     * adjust form for appointment selection
+     * @throws SQLException
+     */
     void selectState() throws SQLException {
         TableViewAppointments.setDisable(false);
         displayTableViewAppointments(9999);
@@ -405,6 +503,10 @@ public class appointmentController{
         checkAppointmentUpcoming();
     }
 
+    /**
+     * clear form boxes
+     */
+
     void clearBoxes(){
         TextFieldAppointmentID.clear();
         ChoiceBoxContactID.getItems().clear();
@@ -426,6 +528,11 @@ public class appointmentController{
         DatePickerEndDate.setValue(null);
     }
 
+    /**
+     * enable/disable form controls
+     * @param areEnabled
+     */
+
     void setButtonsEnabled(boolean areEnabled){
         areEnabled = !areEnabled;
         ButtonAdd.setDisable(areEnabled);
@@ -438,6 +545,11 @@ public class appointmentController{
         ButtonContact.setDisable(areEnabled);
         ButtonAdditional.setDisable(areEnabled);
     }
+
+    /**
+     * enable/disable text fields and comboboxes
+     * @param areEnabled
+     */
 
     void setBoxesEnabled(boolean areEnabled){
         areEnabled = !areEnabled;
@@ -455,6 +567,11 @@ public class appointmentController{
         DatePickerEndDate.setDisable(areEnabled);
     }
 
+    /**
+     * populate boxes with data from appointment
+     * @param appointment
+     * @throws SQLException
+     */
     private void setBoxes(Appointment appointment) throws SQLException {
         if(appointment == null){return;}
 
@@ -476,9 +593,19 @@ public class appointmentController{
         DatePickerEndDate.setValue(appointment.getEndSystem().toLocalDate());
     }
 
+    /**
+     * helper function
+     * @return
+     */
+
     private Appointment getAppointmentFromSelection(){
         return TableViewAppointments.getSelectionModel().getSelectedItem();
     }
+
+    /**
+     * populate choice boxes with db entries
+     * @throws SQLException
+     */
 
     private void populateChoiceBoxes() throws SQLException {
         ObservableList<Contact> allContacts = ContactDAO.getContacts();
@@ -496,6 +623,11 @@ public class appointmentController{
             ChoiceBoxCustomerID.getItems().add(customer.getCustomerID());
         }
     }
+
+    /**
+     * display appointments
+     * @param daysBack
+     */
 
     private void displayTableViewAppointments(int daysBack){
         try {
@@ -516,6 +648,11 @@ public class appointmentController{
         }
     }
 
+    /**
+     * send alert helper function
+     * @param alertMessage
+     */
+
     private void sendAlert(String alertMessage)
     {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -523,6 +660,12 @@ public class appointmentController{
         alert.setContentText(alertMessage);
         alert.showAndWait();
     }
+
+    /**
+     * load stage helper function
+     * @param stageName
+     * @throws IOException
+     */
 
     void loadStage(String stageName) throws IOException {
         Stage stage = Main.getStage();

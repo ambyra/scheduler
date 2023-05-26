@@ -34,6 +34,10 @@ public class reportContactScheduleController{
     @FXML private TableColumn<?, ?> TableColumnTitle;
     @FXML private TableColumn<?, ?> TableColumnType;
 
+    /**
+     * initialize form
+     */
+
     @FXML
     public void initialize(){
         TableColumnAppointmentID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
@@ -47,6 +51,10 @@ public class reportContactScheduleController{
         populateChoiceBox();
     }
 
+    /**
+     * populate form with contact schedules
+     */
+
     private void populateChoiceBox(){
         ObservableList<Contact> allContacts = ContactDAO.getContacts();
         if(allContacts.isEmpty()){return;}
@@ -55,6 +63,11 @@ public class reportContactScheduleController{
         }
         ChoiceBoxContact.setValue(null);
     }
+
+    /**
+     * return to appointments form
+     * @throws IOException
+     */
 
     @FXML
     void ClickReturn() throws IOException {
@@ -65,6 +78,11 @@ public class reportContactScheduleController{
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+    /**
+     * change contact and get appointments
+     * @throws SQLException
+     */
 
     public void ClickChange() throws SQLException {
         String contactName = ChoiceBoxContact.getValue();

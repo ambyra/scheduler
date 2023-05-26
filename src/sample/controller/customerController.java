@@ -14,7 +14,6 @@ import sample.Main;
 import sample.dao.AppointmentDAO;
 import sample.dao.CustomerDAO;
 import sample.dao.DivisionDAO;
-import sample.dao.UserDAO;
 import sample.model.Customer;
 import sample.model.Division;
 import sample.model.User;
@@ -24,9 +23,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ResourceBundle;
 
-public class customerController implements Initializable {
+public class customerController{
     @FXML private Button ButtonAdd;
     @FXML private Button ButtonEdit;
     @FXML private Button ButtonSave;
@@ -51,29 +49,36 @@ public class customerController implements Initializable {
     @FXML private TextField TextFieldPhone;
     @FXML private TextField TextFieldPostalCode;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        setColumnsTableViewCustomers();
-        try {
-            selectState();
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-    }
+    /**
+     * load form
+     * @throws SQLException
+     */
 
-    void displayTableViewCustomers(){
-        ObservableList<Customer> allCustomers = CustomerDAO.getCustomers();
-        TableViewCustomers.setItems(allCustomers);
-    }
-
-    void setColumnsTableViewCustomers(){
+    @FXML
+    public void initialize() throws SQLException {
         TableColumnCustomerId.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         TableColumnName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         TableColumnAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         TableColumnPostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         TableColumnPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         TableColumnStateProvince.setCellValueFactory(new PropertyValueFactory<>("division"));
+
+        selectState();
     }
+
+    /**
+     * populate tableview
+     */
+
+    void displayTableViewCustomers(){
+        ObservableList<Customer> allCustomers = CustomerDAO.getCustomers();
+        TableViewCustomers.setItems(allCustomers);
+    }
+
+    /**
+     * enable/disable textfields
+     * @param areEnabled
+     */
 
     void setBoxesEnabled(boolean areEnabled){
         areEnabled = !areEnabled;
@@ -88,6 +93,11 @@ public class customerController implements Initializable {
         ComboBoxFirstLevelDivision.setDisable(areEnabled);
     }
 
+    /**
+     * enable/disable buttons
+     * @param areEnabled
+     */
+
     void setButtonsEnabled(boolean areEnabled){
         areEnabled = !areEnabled;
         ButtonAdd.setDisable(areEnabled);
@@ -97,6 +107,10 @@ public class customerController implements Initializable {
         ButtonDelete.setDisable(areEnabled);
         ButtonAppointments.setDisable(areEnabled);
     }
+
+    /**
+     * clear textfield values
+     */
 
     void clearBoxes(){
         TextFieldCustomerId.clear();
@@ -109,6 +123,11 @@ public class customerController implements Initializable {
         ComboBoxFirstLevelDivision.getSelectionModel().select("");
     }
 
+    /**
+     * populate text fields with customer data
+     * @param customer
+     */
+
     void setBoxes(Customer customer){
         TextFieldCustomerId.setText(String.valueOf(customer.getCustomerID()));
         TextFieldName.setText(customer.getCustomerName());
@@ -117,11 +136,20 @@ public class customerController implements Initializable {
         TextFieldPostalCode.setText(customer.getPostalCode());
     }
 
+    /**
+     * populate combobox with division information
+     * @param division
+     */
+
     void setComboBoxCountry(Division division){
         setComboBoxCountry();
         int countryIndex = division.getCountryID() - 1;
         ComboBoxCountry.getSelectionModel().select(countryIndex);
     }
+
+    /**
+     * populate combobox with country information
+     */
 
     void setComboBoxCountry(){
         ObservableList<String> countries = FXCollections.observableArrayList();
@@ -131,11 +159,22 @@ public class customerController implements Initializable {
         ComboBoxCountry.setItems(countries);
     }
 
+    /**
+     * populate combobox with division information
+     * @param division
+     * @throws SQLException
+     */
+
     void setComboBoxDivision(Division division) throws SQLException {
         if(division == null){return;}
         setComboBoxDivision();
         ComboBoxFirstLevelDivision.getSelectionModel().select(division.getDivision());
     }
+
+    /**
+     * set division names
+     * @throws SQLException
+     */
 
     void setComboBoxDivision() throws SQLException {
         int countryIndex = ComboBoxCountry.getSelectionModel().getSelectedIndex() + 1;
@@ -143,10 +182,21 @@ public class customerController implements Initializable {
         ComboBoxFirstLevelDivision.setItems(divisionNames);
     }
 
+    /**
+     * populate division combobox on country change
+     * @throws SQLException
+     */
+
     @FXML
     void ActionCountry() throws SQLException {
         setComboBoxDivision();
     }
+
+    /**
+     * get customer from form information
+     * @return
+     * @throws SQLException
+     */
 
     private Customer getCustomerFromBoxes() throws SQLException {
         int customerId;
@@ -223,9 +273,18 @@ public class customerController implements Initializable {
                 createDate,createdBy, lastUpdate, lastUpdatedBy, divisionId);
     }
 
+    /**
+     * get customer from tableview selection
+     * @return
+     */
+
     private Customer getCustomerFromSelection(){
         return TableViewCustomers.getSelectionModel().getSelectedItem();
     }
+
+    /**
+     * add new customer
+     */
 
     @FXML
     void ClickAdd(){
@@ -241,6 +300,11 @@ public class customerController implements Initializable {
         int newCustomerID = CustomerDAO.newCustomerID();
         TextFieldCustomerId.setText(String.valueOf(newCustomerID));
     }
+
+    /**
+     * edit customer
+     * @throws SQLException
+     */
 
     @FXML
     void ClickEdit() throws SQLException {
@@ -262,6 +326,11 @@ public class customerController implements Initializable {
         }
     }
 
+    /**
+     * save customer
+     * @throws SQLException
+     */
+
     @FXML
     void ClickSave() throws SQLException {
         Customer customer = getCustomerFromBoxes();
@@ -271,10 +340,20 @@ public class customerController implements Initializable {
         }
     }
 
+    /**
+     * cancel edition customer
+     * @throws SQLException
+     */
+
     @FXML
     void ClickCancel() throws SQLException {
         selectState();
     }
+
+    /**
+     * remove selected customer
+     * @throws SQLException
+     */
 
     @FXML
     void ClickDelete() throws SQLException {
@@ -290,6 +369,11 @@ public class customerController implements Initializable {
         selectState();
     }
 
+    /**
+     * return to appointments form
+     * @throws IOException
+     */
+
     @FXML
     void ClickAppointments() throws IOException {
         Stage stage = Main.getStage();
@@ -299,6 +383,11 @@ public class customerController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+    /**
+     * setup form for customer selection
+     * @throws SQLException
+     */
 
     void selectState() throws SQLException {
         displayTableViewCustomers();
@@ -313,6 +402,11 @@ public class customerController implements Initializable {
         ButtonDelete.setDisable(false);
         ButtonAppointments.setDisable(false);
     }
+
+    /**
+     * helper function
+     * @param alertMessage
+     */
 
     private void sendAlert(String alertMessage)
     {

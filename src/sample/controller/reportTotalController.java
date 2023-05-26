@@ -36,6 +36,11 @@ public class reportTotalController{
     @FXML private TableColumn<?, ?> TableColumnType;
     @FXML private TableColumn<?, ?> TableColumnTypeTotal;
 
+    /**
+     * initialize form
+     * @throws SQLException
+     */
+
     @FXML
     public void initialize() throws SQLException {
         TableColumnMonth.setCellValueFactory(new PropertyValueFactory<>("yearMonthString"));
@@ -46,6 +51,11 @@ public class reportTotalController{
         countMonths();
         countTypes();
     }
+
+    /**
+     * determine appointments for each month
+     * @throws SQLException
+     */
 
     void countMonths() throws SQLException {
         ObservableList<Appointment> appointments = AppointmentDAO.getAppointments();
@@ -72,6 +82,12 @@ public class reportTotalController{
         TableViewMonth.setItems(monthTotals);
     }
 
+    /**
+     * count appointment types
+     * lambda function enables concise grouping of appointment types
+     * @throws SQLException
+     */
+
     void countTypes() throws SQLException {
         //todo: implement
         ObservableList<Appointment> appointments = AppointmentDAO.getAppointments();
@@ -96,6 +112,11 @@ public class reportTotalController{
         typeCounts.forEach((k, v) -> typeTotals.add(new TypeTotal(k, v.intValue())));
         TableViewType.setItems(typeTotals);
     }
+
+    /**
+     * return to appointments form
+     * @throws IOException
+     */
 
     @FXML
     void ClickReturn() throws IOException {

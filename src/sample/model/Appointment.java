@@ -50,6 +50,11 @@ public class Appointment {
     public LocalDateTime getStartLocal(){return startLocal;}
     public LocalDateTime getEndLocal(){return endLocal;}
 
+    /**
+     * get time converted to EST
+     * @return
+     */
+
 
     public ZonedDateTime getStartEST(){
         //ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));
@@ -57,10 +62,20 @@ public class Appointment {
         return zdtEST;
     }
 
+    /**
+     * get time converted to UTC
+     * @return
+     */
+
     public ZonedDateTime getStartUTC(){
         ZonedDateTime zdtUTC = start.withZoneSameInstant(ZoneId.of("UTC"));
         return zdtUTC;
     }
+
+    /**
+     * get time converted to local time
+     * @return
+     */
 
     public ZonedDateTime getStartSystem(){
         //ZonedDateTime zdtUTC = start.atZone(ZoneId.of("UTC"));

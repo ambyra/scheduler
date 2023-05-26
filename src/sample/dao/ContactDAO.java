@@ -10,6 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ContactDAO {
+    /**
+     * get all contacts from db
+     * @return
+     */
     public static ObservableList<Contact> getContacts(){
         ObservableList<Contact> contacts = FXCollections.observableArrayList();
 
@@ -30,6 +34,12 @@ public class ContactDAO {
         } catch (SQLException sqlException) {return null;}
         return contacts;
     }
+
+    /**
+     * get contact by name
+     * @param contactName
+     * @return
+     */
 
     public static Contact getContact(String contactName){
         ObservableList<Contact> contacts= getContacts();

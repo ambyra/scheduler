@@ -12,6 +12,11 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 
 public class CountryDAO {
+    /**
+     * get all countries from db
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Country> getCountries() throws SQLException {
         ObservableList<Country> countries= FXCollections.observableArrayList();
 

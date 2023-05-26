@@ -12,6 +12,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class AppointmentDAO {
+    /**
+     * get list of all apointments
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAppointments() throws SQLException {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
 
@@ -46,6 +51,11 @@ public class AppointmentDAO {
         return appointments;
     }
 
+    /**
+     * remove appointment from database
+     * @param customer
+     * @throws SQLException
+     */
     public static void deleteAppointments(Customer customer) throws SQLException {
         ObservableList<Appointment> allAppointments = getAppointments();
         if(allAppointments == null){return;}
@@ -55,6 +65,13 @@ public class AppointmentDAO {
             }
         }
     }
+
+    /**
+     * get appointment by ID
+     * @param appointmentID
+     * @return
+     * @throws SQLException
+     */
 
     public static Appointment getAppointment(int appointmentID) throws SQLException {
         ObservableList<Appointment> appointments = getAppointments();
@@ -67,6 +84,12 @@ public class AppointmentDAO {
         return null;
     }
 
+    /**
+     * generate appointment ID
+     * @return
+     * @throws SQLException
+     */
+
     public static int newAppointmentID() throws SQLException {
         ObservableList<Appointment> appointments = getAppointments();
         if(appointments == null){return 1;}
@@ -77,6 +100,11 @@ public class AppointmentDAO {
         int largest = Collections.max(appointmentIDs);
         return largest + 1;
     }
+
+    /**
+     * load appointment into database
+     * @param appointment
+     */
 
     public static void updateAppointment(Appointment appointment){
         if(appointment == null){return;}
@@ -110,6 +138,11 @@ public class AppointmentDAO {
         }catch(SQLException sqlException){sqlException.printStackTrace();}
     }
 
+    /**
+     * remove appointment from database
+     * @param appointment
+     */
+
     public static void deleteAppointment(Appointment appointment){
         if(appointment == null){return;}
         Connection connection = JDBC.getConnection();
@@ -124,6 +157,13 @@ public class AppointmentDAO {
         }
         catch(SQLException sqlException){sqlException.printStackTrace();}
     }
+
+    /**
+     * get all contact's appointments
+     * @param contactID
+     * @return
+     * @throws SQLException
+     */
 
     public static ObservableList<Appointment> getAppointmentsFromContact(int contactID) throws SQLException {
         ObservableList<Appointment> appointments = getAppointments();

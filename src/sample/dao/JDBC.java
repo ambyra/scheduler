@@ -16,7 +16,11 @@ public class JDBC {
         private static Connection connection = null;  // Connection Interface
         private static PreparedStatement preparedStatement;
 
-         public static void makeConnection() {
+    /**
+     * make db connection
+     */
+
+    public static void makeConnection() {
 
           try {
               Class.forName(driver); // Locate Driver
@@ -32,7 +36,12 @@ public class JDBC {
                   }
           }
 
-            public static Connection getConnection() {
+    /**
+     * get connection
+     * @return
+     */
+
+    public static Connection getConnection() {
                 return connection;
             }
              public static void closeConnection() {
@@ -44,7 +53,14 @@ public class JDBC {
                  }
              }
 
-       public static void makePreparedStatement(String sqlStatement, Connection conn) throws SQLException {
+    /**
+     * make prepared statement for communication with db
+     * @param sqlStatement
+     * @param conn
+     * @throws SQLException
+     */
+
+    public static void makePreparedStatement(String sqlStatement, Connection conn) throws SQLException {
            if (conn != null)
                preparedStatement = conn.prepareStatement(sqlStatement);
            else
@@ -56,7 +72,4 @@ public class JDBC {
            else System.out.println("Null reference to Prepared Statement");
            return null;
        }
-
-
-
 }
