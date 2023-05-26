@@ -1,5 +1,8 @@
 package sample.model;
-
+/**
+ * class for tableview display, organizes data in to type and total
+ * @return
+ */
 public class TypeTotal{
     private String type;
     private int total;

@@ -49,8 +49,16 @@ public class Customer {
     public void setDivision(String division){this.division = division;}
     public String getDivision(){return division;}
 
-
+    /**
+     * get create date converted to utc
+     * @return
+     */
     public ZonedDateTime getCreateDateUTC() {return createDate.withZoneSameInstant(ZoneId.of("UTC"));}
+
+    /**
+     * get last update converted to UTC
+     * @return
+     */
     public ZonedDateTime getLastUpdateUTC() {return lastUpdate.withZoneSameInstant(ZoneId.of("UTC"));}
 
     public Customer(int customerID, String customerName, String address, String postalCode,

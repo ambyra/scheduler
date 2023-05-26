@@ -5,17 +5,11 @@ public class Contact {
     private String contactName;
     private String email;
 
-    public int getContactID() {
-        return contactID;
-    }
+    public int getContactID() { return contactID; }
 
-    public String getContactName() {
-        return contactName;
-    }
+    public String getContactName() { return contactName; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() {return email; }
 
     public Contact(int contactID, String contactName, String email){
         this.contactID = contactID;

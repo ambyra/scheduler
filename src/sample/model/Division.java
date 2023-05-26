@@ -11,33 +11,13 @@ public class Division {
     private String lastUpdatedBy;
     private int countryID;
 
-    public int getDivisionID() {
-        return divisionID;
-    }
-
-    public String getDivision() {
-        return division;
-    }
-
-    public ZonedDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public ZonedDateTime getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public String getLastUpdatedBy() {
-        return lastUpdatedBy;
-    }
-
-    public int getCountryID() {
-        return countryID;
-    }
+    public int getDivisionID() {return divisionID;}
+    public String getDivision() {return division; }
+    public ZonedDateTime getCreateDate() {return createDate; }
+    public String getCreatedBy() {return createdBy; }
+    public ZonedDateTime getLastUpdate() {return lastUpdate; }
+    public String getLastUpdatedBy() {return lastUpdatedBy; }
+    public int getCountryID() { return countryID; }
 
     public Division(int divisionID, String division, ZonedDateTime createDate, String createdBy,
                     ZonedDateTime lastUpdate, String lastUpdatedBy, int countryID){
